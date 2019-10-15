@@ -6,7 +6,7 @@
 # file `<MODULES DIRECTORY>/mysql/files/mysqltuner.pl`.)
 #
 # This function can also accept:
-# 
+#
 # * An absolute String path, which will check for the existence of a file from anywhere on disk.
 # * Multiple String arguments, which will return the path of the **first** file
 #   found, skipping non existing files.

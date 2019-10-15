@@ -233,7 +233,7 @@ module Puppet::Util::Execution
             # Use non-blocking read to check for data. After each attempt,
             # check whether the child is done. This is done in case the child
             # forks and inherits stdout, as happens in `foo &`.
-            
+
             until results = Process.waitpid2(child_pid, Process::WNOHANG) #rubocop:disable Lint/AssignmentInCondition
 
               # If not done, wait for data to read with a timeout

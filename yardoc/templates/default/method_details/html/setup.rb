@@ -20,7 +20,7 @@ def format_method_detail_extras(object)
       if object.has_tag?(:api) && object.tag(:api).text == 'private' && object.visibility != :private
         result << '<span class="private note title">private</span>'
       end
-    else  
+    else
       if object.has_tag?(:api) && object.tag(:api).text == 'private'
         result << '<span class="private note title">private</span>'
       end

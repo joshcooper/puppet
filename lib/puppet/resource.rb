@@ -681,7 +681,7 @@ class Puppet::Resource
     type = resource_type
     if type.respond_to?(:title_patterns) && !type.title_patterns.nil?
       type.title_patterns.each do |regexp, symbols_and_lambdas|
-        captures = regexp.match(title.to_s)  
+        captures = regexp.match(title.to_s)
         if captures
           symbols_and_lambdas.zip(captures[1..-1]).each do |symbol_and_lambda,capture|
             symbol, proc = symbol_and_lambda

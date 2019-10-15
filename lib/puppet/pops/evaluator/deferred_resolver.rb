@@ -108,7 +108,7 @@ class DeferredResolver
     # If any of the arguments to a future is a future it needs to be resolved first
     func_name = f.name
     mapped_arguments = map_arguments(f.arguments)
-    # if name starts with $ then this is a call to dig 
+    # if name starts with $ then this is a call to dig
     if func_name[0] == DOLLAR
       var_name = func_name[1..-1]
       func_name = DIG

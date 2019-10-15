@@ -47,7 +47,7 @@ class Puppet::Pops::Loader::RubyLegacyFunctionInstantiator
         raise ArgumentError, _("Illegal legacy function definition! The code loaded from %{source_ref} did not return the result of calling 'newfunction'. Got '%{klass}'") % { source_ref: source_ref, klass: func_info.class }
       end
       unless func_info[:name] == "function_#{typed_name.name()}"
-        raise ArgumentError, _("The code loaded from %{source_ref} produced mis-matched name, expected 'function_%{type_name}', got '%{created_name}'") % { 
+        raise ArgumentError, _("The code loaded from %{source_ref} produced mis-matched name, expected 'function_%{type_name}', got '%{created_name}'") % {
           source_ref: source_ref, type_name: typed_name.name, created_name: func_info[:name] }
       end
     end
@@ -91,7 +91,7 @@ class Puppet::Pops::Loader::RubyLegacyFunctionInstantiator
     when :def, :defs
       # There should not be any calls to def in a 3x function
       mname, mline = extract_name_line(find_identity(x))
-      raise SecurityError, _("Illegal method definition of method '%{method_name}' on line %{line}' in legacy function. See %{url} for more information") % { 
+      raise SecurityError, _("Illegal method definition of method '%{method_name}' on line %{line}' in legacy function. See %{url} for more information") % {
         method_name: mname,
         line: mline,
         url: "https://puppet.com/docs/puppet/latest/functions_refactor_legacy.html"

@@ -334,7 +334,7 @@ class Puppet::Configurer
                                          current_environment.config_version)
       end
       Puppet.push_context({
-        :current_environment => local_node_environment, 
+        :current_environment => local_node_environment,
         :loaders => Puppet::Pops::Loaders.new(local_node_environment, true)
       }, "Local node environment for configurer transaction")
 

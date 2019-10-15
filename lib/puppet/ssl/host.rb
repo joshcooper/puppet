@@ -186,7 +186,7 @@ ERROR_STRING
         @certificate_request = csr
       else
         csr = download_csr_from_ca
-        if csr 
+        if csr
           @certificate_request = csr
         end
       end

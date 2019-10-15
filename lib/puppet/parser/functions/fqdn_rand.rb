@@ -17,7 +17,7 @@ Puppet::Parser::Functions::newfunction(:fqdn_rand, :arity => -2, :type => :rvalu
   node. (For example, `fqdn_rand(30)`, `fqdn_rand(30, 'expensive job 1')`, and
   `fqdn_rand(30, 'expensive job 2')` will produce totally different numbers.)") do |args|
     max = args.shift.to_i
- 
+
     # Puppet 5.4's fqdn_rand function produces a different value than earlier versions
     # for the same set of inputs.
     # This causes problems because the values are often written into service configuration files.

@@ -16,7 +16,7 @@ module Puppet::Util::POSIX
       Puppet::Etc.group do |group|
         groups << group.name if group.mem.include?(user)
       end
-  
+
       uniq_groups = groups.uniq
       if uniq_groups != groups
         Puppet.debug(_('Removing any duplicate group entries'))
@@ -125,7 +125,7 @@ module Puppet::Util::POSIX
 
   private
 
-  # Get the specified id_field of a given field (user or group), 
+  # Get the specified id_field of a given field (user or group),
   # whether an ID name is provided
   def get_posix_value(location, id_field, field)
     begin

@@ -23,7 +23,7 @@ function example($x) {
     return false
   }
   # complex logic to determine if value is true
-  true 
+  true
 }
 notice example([]) # would notice false
 notice example(42) # would notice true

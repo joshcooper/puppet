@@ -22,7 +22,7 @@ module Puppet
       module_function :default_paths
 
       @fips_enabled = !windows? &&
-                       File.exist?(FIPS_STATUS_FILE) &&  
+                       File.exist?(FIPS_STATUS_FILE) &&
                        File.read(FIPS_STATUS_FILE, 1) == '1'
 
       def fips_enabled?

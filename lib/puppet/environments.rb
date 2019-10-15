@@ -268,7 +268,7 @@ module Puppet::Environments
     def get(name)
       @loaders.each do |loader|
         env = loader.get(name)
-        if env 
+        if env
           return env
         end
       end
