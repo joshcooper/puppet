@@ -8,8 +8,28 @@ module Puppet
 
     ensurable
 
-    newproperty(:type) do
+    def self.title_patterns
+      [
+        [
+          %r{^(.*)@(.*)$},
+          [
+            [:name],
+            [:type],
+          ],
+        ],
+        [
+          %r{^([^@]+)$},
+          [
+            [:name],
+          ],
+        ]
+      ]
+    end
+
+    newparam(:type) do
       desc "The encryption type used.  Probably ssh-dss or ssh-rsa."
+
+      isnamevar
 
       newvalues :'ssh-dss', :'ssh-ed25519', :'ssh-rsa', :'ecdsa-sha2-nistp256', :'ecdsa-sha2-nistp384', :'ecdsa-sha2-nistp521'
 
