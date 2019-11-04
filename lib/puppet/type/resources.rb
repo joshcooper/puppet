@@ -115,7 +115,7 @@ Puppet::Type.newtype(:resources) do
   def generate
     return [] unless self.purge?
     resource_type.instances.
-      reject { |r| catalog.resource_refs.include? r.ref }.
+      reject { |r| catalog.contains_resource?(r) }.
       select { |r| check(r) }.
       select { |r| r.class.validproperty?(:ensure) }.
       select { |r| able_to_ensure_absent?(r) }.

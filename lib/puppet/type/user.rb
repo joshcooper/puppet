@@ -841,7 +841,7 @@ module Puppet
           :name => keyname,
           :target => keyfile)
       }.reject { |res|
-        catalog.resource_refs.include? res.ref
+        catalog.contains_resource?(res)
       }
     end
   end
