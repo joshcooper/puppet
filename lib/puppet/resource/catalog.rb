@@ -403,6 +403,24 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
     result
   end
 
+  # Returns true if the resource is contained in the catalog either based on its
+  # type and title, e.g. File[/etc/passwd], or one of its aliases. The latter is
+  # important if the namevar(s) for the resource don't match its title.
+  def contains_resource?(resource)
+    raise ArgumentError unless resource.is_a?(Puppet::Type)
+    type_name = Puppet::Resource.type_and_title(resource, nil)
+    @resource_table.has_key?([type_name, resource.uniqueness_key].flatten)
+  end
+
+  # Returns an array of resource references, where each reference is the type and
+  # title of the resource, e.g. File[/etc/passwd]. The type and title always come
+  # from the manifest, and may not match the name of the resource as known by the
+  # system. For example, when managing the apache2 package, the package title may
+  # be `apache`, but the name on Redhat is `apache2` while the name on Ubuntu
+  # is `httpd`.
+  #
+  # Don't call this method to check if a resource is in the catalog. Use
+  # {#contains_resource?} instead.
   def resource_refs
     resource_keys.collect{ |type, name| name.is_a?( String ) ? "#{type}[#{name}]" : nil}.compact
   end
