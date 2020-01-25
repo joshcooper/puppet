@@ -126,12 +126,13 @@ describe "Puppet defaults" do
     end
 
     it "path should support UTF8 characters" do
+      case_preserved_key = ENV.keys.grep(/^PATH$/i).first
       path = "c:\\windows\\system32#{File::PATH_SEPARATOR}c:\\windows#{File::PATH_SEPARATOR}C:\\" + rune_utf8
       Puppet::Util.withenv( {"PATH" => path }, :windows) do
         Puppet.settings[:path] = "none" # this causes it to ignore the setting
 
         envhash = Puppet::Util::Windows::Process.get_environment_strings
-        expect(envhash['Path']).to eq(path)
+        expect(envhash[case_preserved_key]).to eq(path)
       end
     end
   end
