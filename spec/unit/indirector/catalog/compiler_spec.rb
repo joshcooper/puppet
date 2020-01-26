@@ -25,6 +25,7 @@ describe Puppet::Resource::Catalog::Compiler do
       Puppet::Node.indirection.save(Puppet::Node.new("node1"))
       Puppet::Node.indirection.save(Puppet::Node.new("node2"))
 
+      # WTF?
       allow(compiler).to receive(:compile)
 
       compiler.find(Puppet::Indirector::Request.new(:catalog, :find, 'node1', nil, :node => 'node1'))
