@@ -17,8 +17,6 @@ describe Puppet::HTTP::Service::Compiler do
   before :each do
     Puppet[:server] = 'compiler.example.com'
     Puppet[:masterport] = 8140
-
-    Puppet::Node::Facts.indirection.terminus_class = :memory
   end
 
   context 'when making requests' do
