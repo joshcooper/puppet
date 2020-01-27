@@ -2027,13 +2027,11 @@ EOT
       # Call our hook with the default value, so we always get the libdir set.
       :call_hook => :on_initialize_and_write,
       :hook => proc do |value|
-        require 'puppet/node'
-        require 'puppet/node/facts'
         if value
-          Puppet::Resource::Catalog.indirection.set_global_setting(:cache_class, :store_configs)
-          Puppet.settings.override_default(:catalog_cache_terminus, :store_configs)
-          Puppet::Node::Facts.indirection.set_global_setting(:cache_class, :store_configs)
-          Puppet::Resource.indirection.set_global_setting(:terminus_class, :store_configs)
+          #Puppet::Resource::Catalog.indirection.set_global_setting(:cache_class, :store_configs)
+          #Puppet.settings.override_default(:catalog_cache_terminus, :store_configs)
+          #Puppet::Node::Facts.indirection.set_global_setting(:cache_class, :store_configs)
+          #Puppet::Resource.indirection.set_global_setting(:terminus_class, :store_configs)
         end
       end
     },
