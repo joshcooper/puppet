@@ -2,6 +2,7 @@ class Puppet::HTTP::Session
   # capabilities for a site
   CAP_LOCALES = 'locales'.freeze
   CAP_JSON = 'json'.freeze
+  CAP_GZIP = 'gzip'.freeze
 
   # puppet version where locales mount was added
   SUPPORTED_LOCALES_MOUNT_AGENT_VERSION = Gem::Version.new("5.3.4")
@@ -15,6 +16,7 @@ class Puppet::HTTP::Session
     @resolved_services = {}
     @resolution_exceptions = []
     @server_versions = {}
+    @gzip = false
   end
 
   def route_to(name, url: nil, ssl_context: nil)
@@ -56,6 +58,10 @@ class Puppet::HTTP::Session
       site = Puppet::Network::HTTP::Site.from_uri(response.url)
       @server_versions[site] = version
     end
+
+    if response['Content-Encoding'] == 'gzip'
+      @gzip = true
+    end
   end
 
   def supports?(name, capability)
@@ -72,6 +78,8 @@ class Puppet::HTTP::Session
       !server_version.nil? && Gem::Version.new(server_version) >= SUPPORTED_LOCALES_MOUNT_AGENT_VERSION
     when CAP_JSON
       server_version.nil? || Gem::Version.new(server_version) >= SUPPORTED_JSON_DEFAULT
+    when CAP_GZIP
+      @gzip
     else
       false
     end
