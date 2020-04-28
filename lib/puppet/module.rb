@@ -25,6 +25,7 @@ class Puppet::Module
     "plugins" => "lib",
     "pluginfacts" => "facts.d",
     "locales" => "locales",
+    "types" => "types",
   }
 
   # Find and return the +module+ that +path+ belongs to. If +path+ is
@@ -316,6 +317,11 @@ class Puppet::Module
   #@return [String]
   def locale_directory
     subpath("locales")
+  end
+
+  #@return [String]
+  def type_directory
+    subpath("types")
   end
 
   # Returns true if the module has translation files for the

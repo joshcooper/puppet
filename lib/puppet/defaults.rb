@@ -1922,6 +1922,18 @@ EOT
       is used for retrieval, so anything that is a valid file source can
       be used here.",
     },
+    :typedest => {
+      :type       => :directory,
+      :default    => "$vardir/lib/types",
+      :desc       => "Where Puppet should store translation files that it pulls down from the central
+      server.",
+    },
+    :typesource => {
+      :default    => "puppet:///types",
+      :desc       => "From where to retrieve types. The standard Puppet `file` type
+      is used for retrieval, so anything that is a valid file source can
+      be used here.",
+    },
     :pluginsignore => {
         :default  => ".svn CVS .git .hg",
         :desc     => "What files to ignore when pulling down plugins.",

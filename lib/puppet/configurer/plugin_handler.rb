@@ -50,6 +50,15 @@ class Puppet::Configurer::PluginHandler
       result += locales_downloader.evaluate
     end
 
+    types_downloader = Puppet::Configurer::Downloader.new(
+      "types",
+      Puppet[:typedest],
+      Puppet[:typesource],
+      Puppet[:pluginsignore],
+      environment
+    )
+    result += types_downloader.evaluate
+
     Puppet::Util::Autoload.reload_changed(Puppet.lookup(:current_environment))
 
     result
