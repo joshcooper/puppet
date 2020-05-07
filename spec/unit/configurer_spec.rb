@@ -866,6 +866,22 @@ describe Puppet::Configurer do
       expect(File).to_not be_exist(path)
     end
 
+    it "should not update its last run report and summary in noop mode" do
+      Puppet[:noop] = true
+      Puppet[:summarize] = true
+      Puppet::Transaction::Report.indirection.cache_class = :yaml
+
+      stub_request(:post, %r{/puppet/v3/catalog}).to_return(:status => 200, :body => catalog.render(:json), :headers => {'Content-Type' => 'application/json'})
+
+      [Puppet[:lastrunreport], Puppet[:lastrunfile]].each do |path|
+        expect(File).to_not be_exist(path)
+      end
+      configurer.run
+      [Puppet[:lastrunreport], Puppet[:lastrunfile]].each do |path|
+        expect(File).to_not be_exist(path)
+      end
+    end
+
     it "should update the cached catalog when not in noop mode" do
       Puppet[:noop] = false
       Puppet[:log_level] = 'info'
@@ -880,6 +896,25 @@ describe Puppet::Configurer do
       expect(File).to be_exist(cache_path)
 
       expect(@logs).to include(an_object_having_attributes(level: :info, message: "Caching catalog for #{Puppet[:node_name_value]}"))
+    end
+
+    it "should update its last run report and summary when not in noop mode" do
+      Puppet[:noop] = false
+      Puppet[:summarize] = true
+      Puppet::Transaction::Report.indirection.cache_class = :yaml
+
+      stub_request(:post, %r{/puppet/v3/catalog}).to_return(:status => 200, :body => catalog.render(:json), :headers => {'Content-Type' => 'application/json'})
+
+      [Puppet[:lastrunreport], Puppet[:lastrunfile]].each do |path|
+        expect(File).to_not be_exist(path)
+      end
+
+      allow(configurer).to receive(:puts)
+      configurer.run
+
+      [Puppet[:lastrunreport], Puppet[:lastrunfile]].each do |path|
+        expect(File).to be_exist(path)
+      end
     end
 
     it "successfully applies the catalog without a cache" do
