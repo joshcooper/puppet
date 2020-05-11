@@ -142,7 +142,7 @@ class Puppet::Transaction::ResourceHarness
       end
     rescue => detail
       # Execution will continue on StandardErrors, just store the event
-      Puppet.log_exception(detail)
+      Puppet.log_exception(detail) unless event
 
       event = create_change_event(param, current_value, historical_value)
       event.status = "failure"
