@@ -1,4 +1,3 @@
-require 'puppet/http'
 require 'singleton'
 
 # Provides access to runtime implementations.
@@ -10,6 +9,7 @@ class Puppet::Runtime
   def initialize
     @runtime_services = {
       http: proc do
+        require 'puppet/http'
         klass = Puppet::Network::HttpPool.http_client_class
         if klass == Puppet::Network::HTTP::Connection ||
            klass == Puppet::Network::HTTP::ConnectionAdapter
@@ -17,6 +17,14 @@ class Puppet::Runtime
         else
           Puppet::HTTP::ExternalClient.new(klass)
         end
+      end,
+      ssl: proc do
+        require 'puppet/ssl'
+        Puppet::SSL::SSLProvider.new
+      end,
+      certificates: proc do
+        require 'puppet/x509'
+        Puppet::X509::CertProvider.new
       end
     }
   end

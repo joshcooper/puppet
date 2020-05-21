@@ -363,7 +363,7 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
       daemon.set_signal_traps
 
       log_config if Puppet[:daemonize]
-      
+
       Puppet.override(ssl_context: wait_for_certificates) do
         if Puppet[:onetime]
           onetime(daemon)
@@ -386,7 +386,7 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
 
   def fingerprint
     Puppet::Util::Log.newdestination(:console)
-    cert_provider = Puppet::X509::CertProvider.new
+    cert_provider = Puppet.runtime[:certificates]
     client_cert = cert_provider.load_client_cert(Puppet[:certname])
     if client_cert
       puts Puppet::SSL::Digest.new(options[:digest].to_s, client_cert.to_der).to_s

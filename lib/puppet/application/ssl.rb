@@ -87,8 +87,8 @@ HELP
   def initialize(command_line = Puppet::Util::CommandLine.new)
     super(command_line)
 
-    @cert_provider = Puppet::X509::CertProvider.new
-    @ssl_provider = Puppet::SSL::SSLProvider.new
+    @cert_provider = Puppet.runtime[:certificates]
+    @ssl_provider = Puppet.runtime[:ssl]
     @machine = Puppet::SSL::StateMachine.new
     @session = Puppet.runtime[:http].create_session
   end

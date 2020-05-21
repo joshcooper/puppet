@@ -121,16 +121,16 @@ class Puppet::SSL::SSLProvider
   # @raise [Puppet::Error] There was an issue with one of the required components.
   # @api private
   def load_context(certname: Puppet[:certname], revocation: Puppet[:certificate_revocation], password: nil)
-    cert = Puppet::X509::CertProvider.new
-    cacerts = cert.load_cacerts(required: true)
+    cert_provider = Puppet.runtime[:certificates]
+    cacerts = cert_provider.load_cacerts(required: true)
     crls = case revocation
            when :chain, :leaf
-             cert.load_crls(required: true)
+             cert_provider.load_crls(required: true)
            else
              []
            end
-    private_key = cert.load_private_key(certname, required: true, password: password)
-    client_cert = cert.load_client_cert(certname, required: true)
+    private_key = cert_provider.load_private_key(certname, required: true, password: password)
+    client_cert = cert_provider.load_client_cert(certname, required: true)
 
     create_context(cacerts: cacerts, crls: crls,  private_key: private_key, client_cert: client_cert, revocation: revocation)
   rescue OpenSSL::PKey::PKeyError => e

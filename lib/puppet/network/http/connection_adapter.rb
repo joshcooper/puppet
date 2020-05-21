@@ -125,18 +125,18 @@ class Puppet::Network::HTTP::ConnectionAdapter < Puppet::Network::HTTP::Connecti
     return ctx if ctx
 
     # load available certs
-    cert = Puppet::X509::CertProvider.new
-    ssl = Puppet::SSL::SSLProvider.new
+    cert_provider = Puppet.runtime[:certificates]
+    ssl_provider = Puppet.runtime[:ssl]
     begin
-      password = cert.load_private_key_password
-      ssl.load_context(certname: Puppet[:certname], password: password)
+      password = cert_provider.load_private_key_password
+      ssl_provider.load_context(certname: Puppet[:certname], password: password)
     rescue Puppet::SSL::SSLError => e
       Puppet.log_exception(e)
 
       # if we don't have cacerts, then create a root context that doesn't
       # trust anything. The old code used to fallback to VERIFY_NONE,
       # which we don't want to emulate.
-      ssl.create_root_context(cacerts: [])
+      ssl_provider.create_root_context(cacerts: [])
     end
   end
 

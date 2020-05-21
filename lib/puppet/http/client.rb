@@ -399,11 +399,11 @@ class Puppet::HTTP::Client
   def system_ssl_context
     return @default_system_ssl_context if @default_system_ssl_context
 
-    cert_provider = Puppet::X509::CertProvider.new
+    cert_provider = Puppet.runtime[:certificates]
     cacerts = cert_provider.load_cacerts || []
 
-    ssl = Puppet::SSL::SSLProvider.new
-    @default_system_ssl_context = ssl.create_system_context(cacerts: cacerts)
+    ssl_provider = Puppet.runtime[:ssl]
+    @default_system_ssl_context = ssl_provider.create_system_context(cacerts: cacerts)
   end
 
   def apply_auth(request, basic_auth)

@@ -383,8 +383,8 @@ class Puppet::SSL::StateMachine
                  waitforlock: Puppet[:waitforlock],
                  maxwaitforlock: Puppet[:maxwaitforlock],
                  onetime: Puppet[:onetime],
-                 cert_provider: Puppet::X509::CertProvider.new,
-                 ssl_provider: Puppet::SSL::SSLProvider.new,
+                 cert_provider: Puppet.runtime[:certificates],
+                 ssl_provider: Puppet.runtime[:ssl],
                  lockfile: Puppet::Util::Pidlock.new(Puppet[:ssl_lockfile]),
                  digest: 'SHA256',
                  ca_fingerprint: Puppet[:ca_fingerprint])

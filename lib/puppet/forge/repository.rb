@@ -23,7 +23,7 @@ class Puppet::Forge
       @cache = Cache.new(self)
       @uri   = URI.parse(host)
 
-      ssl_provider = Puppet::SSL::SSLProvider.new
+      ssl_provider = Puppet.runtime[:ssl]
       @ssl_context = ssl_provider.create_system_context(cacerts: [])
     end
 

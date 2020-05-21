@@ -12,8 +12,8 @@ class Puppet::SSL::VerifierAdapter
     @validator = validator
 
     if validator.is_a?(Puppet::SSL::Validator::NoValidator)
-      ssl = Puppet::SSL::SSLProvider.new
-      @ssl_context = ssl.create_insecure_context
+      ssl_provider = Puppet.runtime[:ssl]
+      @ssl_context = ssl_provider.create_insecure_context
     else
       # nil means use the default SSLContext
       @ssl_context = nil
