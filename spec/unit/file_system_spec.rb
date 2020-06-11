@@ -931,9 +931,9 @@ describe "Puppet::FileSystem" do
       end
 
       it 'writes in binary mode' do
-        Puppet::FileSystem.replace_file(dest) { |f| f.write("\x00\x01\x02") }
+        Puppet::FileSystem.replace_file(dest) { |f| f.write("\x00\x01\r\n\x02") }
 
-        expect(Puppet::FileSystem.binread(dest)).to eq("\x00\x01\x02")
+        expect(Puppet::FileSystem.binread(dest)).to eq("\x00\x01\r\n\x02")
       end
 
       context 'on posix', unless: Puppet::Util::Platform.windows? do

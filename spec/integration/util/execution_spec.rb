@@ -50,6 +50,30 @@ describe Puppet::Util::Execution, unless: Puppet::Util::Platform.jruby? do
       Puppet::Util::Execution.execute(str, sensitive: true)
       expect(@logs).to include(an_object_having_attributes(level: :debug, message: "Executing: '[redacted]'"))
     end
+
+    it 'reads stdin in binary mode' do
+      stdin = tmpfile('stdin')
+      File.binwrite(stdin, "1\r\n2\r\n")
+
+      if Puppet::Util::Platform.windows?
+        argv = "cmd.exe /c sort"
+      else
+        argv = "sort -"
+      end
+
+      result = Puppet::Util::Execution.execute(argv, stdinfile: stdin)
+      expect(result).to eq("1\r\n2\r\n")
+    end
+
+    it 'writes stdout in binary mode' do
+      if Puppet::Util::Platform.windows?
+        result = Puppet::Util::Execution.execute("cmd.exe /c echo 1")
+        expect(result).to eq("1\r\n")
+      else
+        result = Puppet::Util::Execution.execute("echo 1")
+        expect(result).to eq("1\n")
+      end
+    end
   end
 
   describe "#execute (non-Windows)", :if => !Puppet::Util::Platform.windows? do

@@ -144,6 +144,8 @@ class Puppet::FileSystem::Windows < Puppet::FileSystem::Posix
 
     tempfile = Puppet::FileSystem::Uniquefile.new(Puppet::FileSystem.basename_string(path), Puppet::FileSystem.dir_string(path))
     begin
+      tempfile.binmode
+
       tempdacl = Puppet::Util::Windows::AccessControlList.new
       tempdacl.allow(current_sid, FULL_CONTROL)
       set_dacl(tempfile.path, tempdacl)

@@ -197,19 +197,20 @@ module Puppet::Util::Execution
     end
 
     begin
-      stdin = Puppet::FileSystem.open(options[:stdinfile] || null_file, nil, 'r')
+      stdin = Puppet::FileSystem.open(options[:stdinfile] || null_file, nil, 'rb')
       # On Windows, continue to use the file-based approach to avoid breaking people's existing
       # manifests. If they use a script that doesn't background cleanly, such as
       # `start /b ping 127.0.0.1`, we couldn't handle it with pipes as there's no non-blocking
       # read available.
       if options[:squelch]
-        stdout = Puppet::FileSystem.open(null_file, nil, 'w')
+        stdout = Puppet::FileSystem.open(null_file, nil, 'wb')
       elsif Puppet.features.posix?
         reader, stdout = IO.pipe
       else
         stdout = Puppet::FileSystem::Uniquefile.new('puppet')
+        stdout.binmode
       end
-      stderr = options[:combine] ? stdout : Puppet::FileSystem.open(null_file, nil, 'w')
+      stderr = options[:combine] ? stdout : Puppet::FileSystem.open(null_file, nil, 'wb')
 
       exec_args = [command, options, stdin, stdout, stderr]
       output = ''
@@ -411,6 +412,7 @@ module Puppet::Util::Execution
     2.times do |try|
       if Puppet::FileSystem.exist?(stdout.path)
         stdout.open
+        stdout.binmode
         begin
           return stdout.read
         ensure
