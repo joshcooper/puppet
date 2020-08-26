@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/thread_local'
 
 module Puppet
@@ -25,7 +27,7 @@ module Puppet
     #
     # To support testing, a given file that is an empty string, or nil
     # as well as a nil line number are supported. Such stack frames
-    # will be represented with the text `unknown` and `0´ respectively.
+    # will be represented with the text `unknown` and `0` respectively.
     module PuppetStack
       @stack = Puppet::ThreadLocal.new { Array.new }
 
