@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/concurrent/thread_local_singleton'
 
 module Puppet::Pops
@@ -49,7 +51,7 @@ class TypeFormatter
   # @api public
   #
   def string(t)
-    @bld = ''
+    @bld = String.new
     append_string(t)
     @bld
   end
@@ -63,7 +65,7 @@ class TypeFormatter
   #
   # @api public
   def indented_string(t, indent = 0, indent_width = 2)
-    @bld = ''
+    @bld = String.new
     append_indented_string(t, indent, indent_width)
     @bld
   end
