@@ -152,8 +152,8 @@ module Puppet
         * emerg
         * crit
         ",
-      :hook => proc {|value| Puppet::Util::Log.level = value },
       :call_hook => :on_initialize_and_write,
+      :hook => proc {|value| Puppet::Util::Log.level = value },
     },
     :disable_warnings => {
       :default => [],
@@ -170,6 +170,7 @@ module Puppet
         * `deprecations` --- disables deprecation warnings.
         * `undefined_variables` --- disables warnings about non existing variables.
         * `undefined_resources` --- disables warnings about non existing resources.",
+      :call_hook => :on_initialize_and_write,
       :hook      => proc do |value|
         values = munge(value)
         valid   = %w[deprecations undefined_variables undefined_resources]
@@ -212,6 +213,7 @@ module Puppet
         but may be added in minor releases (x.y.0). In major releases
         it expected that most (if not all) strictness validation become
         standard behavior.",
+      :call_hook => :on_initialize_and_write,
       :hook    => proc do |value|
         munge(value)
         value.to_sym
@@ -223,6 +225,7 @@ module Puppet
       :desc    => "If true, turns off all translations of Puppet and module
         log messages, which affects error, warning, and info log messages,
         as well as any translations in the report and CLI.",
+      :call_hook => :on_initialize_and_write,
       :hook    => proc do |value|
         if value
           require 'puppet/gettext/stubs'
@@ -1993,9 +1996,12 @@ EOT
       :type       => :boolean,
       :desc       => "Whether plugins should be synced with the central server. This setting is
         deprecated.",
+      :call_hook => :on_initialize_and_write,
       :hook => proc { |value|
-        #TRANSLATORS 'pluginsync' is a setting and should not be translated
-        Puppet.deprecation_warning(_("Setting 'pluginsync' is deprecated."))
+        if Puppet.settings.set_by_config?(:pluginsync)
+          #TRANSLATORS 'pluginsync' is a setting and should not be translated
+          Puppet.deprecation_warning(_("Setting 'pluginsync' is deprecated."))
+        end
       }
     },
     :pluginsignore => {
@@ -2257,6 +2263,7 @@ EOT
     :rich_data => {
       :default  => true,
       :type     => :boolean,
+      :call_hook => :on_initialize_and_write,
       :hook    => proc do |value|
         envs = Puppet.lookup(:environments) { nil }
         envs.clear_all unless envs.nil?
