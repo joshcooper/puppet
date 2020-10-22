@@ -340,16 +340,6 @@ Naming/RescuedExceptionsVariableName:
 Naming/VariableNumber:
   Enabled: false
 
-# Offense count: 7
-Security/Open:
-  Exclude:
-    - 'lib/puppet/file_system/file_impl.rb'
-    - 'lib/puppet/file_system/posix.rb'
-    - 'lib/puppet/provider/package/appdmg.rb'
-    - 'lib/puppet/provider/package/windows/package.rb'
-    - 'lib/puppet/util/command_line/trollop.rb'
-    - 'lib/puppet/util/execution.rb'
-
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle, AllowModifiersOnSymbols.
