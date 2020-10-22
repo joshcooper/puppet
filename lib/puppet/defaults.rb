@@ -1041,7 +1041,9 @@ EOT
         listed in this file.  If this setting has no value then the Puppet master's CA
         certificate (localcacert) will be used.",
       :hook => proc do |val|
-        Puppet.deprecation_warning(_("Setting 'ssl_client_ca_auth' is deprecated."))
+        if Puppet.settings.set_by_config?(:ssl_client_ca_auth)
+          Puppet.deprecation_warning(_("Setting 'ssl_client_ca_auth' is deprecated."))
+        end
       end
     },
     :ssl_server_ca_auth => {
@@ -1379,7 +1381,9 @@ EOT
       with Puppet Server. (eg `puppet facts upload`, `puppet agent`). May be
       overridden by more specific settings (see `ca_port`, `report_port`).",
       :hook       => proc do |value|
-        Puppet[:masterport] = value unless Puppet.settings.set_by_config?(:masterport)
+        if value != 8140 && !Puppet.settings.set_by_config?(:masterport)
+          Puppet[:masterport] = value
+        end
       end
     },
     :masterport => {
@@ -1388,7 +1392,9 @@ EOT
       with Puppet Server. (eg `puppet facts upload`, `puppet agent`). May be
       overridden by more specific settings (see `ca_port`, `report_port`).",
       :hook => proc do |value|
-        Puppet[:serverport] = value unless Puppet.settings.set_by_config?(:serverport)
+        if value != 8140 && !Puppet.settings.set_by_config?(:serverport)
+          Puppet[:serverport] = value
+        end
       end
     },
     :node_name => {

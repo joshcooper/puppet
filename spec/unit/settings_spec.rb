@@ -434,11 +434,6 @@ describe Puppet::Settings do
         end
       end
 
-      it "should have a default value of :on_write_only" do
-        @settings.define_settings(:section, :setting => {:default => "yay", :desc => "boo", :hook => lambda { |v| hook_values << v  }})
-        expect(@settings.setting(:setting).call_hook).to eq(:on_write_only)
-      end
-
       describe "when nil" do
         it "should generate a warning" do
           expect(Puppet).to receive(:warning)
@@ -447,7 +442,7 @@ describe Puppet::Settings do
 
         it "should use default" do
           @settings.define_settings(:section, :setting => {:default => "yay", :desc => "boo", :call_hook => nil, :hook => lambda { |v| hook_values << v  }})
-          expect(@settings.setting(:setting).call_hook).to eq(:on_write_only)
+          expect(@settings.setting(:setting).call_hook).to eq(:on_initialize_and_write)
         end
       end
 
@@ -456,77 +451,6 @@ describe Puppet::Settings do
           expect do
             @settings.define_settings(:section, :setting => {:default => "yay", :desc => "boo", :call_hook => :foo, :hook => lambda { |v| hook_values << v  }})
           end.to raise_error(ArgumentError, /invalid.*call_hook/i)
-        end
-      end
-
-      describe "when :on_write_only" do
-        it "returns its hook type" do
-          @settings.define_settings(:main, :setting => {:default => "yay", :desc => "boo", :hook => lambda { |_| }})
-
-          expect(@settings.setting(:setting).call_hook).to eq(:on_write_only)
-        end
-
-        it "should not call the hook at definition" do
-          hook_values = []
-          @settings.define_settings(:main, :setting => {:default => "yay", :desc => "boo", :hook => lambda { |v| hook_values << v  }})
-
-          expect(hook_values).to eq(%w[])
-        end
-
-        it "calls the hook when initializing global defaults with the value from the `main` section" do
-          hook_values = []
-          @settings.define_settings(:main, :setting => {:default => "yay", :desc => "boo", :hook => lambda { |v| hook_values << v  }})
-
-          File.write(config_file, <<~END)
-            [main]
-            setting=in_main
-          END
-          @settings.initialize_global_settings
-
-          expect(@settings[:setting]).to eq('in_main')
-          expect(hook_values).to eq(%w[in_main])
-        end
-
-        it "doesn't call the hook when initializing app defaults" do
-          hook_values = []
-          @settings.define_settings(:main, PuppetSpec::Settings::TEST_APP_DEFAULT_DEFINITIONS)
-          @settings.define_settings(:main, :setting => {:default => "yay", :desc => "boo", :hook => lambda { |v| hook_values << v }})
-
-          File.write(config_file, <<~END)
-            [main]
-            setting=in_main
-            [agent]
-            setting=in_agent
-          END
-          @settings.initialize_global_settings
-
-          hook_values.clear
-
-          @settings.initialize_app_defaults(PuppetSpec::Settings::TEST_APP_DEFAULT_VALUES)
-
-          expect(@settings[:setting]).to eq('in_main')
-          expect(hook_values).to eq(%w[])
-        end
-
-        it "doesn't call the hook with value from a section that matches the run_mode" do
-          hook_values = []
-          @settings.define_settings(:main, PuppetSpec::Settings::TEST_APP_DEFAULT_DEFINITIONS)
-          @settings.define_settings(:main, :setting => {:default => "yay", :desc => "boo", :hook => lambda { |v| hook_values << v  }})
-
-          File.write(config_file, <<~END)
-            [main]
-            setting=in_main
-            [agent]
-            setting=in_agent
-          END
-          @settings.initialize_global_settings
-
-          hook_values.clear
-
-          @settings.initialize_app_defaults(PuppetSpec::Settings::TEST_APP_DEFAULT_VALUES.merge(:run_mode => :agent))
-
-          expect(@settings[:setting]).to eq('in_agent')
-          expect(hook_values).to eq(%w[])
         end
       end
 
@@ -1287,7 +1211,7 @@ describe Puppet::Settings do
       CONF
       @settings.initialize_global_settings
 
-      expect(values).to eq(["yay/setval"])
+      expect(values).to eq(["yay", "yay/setval"])
     end
 
     it "should allow hooks invoked at parse time to be deferred" do
