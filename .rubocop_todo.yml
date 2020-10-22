@@ -354,17 +354,6 @@ Naming/RescuedExceptionsVariableName:
 Naming/VariableNumber:
   Enabled: false
 
-# Offense count: 8
-Security/Open:
-  Exclude:
-    - 'ext/regexp_nodes/regexp_nodes.rb'
-    - 'lib/puppet/file_system/file_impl.rb'
-    - 'lib/puppet/file_system/posix.rb'
-    - 'lib/puppet/provider/package/appdmg.rb'
-    - 'lib/puppet/provider/package/windows/package.rb'
-    - 'lib/puppet/util/command_line/trollop.rb'
-    - 'lib/puppet/util/execution.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, AllowModifiersOnSymbols.
 # SupportedStyles: inline, group
