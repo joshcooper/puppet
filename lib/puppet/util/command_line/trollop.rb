@@ -647,12 +647,13 @@ private
     case param
     when /^(stdin|-)$/i; $stdin
     else
-      require 'open-uri'
-      begin
-        open param
-      rescue SystemCallError => e
-        raise CommandlineError, _("file or url for option '%{arg}' cannot be opened: %{value0}") % { arg: arg, value0: e.message }, e.backtrace
-      end
+      # require 'open-uri'
+      # begin
+      #   open param
+      # rescue SystemCallError => e
+      #   raise CommandlineError, _("file or url for option '%{arg}' cannot be opened: %{value0}") % { arg: arg, value0: e.message }, e.backtrace
+      # end
+      raise CommandlineError, _("option '%{arg}' is an IO option and is not supported") % { arg: arg }
     end
   end
 
