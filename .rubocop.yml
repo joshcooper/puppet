@@ -13,6 +13,7 @@ AllCops:
     - 'tasks/**/*'
     - 'ext/suse/puppet.spec'
     - 'lib/puppet/vendor/**/*'
+    - 'lib/puppet/external/**/*'
     - 'lib/puppet/pops/parser/eparser.rb'
 
 # MAYBE useful - no return inside ensure block.
@@ -20,7 +21,7 @@ Lint/EnsureReturn:
   Enabled: false
 
 # MAYBE useful - errors when rescue {} happens.
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Enabled: false
 
 # DISABLED really useless. Detects return as last statement.
@@ -68,15 +69,15 @@ Lint/AmbiguousRegexpLiteral:
 Security/Eval:
   Enabled: false
 # DISABLED
-Lint/BlockAlignment:
+Layout/BlockAlignment:
   Enabled: false
 
 # DISABLED
-Lint/DefEndAlignment:
+Layout/DefEndAlignment:
   Enabled: false
 
 # DISABLED
-Lint/EndAlignment:
+Layout/EndAlignment:
   Enabled: false
 
 # DISABLED
@@ -95,19 +96,16 @@ Lint/UnusedMethodArgument:
 Layout/AccessModifierIndentation:
   Enabled: false
 
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false
 
 Style/Alias:
   Enabled: false
 
-Layout/AlignArray:
+Layout/ArrayAlignment:
   Enabled: false
 
-Layout/AlignHash:
-  Enabled: false
-
-Layout/AlignParameters:
+Layout/HashAlignment:
   Enabled: false
 
 Metrics/BlockNesting:
@@ -119,9 +117,6 @@ Style/AsciiComments:
 Style/Attr:
   Enabled: false
 
-Style/BracesAroundHashParameters:
-  Enabled: false
-
 Style/CaseEquality:
   Enabled: false
 
@@ -131,7 +126,7 @@ Layout/CaseIndentation:
 Style/CharacterLiteral:
   Enabled: false
 
-Style/ClassAndModuleCamelCase:
+Naming/ClassAndModuleCamelCase:
   Enabled: false
 
 Style/ClassAndModuleChildren:
@@ -157,22 +152,19 @@ Style/WhenThen:
 Style/WordArray:
   Enabled: false
 
-Style/UnneededPercentQ:
+Style/RedundantInterpolation:
   Enabled: false
 
-Layout/Tab:
+Layout/IndentationStyle:
   Enabled: false
 
 Layout/SpaceBeforeSemicolon:
   Enabled: false
 
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   Enabled: false
 
 Layout/SpaceInsideBlockBraces:
-  Enabled: false
-
-Layout/SpaceInsideBrackets:
   Enabled: false
 
 Layout/SpaceInsideHashLiteralBraces:
@@ -230,7 +222,7 @@ Style/CommentAnnotation:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
-Style/ConstantName:
+Naming/ConstantName:
   Enabled: false
 
 Style/Documentation:
@@ -255,10 +247,10 @@ Style/EachWithObject:
 Layout/EmptyLineBetweenDefs:
   Enabled: false
 
-Layout/IndentArray:
+Layout/FirstArrayElementIndentation:
   Enabled: false
 
-Layout/IndentHash:
+Layout/FirstHashElementIndentation:
   Enabled: false
 
 Layout/IndentationConsistency:
@@ -276,7 +268,7 @@ Layout/EmptyLinesAroundAccessModifier:
 Style/EmptyLiteral:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
 
 Style/MethodCallWithoutArgsParentheses:
@@ -294,7 +286,10 @@ Layout/TrailingWhitespace:
 Style/StringLiterals:
   Enabled: false
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
   Enabled: false
 
 Style/TrailingCommaInArguments:
@@ -340,7 +335,7 @@ Style/UnlessElse:
 Style/VariableInterpolation:
   Enabled: false
 
-Style/VariableName:
+Naming/VariableName:
   Enabled: false
 
 Style/WhileUntilDo:
@@ -349,7 +344,7 @@ Style/WhileUntilDo:
 Style/EvenOdd:
   Enabled: false
 
-Style/FileName:
+Naming/FileName:
   Enabled: false
 
 Style/For:
@@ -358,7 +353,7 @@ Style/For:
 Style/Lambda:
   Enabled: false
 
-Style/MethodName:
+Naming/MethodName:
   Enabled: false
 
 Style/MultilineTernaryOperator:
@@ -394,7 +389,7 @@ Style/NumericLiterals:
 Style/OneLineConditional:
   Enabled: false
 
-Style/OpMethod:
+Naming/BinaryOperatorParameterName:
   Enabled: false
 
 Style/ParenthesesAroundCondition:
@@ -406,7 +401,7 @@ Style/PercentLiteralDelimiters:
 Style/PerlBackrefs:
   Enabled: false
 
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: false
 
 Style/RedundantException:
@@ -517,9 +512,6 @@ Layout/EmptyLinesAroundMethodBody:
 Layout/ClosingParenthesisIndentation:
   Enabled: false
 
-Style/UnneededInterpolation:
-  Enabled: false
-
 Layout/ElseAlignment:
   Enabled: false
 
@@ -532,19 +524,13 @@ Layout/FirstParameterIndentation:
 Style/IfInsideElse:
   Enabled: false
 
-Layout/IndentAssignment:
+Layout/AssignmentIndentation:
   Enabled: false
 
 Layout/SpaceAroundBlockParameters:
   Enabled: false
 
 Style/ParallelAssignment:
-  Enabled: false
-
-Performance/RedundantBlockCall:
-  Enabled: false
-
-Performance/RegexpMatch:
   Enabled: false
 
 Style/IdenticalConditionalBranches:
@@ -601,7 +587,7 @@ Layout/EmptyLinesAroundBeginBody:
 Layout/EmptyLinesAroundExceptionHandlingKeywords:
   Enabled: false
 
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: false
 
 Layout/MultilineArrayBraceLayout:
@@ -643,9 +629,6 @@ Style/FormatStringToken:
 Style/InverseMethods:
   Enabled: false
 
-Style/MethodMissing:
-  Enabled: false
-
 Style/MixinGrouping:
   Enabled: false
 
@@ -673,13 +656,13 @@ Style/TernaryParentheses:
 Style/YodaCondition:
   Enabled: false
 
-GetText/DecorateFunctionMessage:
+I18n/GetText/DecorateFunctionMessage:
   Enabled: false
 
-GetText/DecorateString:
+I18n/GetText/DecorateString:
   Enabled: false
 
-GetText/DecorateStringFormattingUsingPercent:
+I18n/GetText/DecorateStringFormattingUsingPercent:
   Enabled: false
 
 Style/SafeNavigation:

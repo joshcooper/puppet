@@ -45,8 +45,8 @@ group(:test) do
   gem 'webmock', '~> 3.0', require: false
   gem 'yard', require: false
 
-  gem 'rubocop', '~> 0.49', require: false, platforms: [:ruby]
-  gem 'rubocop-i18n', '~> 1.2.0', require: false, platforms: [:ruby]
+  gem 'rubocop', '~> 1.0', require: false, platforms: [:ruby]
+  gem 'rubocop-i18n', '~> 3.0', require: false, platforms: [:ruby]
 end
 
 group(:development, optional: true) do
