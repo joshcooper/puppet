@@ -295,14 +295,6 @@ Style/RedundantPercentQ:
     - 'lib/puppet/type.rb'
     - 'lib/puppet/util/at_fork/solaris.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/RedundantSort:
-  Exclude:
-    - 'lib/puppet/interface/face_collection.rb'
-    - 'lib/puppet/module/plan.rb'
-    - 'lib/puppet/module_tool/applications/unpacker.rb'
-
 # Offense count: 188
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
