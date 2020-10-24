@@ -120,12 +120,6 @@ Lint/NonDeterministicRequireOrder:
   Exclude:
     - 'lib/puppet/parser.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/RedundantCopDisableDirective:
-  Exclude:
-    - 'lib/puppet/pops/loader/static_loader.rb'
-
 # Offense count: 3
 Lint/ReturnInVoidContext:
   Exclude:
