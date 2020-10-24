@@ -142,11 +142,6 @@ Lint/ToJSON:
     - 'lib/puppet/pops/serialization/json.rb'
 
 # Offense count: 2
-Lint/UnreachableCode:
-  Exclude:
-    - 'lib/puppet/provider/package/portupgrade.rb'
-
-# Offense count: 2
 Lint/UriEscapeUnescape:
   Exclude:
     - 'lib/puppet/util.rb'
