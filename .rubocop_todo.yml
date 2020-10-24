@@ -126,12 +126,6 @@ Lint/RedundantCopDisableDirective:
   Exclude:
     - 'lib/puppet/pops/loader/static_loader.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/RedundantRequireStatement:
-  Exclude:
-    - 'lib/puppet/type/file.rb'
-
 # Offense count: 3
 Lint/ReturnInVoidContext:
   Exclude:
