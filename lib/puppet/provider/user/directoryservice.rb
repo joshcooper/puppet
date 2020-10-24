@@ -198,7 +198,7 @@ Puppet::Type.type(:user).provide :directoryservice do
   # The salted-SHA512 password hash in 10.7 is stored in the 'SALTED-SHA512'
   # key as binary data. That data is extracted and converted to a hex string.
   def self.get_salted_sha512(embedded_binary_plist)
-    embedded_binary_plist['SALTED-SHA512'].unpack("H*")[0]
+    embedded_binary_plist['SALTED-SHA512'].unpack1("H*")
   end
 
   # This method reads the passed embedded_binary_plist hash and returns values
@@ -208,7 +208,7 @@ Puppet::Type.type(:user).provide :directoryservice do
   def self.get_salted_sha512_pbkdf2(field, embedded_binary_plist)
     case field
     when 'salt', 'entropy'
-      embedded_binary_plist['SALTED-SHA512-PBKDF2'][field].unpack('H*').first
+      embedded_binary_plist['SALTED-SHA512-PBKDF2'][field].unpack1('H*')
     when 'iterations'
       Integer(embedded_binary_plist['SALTED-SHA512-PBKDF2'][field])
     else
