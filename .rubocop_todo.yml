@@ -152,13 +152,6 @@ Lint/UriRegexp:
   Exclude:
     - 'lib/puppet/pops/pcore.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: ContextCreatingMethods, MethodCreatingMethods.
-Lint/UselessAccessModifier:
-  Exclude:
-    - 'lib/hiera_puppet.rb'
-
 # Offense count: 9
 # Configuration parameters: CheckForMethodsWithNoSideEffects.
 Lint/Void:
