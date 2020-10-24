@@ -215,12 +215,6 @@ Style/CommentedKeyword:
     - 'lib/puppet/util/windows/service.rb'
 
 # Offense count: 1
-# Cop supports --auto-correct.
-Style/EmptyBlockParameter:
-  Exclude:
-    - 'lib/puppet/parser/type_loader.rb'
-
-# Offense count: 1
 Style/EvalWithLocation:
   Exclude:
     - 'lib/puppet/interface/action_builder.rb'
