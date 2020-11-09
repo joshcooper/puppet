@@ -22,13 +22,13 @@ class Puppet::Agent
 
   attr_reader :client_class, :client, :should_fork
 
-  def initialize(client_class, should_fork=true)
+  def initialize(client_class, should_fork = true)
     @should_fork = can_fork? && should_fork
     @client_class = client_class
   end
 
   def can_fork?
-    Puppet.features.posix? && RUBY_PLATFORM != 'java'
+    !Puppet::Util::Platform.windows? && RUBY_PLATFORM != 'java'
   end
 
   def needing_restart?

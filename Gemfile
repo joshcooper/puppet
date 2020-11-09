@@ -28,6 +28,7 @@ group(:features) do
   #gem 'ruby-shadow', '~> 2.5', require: false, platforms: [:ruby]
   gem 'minitar', '~> 0.9', require: false
   gem 'msgpack', '~> 1.2', require: false
+#  gem 'opentracing', '~> 0.5', require: false
   gem 'rdoc', '~> 6.0', require: false, platforms: [:ruby]
   # requires native augeas headers/libs
   # gem 'ruby-augeas', require: false, platforms: [:ruby]

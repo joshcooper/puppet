@@ -7,6 +7,8 @@ module Puppet::Util::Profiler
   require 'puppet/util/profiler/wall_clock'
   require 'puppet/util/profiler/object_counts'
   require 'puppet/util/profiler/around_profiler'
+  require 'puppet/util/profiler/tracer'
+  require 'puppet/util/profiler/aggregate'
 
   @profiler = Puppet::Util::Profiler::AroundProfiler.new
 

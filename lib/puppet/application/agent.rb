@@ -4,6 +4,7 @@ require 'puppet/util/pidlock'
 require 'puppet/agent'
 require 'puppet/configurer'
 require 'puppet/ssl/oids'
+require 'puppet/util/profiler'
 
 class Puppet::Application::Agent < Puppet::Application
 
@@ -358,36 +359,96 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
     HELP
   end
 
-  def run_command
+  def initialize(command_line = Puppet::Util::CommandLine.new)
+    super
+
+    @agent = Puppet::Agent.new(Puppet::Configurer, (not(Puppet[:onetime])))
+    @daemon = Puppet::Daemon.new(@agent, Puppet::Util::Pidlock.new(Puppet[:pidfile]))
+    @daemon.argv = @argv # can't we just use command_line.args here?
+
+    if Puppet[:profile]
+      @profiler = Puppet::Util::Profiler.add_profiler(
+        if Puppet.features.opentracing?
+          Puppet::Util::Profiler::Tracer.new("agent")
+        else
+          Puppet::Util::Profiler::Aggregate.new(Puppet.method(:info), object_id)
+        end
+      )
+    end
+  end
+
+  def main
     if options[:fingerprint]
       fingerprint
+      exit(0)
+    elsif options[:enable]
+      @agent.enable
+      exit(0)
+    elsif options[:disable]
+      @agent.disable(options[:disable_message] || 'reason not specified')
+      exit(0)
+    end
+
+    exitstatus = nil
+
+    begin
+      Puppet::Util::Profiler.profile("Run agent", [:agent]) do
+        exitstatus = run_agent
+      end
+    ensure
+      @profiler.shutdown
+      Puppet::Util::Profiler.remove_profiler(@profiler)
+    end
+
+    # close logs after shutting down profiler
+    @daemon.stop(:exit => false)
+
+    if not exitstatus
+      exit(1)
+    elsif options[:detailed_exitcodes]
+      exit(exitstatus)
     else
-      # It'd be nice to daemonize later, but we have to daemonize before
-      # waiting for certificates so that we don't block
-      daemon = daemonize_process_when(Puppet[:daemonize])
+      exit(0)
+    end
+  end
 
-      # Setup signal traps immediately after daemonization so we clean up the daemon
-      daemon.set_signal_traps
+  def run_agent
+    exitstatus = nil
 
-      log_config if Puppet[:daemonize]
+    Puppet.notice _("Starting Puppet client version %{version}") % { version: Puppet.version }
 
-      # run ssl state machine, waiting if needed
-      ssl_context = wait_for_certificates
+    # It'd be nice to daemonize later, but we have to daemonize before
+    # waiting for certificates so that we don't block
+    @daemon.daemonize if Puppet[:daemonize]
 
-      # Each application is responsible for pushing loaders onto the context.
-      # Use the current environment that has already been established, though
-      # it may change later during the configurer run.
-      env = Puppet.lookup(:current_environment)
-      Puppet.override(ssl_context: ssl_context,
-                      current_environment: env,
-                      loaders: Puppet::Pops::Loaders.new(env, true)) do
-        if Puppet[:onetime]
-          onetime(daemon)
-        else
-          main(daemon)
+    # Setup signal traps immediately after daemonization so we clean up the daemon
+    @daemon.set_signal_traps
+
+    log_config if Puppet[:daemonize]
+
+    # run ssl state machine, waiting if needed
+    ssl_context = wait_for_certificates
+
+    # Each application is responsible for pushing loaders onto the context.
+    # Use the current environment that has already been established, though
+    # it may change later during the configurer run.
+    env = Puppet.lookup(:current_environment)
+    Puppet.override(ssl_context: ssl_context,
+                    current_environment: env,
+                    loaders: Puppet::Pops::Loaders.new(env, true)) do
+      if Puppet[:onetime]
+        begin
+          exitstatus = @agent.run({:job_id => options[:job_id], :start_time => options[:start_time]})
+        rescue => detail
+          Puppet.log_exception(detail)
         end
+      else
+        @daemon.start
+        # we never return from 'start'
       end
     end
+
+    exitstatus
   end
 
   def log_config
@@ -418,29 +479,6 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
   rescue => e
     Puppet.log_exception(e, _("Failed to generate fingerprint: %{message}") % {message: e.message})
     exit(1)
-  end
-
-  def onetime(daemon)
-    begin
-      exitstatus = daemon.agent.run({:job_id => options[:job_id], :start_time => options[:start_time]})
-    rescue => detail
-      Puppet.log_exception(detail)
-    end
-
-    daemon.stop(:exit => false)
-
-    if not exitstatus
-      exit(1)
-    elsif options[:detailed_exitcodes] then
-      exit(exitstatus)
-    else
-      exit(0)
-    end
-  end
-
-  def main(daemon)
-    Puppet.notice _("Starting Puppet client version %{version}") % { version: Puppet.version }
-    daemon.start
   end
 
   # Enable all of the most common test options.
@@ -478,40 +516,9 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
     if Puppet[:catalog_cache_terminus]
       Puppet::Resource::Catalog.indirection.cache_class = Puppet[:catalog_cache_terminus]
     end
-
-    # In fingerprint mode we don't need to set up the whole agent
-    unless options[:fingerprint]
-      setup_agent
-    end
   end
 
   private
-
-  def enable_disable_client(agent)
-    if options[:enable]
-      agent.enable
-    elsif options[:disable]
-      agent.disable(options[:disable_message] || 'reason not specified')
-    end
-    exit(0)
-  end
-
-  def setup_agent
-    agent = Puppet::Agent.new(Puppet::Configurer, (not(Puppet[:onetime])))
-
-    enable_disable_client(agent) if options[:enable] or options[:disable]
-
-    @agent = agent
-  end
-
-  def daemonize_process_when(should_daemonize)
-    daemon = Puppet::Daemon.new(@agent, Puppet::Util::Pidlock.new(Puppet[:pidfile]))
-    daemon.argv = @argv
-
-    daemon.daemonize if should_daemonize
-
-    daemon
-  end
 
   def wait_for_certificates
     waitforcert = options[:waitforcert] || (Puppet[:onetime] ? 0 : Puppet[:waitforcert])

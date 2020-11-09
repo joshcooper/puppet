@@ -109,48 +109,54 @@ class Puppet::Configurer
   def convert_catalog(result, duration, facts, options = {})
     catalog = nil
 
-    catalog_conversion_time = thinmark do
-      # Will mutate the result and replace all Deferred values with resolved values
-      if facts
-        Puppet::Pops::Evaluator::DeferredResolver.resolve_and_replace(facts, result)
-      end
+    Puppet::Util::Profiler.profile("Converted catalog", [:agent, :catalog, :convert]) do
+      catalog_conversion_time = thinmark do
+        # Will mutate the result and replace all Deferred values with resolved values
+        if facts
+          Puppet::Pops::Evaluator::DeferredResolver.resolve_and_replace(facts, result)
+        end
 
-      catalog = result.to_ral
-      catalog.finalize
-      catalog.retrieval_duration = duration
-      catalog.write_class_file
-      catalog.write_resource_file
+        catalog = result.to_ral
+        catalog.finalize
+        catalog.retrieval_duration = duration
+        catalog.write_class_file
+        catalog.write_resource_file
+      end
+      options[:report].add_times(:convert_catalog, catalog_conversion_time) if options[:report]
     end
-    options[:report].add_times(:convert_catalog, catalog_conversion_time) if options[:report]
 
     catalog
   end
 
   def get_facts(options)
     if options[:pluginsync]
-      plugin_sync_time = thinmark do
-        remote_environment_for_plugins = Puppet::Node::Environment.remote(@environment)
-        download_plugins(remote_environment_for_plugins)
+      Puppet::Util::Profiler.profile("Retrieving plugins", [:agent, :pluginsync]) do
+        plugin_sync_time = thinmark do
+          remote_environment_for_plugins = Puppet::Node::Environment.remote(@environment)
+          download_plugins(remote_environment_for_plugins)
 
-        Puppet::GettextConfig.reset_text_domain('agent')
-        Puppet::ModuleTranslations.load_from_vardir(Puppet[:vardir])
+          Puppet::GettextConfig.reset_text_domain('agent')
+          Puppet::ModuleTranslations.load_from_vardir(Puppet[:vardir])
+        end
+        options[:report].add_times(:plugin_sync, plugin_sync_time) if options[:report]
       end
-      options[:report].add_times(:plugin_sync, plugin_sync_time) if options[:report]
     end
 
     facts_hash = {}
     facts = nil
     if Puppet::Resource::Catalog.indirection.terminus_class == :rest
-      # This is a bit complicated.  We need the serialized and escaped facts,
-      # and we need to know which format they're encoded in.  Thus, we
-      # get a hash with both of these pieces of information.
-      #
-      # facts_for_uploading may set Puppet[:node_name_value] as a side effect
-      facter_time = thinmark do
-        facts = find_facts
-        facts_hash = encode_facts(facts) # encode for uploading # was: facts_for_uploading
+      Puppet::Util::Profiler.profile("Collected facts", [:agent, :facts]) do
+        # This is a bit complicated.  We need the serialized and escaped facts,
+        # and we need to know which format they're encoded in.  Thus, we
+        # get a hash with both of these pieces of information.
+        #
+        # facts_for_uploading may set Puppet[:node_name_value] as a side effect
+        facter_time = thinmark do
+          facts = find_facts
+          facts_hash = encode_facts(facts) # encode for uploading # was: facts_for_uploading
+        end
+        options[:report].add_times(:fact_generation, facter_time) if options[:report]
       end
-      options[:report].add_times(:fact_generation, facter_time) if options[:report]
     end
     [facts_hash, facts]
   end
@@ -297,15 +303,17 @@ class Puppet::Configurer
       unless (cached_catalog || options[:catalog] || Puppet[:strict_environment_mode])
         begin
           node = nil
-          node_retr_time = thinmark do
-            node = Puppet::Node.indirection.find(Puppet[:node_name_value],
-              :environment => Puppet::Node::Environment.remote(@environment),
-              :configured_environment => configured_environment,
-              :ignore_cache => true,
-              :transaction_uuid => @transaction_uuid,
-              :fail_on_404 => true)
+          Puppet::Util::Profiler.profile("Retrieved node", [:agent, :node]) do
+            node_retr_time = thinmark do
+              node = Puppet::Node.indirection.find(Puppet[:node_name_value],
+                                                   :environment => Puppet::Node::Environment.remote(@environment),
+                                                   :configured_environment => configured_environment,
+                                                   :ignore_cache => true,
+                                                   :transaction_uuid => @transaction_uuid,
+                                                   :fail_on_404 => true)
+            end
+            options[:report].add_times(:node_retrieval, node_retr_time)
           end
-          options[:report].add_times(:node_retrieval, node_retr_time)
 
           if node
             # If we have deserialized a node from a rest call, we want to set
@@ -406,7 +414,9 @@ class Puppet::Configurer
         if !Puppet[:noop] && indirection.cache?
           request = indirection.request(:save, nil, catalog, environment: Puppet::Node::Environment.remote(catalog.environment))
           Puppet.info("Caching catalog for #{request.key}")
-          indirection.cache.save(request)
+          Puppet::Util::Profiler.profile("Saved cached catalog", [:agent, :catalog, :cache]) do
+            indirection.cache.save(request)
+          end
         end
       end
 
@@ -415,7 +425,9 @@ class Puppet::Configurer
       options[:report].code_id = ral_catalog.code_id
       options[:report].catalog_uuid = ral_catalog.catalog_uuid
       options[:report].cached_catalog_status = @cached_catalog_status
-      apply_catalog(ral_catalog, options)
+      Puppet::Util::Profiler.profile("Applied catalog", [:agent, :catalog]) do
+        apply_catalog(ral_catalog, options)
+      end
       true
     rescue => detail
       Puppet.log_exception(detail, _("Failed to apply catalog: %{detail}") % { detail: detail })
@@ -427,16 +439,20 @@ class Puppet::Configurer
     if Puppet[:resubmit_facts]
       # TODO: Should mark the report as "failed" if an error occurs and
       #       resubmit_facts returns false. There is currently no API for this.
-      resubmit_facts_time = thinmark { resubmit_facts }
+      Puppet::Util::Profiler.profile("Resubmitted facts", [:agent, :facts, :resubmit]) do
+        resubmit_facts_time = thinmark { resubmit_facts }
 
-      report.add_times(:resubmit_facts, resubmit_facts_time)
+        report.add_times(:resubmit_facts, resubmit_facts_time)
+      end
     end
 
     report.cached_catalog_status ||= @cached_catalog_status
     report.add_times(:total, Time.now - report.time)
     report.finalize_report
     Puppet::Util::Log.close(report)
-    send_report(report)
+    Puppet::Util::Profiler.profile("Submitted report", [:agent, :report]) do
+      send_report(report)
+    end
     Puppet.pop_context
   end
   private :run_internal
@@ -537,18 +553,20 @@ class Puppet::Configurer
 
   def retrieve_new_catalog(facts, query_options)
     result = nil
-    @duration = thinmark do
-      result = Puppet::Resource::Catalog.indirection.find(
-        Puppet[:node_name_value],
-        query_options.merge(
-          :ignore_cache      => true,
-          # don't update cache until after environment converges
-          :ignore_cache_save => true,
-          :environment       => Puppet::Node::Environment.remote(@environment),
-          :fail_on_404       => true,
-          :facts_for_catalog => facts
+    Puppet::Util::Profiler.profile('Retrieved catalog', [:agent, :catalog, :download]) do
+      @duration = thinmark do
+        result = Puppet::Resource::Catalog.indirection.find(
+          Puppet[:node_name_value],
+          query_options.merge(
+            :ignore_cache      => true,
+            # don't update cache until after environment converges
+            :ignore_cache_save => true,
+            :environment       => Puppet::Node::Environment.remote(@environment),
+            :fail_on_404       => true,
+            :facts_for_catalog => facts
+          )
         )
-      )
+      end
     end
     result
   rescue StandardError => detail
