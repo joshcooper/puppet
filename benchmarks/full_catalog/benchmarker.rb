@@ -36,33 +36,15 @@ class Benchmarker
   end
 
   def run(args=nil)
-    # Probably could pare down these facts a lot
-    facts = Puppet::Node::Facts.new("testing", {
+    facts_path = File.join(File.dirname(__FILE__), 'facts.json')
+    hash = JSON.parse(File.read(facts_path))
+    hash["values"] = {
       'pe_concat_basedir'         => '/tmp/file',
       'platform_symlink_writable' => true,
       'pe_build'                  => '2016.4.4',
-      'identity' => {
-        'privileged' => true,
-      },
-      'mountpoints' => {
-        '/tmp' => {
-          'options' => ['rw'],
-        }
-      },
-      'puppet_files_dir_present' => true,
       'puppetversion' => '4.10.4',
       'aio_agent_version' => '1.10.4',
       'aio_agent_build'   => '1.10.4',
-      'memory'           => {
-        'system'        => {
-          'total_bytes' => 8589934592,
-        }
-      },
-      'memorysize' => '8 GiB',
-      'osfamily' => 'RedHat',
-      'operatingsystem' => 'CentOS',
-      'operatingsystemrelease' => '6.8',
-      'processorcount' => '2',
       'fake_domain' => 'pgtomcat.mycompany.org',
       'function' => 'app',
       'group' => 'pgtomcat',
@@ -70,15 +52,19 @@ class Benchmarker
       'whereami' => 'portland',
       'hostname' => 'pgtomcat',
       'fqdn' => 'pgtomcat.mycompany.org',
-      'lsbdistcodename' => 'n/a',
-      'processor0' => 'AMD Ryzen 7 1700 Eight-Core Processor',
-    })
+    }.merge!(hash["values"])
+
+    Puppet::Node::Facts.indirection.terminus_class = :memory
+    Puppet::Node::Facts.indirection.cache_class = nil
+
+    facts = Puppet::Node::Facts.from_data_hash(hash)
 
     env = Puppet.lookup(:environments).get('perf_control')
-    node = Puppet::Node.indirection.find("testing", :environment => env, :facts => facts)
+    node = Puppet::Node.new(facts.name, :environment => env)
 
     Puppet.push_context({:current_environment => env}, 'current env for benchmark')
-    Puppet::Resource::Catalog.indirection.find("testing", :use_node => node)
+    require  'byebug'; byebug
+    Puppet::Resource::Catalog.indirection.find(facts.name, :use_node => node, facts: facts, facts_format: 'application/json')
     Puppet.pop_context
     Puppet.lookup(:environments).clear('perf_control')
   end
