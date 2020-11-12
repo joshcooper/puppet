@@ -43,7 +43,11 @@ class Benchmarker
     end
     @@count += 1
     env = Puppet.lookup(:environments).get('benchmarking')
-    node = Puppet::Node.new("testing", :environment => env)
+
+    facts_path = File.join(File.dirname(__FILE__), 'facts.json')
+    facts = Puppet::Node::Facts.convert_from(:json, File.read(facts_path))
+    node = Puppet::Node.new("testing", :environment => env, :facts => facts)
+
     # Mimic what apply does (or the benchmark will in part run for the *root* environment)
     Puppet.push_context({:current_environment => env},'current env for benchmark')
     Puppet::Resource::Catalog.indirection.find("testing", :use_node => node)
