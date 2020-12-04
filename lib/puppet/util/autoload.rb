@@ -14,6 +14,7 @@ class Puppet::Util::ModuleDirectoriesAdapter < Puppet::Pops::Adaptable::Adapter
   def self.create_adapter(env)
     adapter = super(env)
     adapter.directories = env.modulepath.flat_map do |dir|
+#      puts "glob #{File.join(dir, '*', 'lib')}"
       Dir.glob(File.join(dir, '*', 'lib'))
     end
     adapter
@@ -26,9 +27,57 @@ class Puppet::Util::Autoload
   extend Puppet::Concurrent::Synchronized
 
   @loaded = {}
+  @stats = {
+    loaded: 0,
+    search_dir: 0,
+    stat: 0,
+    globs: 0,
+    glob_child: 0
+  }
 
   class << self
     attr_accessor :loaded
+
+    # Normalize a path. This converts ALT_SEPARATOR to SEPARATOR on Windows
+    # and eliminates unnecessary parts of a path.
+    def cleanpath(path)
+      # There are two cases here because cleanpath does not handle absolute
+      # paths correctly on windows (c:\ and c:/ are treated as distinct) but
+      # we don't want to convert relative paths to absolute
+      if Puppet::Util.absolute_path?(path)
+        File.expand_path(path)
+      else
+        Pathname.new(path).cleanpath.to_s
+      end
+    end
+
+    TOP_DIR = Pathname.new(File.join(__dir__, '../..')).cleanpath.freeze
+
+    BUILTIN_TYPES = {}
+    [
+      'puppet/type/*.rb',
+      'puppet/feature/*.rb',
+      'puppet/indirector/*/*.rb',
+      'puppet/indirector/*.rb',
+      'puppet/reports/*.rb',
+    ].each do |base|
+      Dir.glob(File.join(TOP_DIR, base)).each do |path|
+        BUILTIN_TYPES[Pathname.new(path).relative_path_from(TOP_DIR).to_s.chomp('.rb')] = Puppet::Util::Autoload.cleanpath(path) # can we skip cleanpath?
+      end
+    end
+
+    BUILTIN_TYPES['puppet/type/class'] = nil
+    BUILTIN_TYPES.freeze
+
+    PROVIDERLESS = Set.new([
+      'puppet/provider/component',
+      'puppet/provider/class',
+      'puppet/provider/filebucket',
+      'puppet/provider/notify',
+      'puppet/provider/schedule',
+      'puppet/provider/stage',
+      'puppet/provider/whit']
+    ).freeze
 
     def gem_source
       @gem_source ||= Puppet::Util::RubyGems::Source.new
@@ -68,14 +117,26 @@ class Puppet::Util::Autoload
       end
     end
 
-    # Load a single plugin by name.  We use 'load' here so we can reload a
-    # given plugin.
+    # Search for and load a single plugin by name. We use 'load' here so we can
+    # reload a given plugin. This method will search for the plugin based on the
+    # current search path. If the path to the plugin is known, use `load_file_from`.
+    #
+    # @param name The plugin name is of the form "puppet/type/file"
     def load_file(name, env)
       file = get_file(name.to_s, env)
       return false unless file
+
+      load_file_from(name, file, env)
+    end
+
+    # Load a single plugin by name from an absolute path. We use 'load' here so
+    # we can reload a given plugin.
+    #
+    def load_file_from(name, file, env)
       begin
+        @stats[:loaded] =+ 1
         mark_loaded(name, file)
-        Kernel.load file
+        Kernel.load(file)
         return true
       rescue SystemExit,NoMemoryError
         raise
@@ -87,11 +148,18 @@ class Puppet::Util::Autoload
     end
 
     def loadall(path, env)
+#      puts "loading #{path}"
+
+      return if PROVIDERLESS.include?(path)
+
       # Load every instance of everything we can find.
-      files_to_load(path, env).each do |file|
-        name = file.chomp(".rb")
-        load_file(name, env) unless loaded?(name)
+      files_to_load_with_path(path, env).each_pair do |name, p|
+        # REMIND: why no cleanpath here?
+        name = name.chomp(".rb")
+        load_file_from(name, p, env) unless loaded?(name)
       end
+#      puts "loaded #{path}"
+#      puts @stats.inspect
     end
 
     def reload_changed(env)
@@ -104,22 +172,74 @@ class Puppet::Util::Autoload
 
     # Get the correct file to load for a given path
     # returns nil if no file is found
+    # @param name The plugin name is of the form "puppet/type/file"
     # @api private
     def get_file(name, env)
+#      puts "get_file #{name}"
+
+      if BUILTIN_TYPES.has_key?(name)
+        path = BUILTIN_TYPES[name]
+#        puts "SHORTCUT #{path}"
+        return path
+      end
+
       name = name + '.rb' unless name =~ /\.rb$/
-      path = search_directories(env).find { |dir| Puppet::FileSystem.exist?(File.join(dir, name)) }
-      path and File.join(path, name)
+      path = search_directories(env).find do |dir|
+#        puts "stat #{File.join(dir, name)}"
+        @stats[:search_dir] += 1
+        @stats[:stat] += 1
+        Puppet::FileSystem.exist?(File.join(dir, name))
+      end
+
+      if path
+        File.join(path, name)
+      else
+        nil
+      end
     end
 
+    # Returns a list of relative paths to plugins of the given path (really that's the plugin name)
     def files_to_load(path, env)
-      search_directories(env).map {|dir| files_in_dir(dir, path) }.flatten.uniq
+      search_directories(env).map do |dir|
+        @stats[:search_dir] += 1
+        files_in_dir(dir, path)
+      end.flatten.uniq
     end
 
+    def files_to_load_with_path(path, env)
+      # REMIND .flatten.uniq
+      files = {}
+      search_directories(env).each do |dir|
+        @stats[:search_dir] += 1
+        files_in_dir_with_path(dir, path) do |name, pathname|
+          files[name] = pathname unless files.has_key?(name)
+        end
+      end
+      files
+    end
+
+    # @param dir a directory to search. Can be the `lib` directory from a gem, module
+    # or entry in the $LOAD_PATH
+    #
     # @api private
     def files_in_dir(dir, path)
       dir = Pathname.new(File.expand_path(dir))
+      @stats[:globs] += 1
+#      puts "glob1 #{File.join(dir, path, "*.rb")}"
       Dir.glob(File.join(dir, path, "*.rb")).collect do |file|
+        @stats[:glob_child] += 1
         Pathname.new(file).relative_path_from(dir).to_s
+      end
+    end
+
+    def files_in_dir_with_path(dir, path)
+      dir = Pathname.new(File.expand_path(dir))
+      @stats[:globs] += 1
+#      puts "glob2 #{File.join(dir, path, "*.rb")}"
+      Dir.glob(File.join(dir, path, "*.rb")).collect do |file|
+        @stats[:glob_child] += 1
+        pathname = Pathname.new(file)
+        yield pathname.relative_path_from(dir).to_s, pathname
       end
     end
 
@@ -160,19 +280,6 @@ class Puppet::Util::Autoload
         gem_directories + module_directories(env) + $LOAD_PATH
       else
         gem_directories + $LOAD_PATH
-      end
-    end
-
-    # Normalize a path. This converts ALT_SEPARATOR to SEPARATOR on Windows
-    # and eliminates unnecessary parts of a path.
-    def cleanpath(path)
-      # There are two cases here because cleanpath does not handle absolute
-      # paths correctly on windows (c:\ and c:/ are treated as distinct) but
-      # we don't want to convert relative paths to absolute
-      if Puppet::Util.absolute_path?(path)
-        File.expand_path(path)
-      else
-        Pathname.new(path).cleanpath.to_s
       end
     end
   end
