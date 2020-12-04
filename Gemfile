@@ -20,6 +20,8 @@ gem "puppet-resource_api", *location_for(ENV['RESOURCE_API_LOCATION'] || ["~> 1.
 
 gem "scanf" if RUBY_VERSION.to_f >= 2.7
 
+gem "bootsnap", require: false
+
 group(:features) do
   gem 'diff-lcs', '~> 1.3', require: false
   gem 'hiera-eyaml', *location_for(ENV['HIERA_EYAML_LOCATION'])

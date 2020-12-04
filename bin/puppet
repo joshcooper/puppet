@@ -1,6 +1,12 @@
 #!/usr/bin/env ruby
 
 begin
+  require 'bootsnap'
+  Bootsnap.setup(
+    cache_dir: '/tmp/puppet_cache',
+    load_path_cache: true,
+    autoload_paths_cache: false
+  )
   require 'puppet/util/command_line'
   Puppet::Util::CommandLine.new.execute
 rescue LoadError => e
