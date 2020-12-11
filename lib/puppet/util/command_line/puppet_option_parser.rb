@@ -1,4 +1,4 @@
-require 'puppet/util/command_line/trollop'
+require_relative '../../../puppet/util/command_line/trollop'
 
 module Puppet
   module Util
