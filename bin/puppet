@@ -1,8 +1,94 @@
 #!/usr/bin/env ruby
 
+$puppet_indent = 0
+$puppet_enable = true
+$puppet_bin = File.join(Dir.pwd, 'bin')
+$puppet_lib = File.join(Dir.pwd, 'lib')
+
+require 'json'
+
+$dependencies = {}
+
+def add_edge(src, dst)
+  $dependencies[src] ||= []
+  $dependencies[src] << dst
+end
+
+require 'tsort'
+
+class Hash
+  include TSort
+  alias tsort_each_node each_key
+  def tsort_each_child(node, &block)
+    fetch(node).each(&block)
+  end
+end
+
+module Kernel
+  alias __original_puppet_require require
+  private :__original_puppet_require
+
+  def require(*args)
+    md = caller.first.match(/([^:]*):(\d*)/)
+
+    if !$puppet_enable
+      __original_puppet_require(*args)
+    elsif args.first !~ /^puppet/
+      prefix = " " * $puppet_indent
+      label = "#{prefix}#{md[1]}:#{md[2]}"
+
+      $puppet_enable = false
+      $puppet_indent += 2
+
+      $stderr.puts "#{label} requiring #{args.first}"
+      __original_puppet_require(*args)
+      $stderr.puts "#{label} done"
+
+      $puppet_indent -= 2
+      $puppet_enable = true
+    else
+      if md[1].start_with?($puppet_lib)
+        source = md[1][$puppet_lib.length+1..-1]
+      elsif md[1].start_with?($puppet_bin)
+        source = md[1][$puppet_bin.length+1..-1]
+      else
+        raise "Unknown prefix #{md[1]}"
+      end
+      dest = "#{args.first}.rb"
+
+      add_edge(source, dest)
+
+      prefix = " " * $puppet_indent
+      label = "#{prefix}#{md[1]}:#{md[2]}"
+      $puppet_indent += 2
+
+      $stderr.puts "#{label} requiring #{args.first}"
+      __original_puppet_require(*args)
+      $stderr.puts "#{label} done"
+
+      $puppet_indent -= 2
+    end
+  end
+end
+
 begin
   require 'puppet/util/command_line'
   Puppet::Util::CommandLine.new.execute
+rescue SystemExit => e
+  $dependencies.values.each do |array|
+    array.each do |v|
+      # every value must be a key with no dependencies
+      $dependencies[v] ||= []
+      $dependencies[v].sort!
+    end
+  end
+  File.write('dependencies.json', JSON.dump($dependencies))
+  scc = $dependencies.strongly_connected_components
+  scc.each do |array|
+    array.sort!
+  end
+  File.write('scc.json', JSON.dump(scc))
+  raise
 rescue LoadError => e
   $stderr.puts e.message
   exit(1)
