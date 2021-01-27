@@ -78,8 +78,8 @@ module Puppet
       stat = resource.stat
       return :absent unless stat
       ftype = stat.ftype
-      # Don't even try to manage the content on directories or links
-      return nil if ["directory","link"].include?(ftype)
+      # we can only checkum files, not directories, links, fifo, socket, etc
+      return nil unless ftype == "file"
 
       begin
         resource.parameter(:checksum).sum_file(resource[:path])
