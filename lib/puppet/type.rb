@@ -1675,6 +1675,9 @@ class Type
       [the language page on relationships](https://puppet.com/docs/puppet/latest/lang_relationships.html)."
   end
 
+  newmetaparam(:reload, :parent => RelationshipMetaparam, :attributes => {:direction => :out, :events => :ALL_EVENTS, :callback => :reload}) do
+  end
+
   newmetaparam(:notify, :parent => RelationshipMetaparam, :attributes => {:direction => :out, :events => :ALL_EVENTS, :callback => :refresh}) do
     desc "One or more resources that depend on this resource, expressed as
       [resource references](https://puppet.com/docs/puppet/latest/lang_data_resource_reference.html).

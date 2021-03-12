@@ -317,6 +317,14 @@ module Puppet
       end
     end
 
+    def reload
+      if (@parameters[:ensure] || newattr(:ensure)).retrieve == :running
+        self.notice("Reloading")
+      else
+        debug "Skipping reload; service is not running"
+      end
+    end
+
     def self.needs_ensure_retrieved
       false
     end
