@@ -7,6 +7,8 @@ class Puppet::HTTP::Service::Ca < Puppet::HTTP::Service
     super(client, url)
   end
 
+  # path = Addressable::URI.encode_component(name, Addressable::URI::CharacterClasses::PATH)
+
   def get_certificate(name, ssl_context: nil)
     encoded_name = Puppet::Util.uri_encode(name)
 

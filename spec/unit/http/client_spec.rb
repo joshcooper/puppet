@@ -437,4 +437,90 @@ describe Puppet::HTTP::Client do
       client.get(uri)
     end
   end
+
+  context "when encoding" do
+    # See https://tools.ietf.org/html/rfc3986
+    # See Addressable::URI::CharacterClasses::RESERVED
+    ALPHA = ('a'..'z').to_a + ('A'..'Z').to_a
+    DIGIT = ('0'..'9').to_a
+    GEN_DELIMS = %w[: / ? # [ ] @]
+    SUB_DELIMS = %w[! $ & ' ( ) * + , ; =]
+    RESERVED = GEN_DELIMS + SUB_DELIMS
+    UNRESERVED = ALPHA + DIGIT + %w[- . _ ~]
+    PCHAR = UNRESERVED + SUB_DELIMS + %w[: @]
+    PATH = PCHAR + %w[\\ /]
+    QUERY = PCHAR + %w[\\ / ?]
+
+    UNENCODED_CHARS = Set.new(PATH).freeze
+
+    # "\x00\x01\x02\x03\x04\x05\x06\a\b\t\n\v\f\r\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\e\x1C\x1D\x1E\x1F !\"\#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+
+    def chars(range)
+      range.map { |b| b.chr }
+    end
+
+    def encode(arr)
+      arr.map do |ch|
+        UNENCODED_CHARS.include?(ch) ? ch : format("%%%02x", ch.ord)
+      end.join
+    end
+
+    context 'path' do
+      it 'encodes control characters 0x00-0x1F' do
+        ch = chars(0x00..0x1F)
+
+        path = URI("https://www.example.com/puppet/v3/catalog/node#{ch.join}")
+        puts path
+        encoded_path = "https://www.example.com/puppet/v3/catalog/node#{encode(ch).join}"
+        puts encoded_path
+
+        stub_request(:get, encoded_path)
+
+        client.get(path)
+      end
+
+      it 'passes through alphanumeric' do
+        uri = URI("https://www.example.com/node0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+        stub_request(:get, uri)
+
+        client.get(uri)
+      end
+
+      it 'passes through unreserved punctuation' do
+        uri = URI("https://www.example.com/node-._~")
+
+        stub_request(:get, uri)
+
+        client.get(uri)
+      end
+
+      it 'passes through sub-delimiters' do
+        uri = URI("https://www.example.com/node!$&'()*+,;=")
+
+        stub_request(:get, uri)
+
+        client.get(uri)
+      end
+
+      it 'passes through other pchars' do
+        uri = URI("https://www.example.com/node:@")
+
+        stub_request(:get, uri)
+
+        client.get(uri)
+      end
+
+      it 'encodes general delimiters' do
+        chars = %w[: / ? # [ ] @].join
+        encoded = %w[%3A %2F %3F %23 %5B %5D %40].join
+
+        uri = "https://www.example.com/node#{encoded}"
+
+        stub_request(:get, uri)
+
+        client.get("https://www.example.com/node#{chars}")
+      end 
+   end
+  end
 end
