@@ -61,7 +61,9 @@ class Puppet::Util::Autoload
     # Load a single plugin by name.  We use 'load' here so we can reload a
     # given plugin.
     def load_file(name, env)
+      $stderr.puts("LOADING FILE #{name}")
       file = get_file(name.to_s, env)
+      $stderr.puts("LOADED FILE #{file} using #{env.class == Puppet::Node::Environment::Remote ? 'remote' : 'local'} environment '#{env ? env.name : "<unknown>"}' with modulepath #{env ? env.modulepath : '[]'}")
       return false unless file
       begin
         mark_loaded(name, file)
@@ -77,11 +79,18 @@ class Puppet::Util::Autoload
     end
 
     def loadall(path, env = nil)
+      $stderr.puts("LOADALL #{path} from #{env.class == Puppet::Node::Environment::Remote ? 'remote' : 'local'} environment #{env ? env.name : '<unknown>'} with modulepath #{env ? env.modulepath : '[]'}")
+
       # Load every instance of everything we can find.
+      count = 0
       files_to_load(path, env).each do |file|
         name = file.chomp(".rb")
-        load_file(name, env) unless loaded?(name)
+        unless loaded?(name)
+          load_file(name, env)
+          count += 1
+        end
       end
+      $stderr.puts("LOADALL loaded #{count} files")
     end
 
     def reload_changed
@@ -97,7 +106,10 @@ class Puppet::Util::Autoload
     end
 
     def files_to_load(path, env = nil)
-      search_directories(env).map {|dir| files_in_dir(dir, path) }.flatten.uniq
+      $stderr.puts("FILES_TO_LOAD #{path} from #{env.class == Puppet::Node::Environment::Remote ? 'remote' : 'local'} environment #{env ? env.name : '<unknown>'} with modulepath #{env ? env.modulepath : '[]'}")
+      files = search_directories(env).map {|dir| files_in_dir(dir, path) }.flatten.uniq
+      $stderr.puts("LOADED #{files.count} files")
+      files
     end
 
     def files_in_dir(dir, path)
@@ -133,11 +145,18 @@ class Puppet::Util::Autoload
         if env
           # if the app defaults have been initialized then it should be safe to access the module path setting.
           Puppet::Util::ModuleDirectoriesAdapter.adapt(env) do |a|
-            a.directories ||= env.modulepath.collect do |dir|
-              Dir.entries(dir).reject { |f| f =~ /^\./ }.collect { |f| File.join(dir, f, "lib") }
-            end.flatten.find_all do |d|
-              FileTest.directory?(d)
+            if a.directories
+              $stderr.puts "CACHED modules from #{env.class == Puppet::Node::Environment::Remote ? 'remote' : 'local'} environment #{env ? env : '<unknown>'} as #{a.directories}"
+            else
+              $stderr.puts "SCANNING modules from #{env.class == Puppet::Node::Environment::Remote ? 'remote' : 'local'} environment #{env ? env : '<unknown>'} with modulepath #{env ? env.modulepath : ''}"
+              a.directories = env.modulepath.collect do |dir|
+                Dir.entries(dir).reject { |f| f =~ /^\./ }.collect { |f| File.join(dir, f, "lib") }
+              end.flatten.find_all do |d|
+                FileTest.directory?(d)
+              end
+              $stderr.puts "SCANNED #{a.directories.count} directories"
             end
+            a.directories
           end.directories
         else
           []
