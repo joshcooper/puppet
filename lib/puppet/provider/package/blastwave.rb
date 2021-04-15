@@ -55,7 +55,6 @@ Puppet::Type.type(:package).provide :blastwave, :parent => :sun, :source => :sun
       }
       return list
     end
-
   end
 
   # Split the different lines into hashes.

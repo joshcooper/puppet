@@ -93,7 +93,6 @@ class Puppet::Parser::AST::PopsBridge
     # efficient as it avoids one full scan of all logic via recursive enumeration/yield)
     #
     def instantiate(modname)
-
       @program_model.definitions.map do |d|
         case d
         when Puppet::Pops::Model::HostClassDefinition

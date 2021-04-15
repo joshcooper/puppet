@@ -213,7 +213,6 @@ Puppet::Type.type(:service).provide :smf, :parent => :base do
       raise Puppet::Error,
         "Unmanageable state '#{state}' on service #{self.name}"
     end
-
   end
 
   def stopcmd

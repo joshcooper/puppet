@@ -2278,7 +2278,6 @@ EOS
     }
 
     @doc ||= ""
-
   end
 
   # Returns the name of this type (if specified) or the parent type #to_s.
@@ -2330,7 +2329,6 @@ EOS
   # @return [void]
   #
   def log(msg)
-
     Puppet::Util::Log.create(
       :level => @parameters[:loglevel].value,
       :message => msg,

@@ -44,17 +44,14 @@ class CheckPuppet
   end
 
   def check_proc
-
     unless ProcTable.ps.find { |p| p.name == OPTIONS[:process]}
       @proc = 2
     else
       @proc = 0
     end
-
   end
 
   def check_state
-
     # Set variables
     curt = Time.now
     intv = OPTIONS[:interval] * 60
@@ -73,11 +70,9 @@ class CheckPuppet
     else
       @file = 0
     end
-
   end
 
   def output_status
-
     case @file
     when 0
       state = "state file status okay updated on " + @modt.strftime("%m/%d/%Y at %H:%M:%S")

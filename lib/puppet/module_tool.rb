@@ -131,7 +131,6 @@ module Puppet
 
       # Note: environment will have expanded the path
       options[:target_dir] = face_environment.full_modulepath.first
-
     end
 
     # Given a hash of options, we should discover or create a

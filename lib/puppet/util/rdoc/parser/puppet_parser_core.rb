@@ -43,7 +43,6 @@ module RDoc::PuppetParserCore
 
   # walk down the namespace and lookup/create container as needed
   def get_class_or_module(container, name)
-
     # class ::A -> A is in the top level
     if name =~ /^::/
       container = @top_level

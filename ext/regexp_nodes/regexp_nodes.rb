@@ -128,7 +128,6 @@ class ExternalNode
   # match - it returns true if the string was matched by any of the lines in
   # the file
   def matched_in_patternfile?(filepath, matchthis)
-
     patternlist = []
 
     begin
@@ -165,7 +164,6 @@ class ExternalNode
       log("#{matchthis} unmatched, returning false")
       return nil
     end
-
   end # def
 
   # private method - takes a path to look for files, iterates through all
@@ -238,7 +236,6 @@ end
 # happen as we initialize a subclass
 class MyExternalNode < ExternalNode
   def initialize(hostname, classdir = 'classes/', parameterdir = 'parameters/')
-
     super
 
     # Set "hostclass" parameter based on hostname,

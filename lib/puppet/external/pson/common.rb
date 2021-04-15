@@ -212,7 +212,6 @@ module PSON
   # The _opts_ argument can be used to configure the generator, see the
   # generate method for a more detailed explanation.
   def pretty_generate(obj, opts = nil)
-
     state = PSON.state.new(
       :indent     => '  ',
       :space      => ' ',

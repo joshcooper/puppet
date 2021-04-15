@@ -139,6 +139,5 @@ Puppet::Type.type(:package).provide :zypper, :parent => :rpm, :source => :rpm do
 
       zypper(*options)
     end
-
   end
 end

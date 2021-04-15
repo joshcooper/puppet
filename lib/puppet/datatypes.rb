@@ -132,7 +132,6 @@ module Puppet::DataTypes
     rescue StandardError => e
       raise ArgumentError, _("Data Type Load Error for type '%{type_name}': %{message}") % {type_name: type_name, message: e.message}
     end
-
   end
 
   def self.create_loaded_type(type_name, loader, &block)
