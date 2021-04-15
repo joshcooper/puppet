@@ -21,11 +21,6 @@ GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-# Offense count: 27
-# Cop supports --auto-correct.
-Layout/EmptyLinesAroundExceptionHandlingKeywords:
-  Enabled: false
-
 # Offense count: 38
 # Cop supports --auto-correct.
 Layout/EmptyLinesAroundMethodBody:

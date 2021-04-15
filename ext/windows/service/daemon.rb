@@ -87,7 +87,6 @@ class WindowsDaemon < Win32::Daemon
       end
     end
     @run_thread.join
-
   rescue Exception => e
     log_exception(e)
   ensure

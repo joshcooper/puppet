@@ -399,7 +399,7 @@ module Puppet
         feature.  This behavior is almost always appropriate for the server,
         and can result in a significant performance improvement for types and
         features that are checked frequently.
-        EOT
+      EOT
     },
     :diff_args => {
       :default  => lambda { default_diffargs },
@@ -965,7 +965,7 @@ EOT
 
           When certificate_revocation is set to 'false', Puppet disables all
           certificate revocation checking and does not attempt to download the CRL.
-        EOT
+      EOT
     },
     :digest_algorithm => {
       :default  => lambda { default_digest_algorithm },
@@ -1949,7 +1949,7 @@ EOT
        Sets the max number of logged/displayed parser validation errors in case
        multiple errors have been detected. A value of 0 is the same as a value of 1; a
        minimum of one error is always raised.  The count is per manifest.
-     EOT
+      EOT
     },
     :max_warnings => {
       :default => 10,
@@ -1957,7 +1957,7 @@ EOT
        Sets the max number of logged/displayed parser validation warnings in
        case multiple warnings have been detected. A value of 0 blocks logging of
        warnings.  The count is per manifest.
-     EOT
+      EOT
     },
     :max_deprecations => {
       :default => 10,
@@ -1965,7 +1965,7 @@ EOT
       Sets the max number of logged/displayed parser validation deprecation
       warnings in case multiple deprecation warnings have been detected. A value of 0
       blocks the logging of deprecation warnings.  The count is per manifest.
-    EOT
+      EOT
     },
     :strict_variables => {
       :default => false,
@@ -1973,7 +1973,7 @@ EOT
       :desc => <<-'EOT'
       Causes an evaluation error when referencing unknown variables. (This does not affect
       referencing variables that are explicitly set to undef).
-    EOT
+      EOT
     },
     :func3x_check => {
       :default => true,
@@ -1983,7 +1983,7 @@ EOT
        could cause harm or that simply does not work. This flag is on by default. This flag is made available
        so that the validation can be turned off in case the method of validation is faulty - if encountered, please
        file a bug report.
-     EOT
+      EOT
     },
     :tasks => {
       :default => false,
@@ -1991,7 +1991,7 @@ EOT
       :desc => <<-'EOT'
       Turns on experimental support for tasks and plans in the puppet language. This is for internal API use only.
       Do not change this setting.
-    EOT
+      EOT
     }
   )
 
