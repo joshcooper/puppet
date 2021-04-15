@@ -16,7 +16,6 @@ module Puppet::Util::Windows::User
   end
   module_function :admin?
 
-
   # https://msdn.microsoft.com/en-us/library/windows/desktop/ee207397(v=vs.85).aspx
   SECURITY_MAX_SID_SIZE = 68
 

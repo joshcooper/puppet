@@ -311,7 +311,6 @@ module PSON
     raise ArgumentError, _("exceed depth limit"), $!.backtrace
   end
 
-
   # Provide a smarter wrapper for changing string encoding that works with
   # both Ruby 1.8 (iconv) and 1.9 (String#encode).  Thankfully they seem to
   # have compatible input syntax, at least for the encodings we touch.

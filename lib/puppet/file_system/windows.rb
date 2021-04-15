@@ -140,7 +140,6 @@ class Puppet::FileSystem::Windows < Puppet::FileSystem::Posix
              raise ArgumentError, "Only modes 0644, 0640 and 0600 are allowed"
            end
 
-
     tempfile = Puppet::FileSystem::Uniquefile.new(Puppet::FileSystem.basename_string(path), Puppet::FileSystem.dir_string(path))
     begin
       tempdacl = Puppet::Util::Windows::AccessControlList.new

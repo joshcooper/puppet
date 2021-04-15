@@ -347,7 +347,6 @@ Suite.new :report, "Reports interactions" do
     end
 end
 
-
 $cmdargs = [
     [ "--compile",  "-c", GetoptLong::NO_ARGUMENT       ],
     [ "--describe",       GetoptLong::REQUIRED_ARGUMENT ],

@@ -64,7 +64,6 @@ DOC
 
   private
 
-
   # Extract the extensions sequence from the wrapped certificate's raw ASN.1 form
   def exts_seq
     # See RFC-2459 section 4.1 (https://tools.ietf.org/html/rfc2459#section-4.1)

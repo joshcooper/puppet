@@ -323,7 +323,6 @@ module Puppet::Util::Execution
     alias util_execute execute
   end
 
-
   # This is private method.
   # @comment see call to private_class_method after method definition
   # @api private
@@ -377,7 +376,6 @@ module Puppet::Util::Execution
   end
   private_class_method :execute_posix
 
-
   # This is private method.
   # @comment see call to private_class_method after method definition
   # @api private
@@ -393,7 +391,6 @@ module Puppet::Util::Execution
     end
   end
   private_class_method :execute_windows
-
 
   # This is private method.
   # @comment see call to private_class_method after method definition

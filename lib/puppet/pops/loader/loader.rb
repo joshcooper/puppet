@@ -189,7 +189,6 @@ class Loader
     self.to_s
   end
 
-
   # An entry for one entity loaded by the loader.
   #
   class NamedEntry

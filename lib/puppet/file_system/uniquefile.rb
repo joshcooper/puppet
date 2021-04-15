@@ -166,7 +166,6 @@ class Puppet::FileSystem::Uniquefile < DelegateClass(File)
     end
   end
 
-
   class << self
     # yields with locking for +tmpname+ and returns the result of the
     # block.

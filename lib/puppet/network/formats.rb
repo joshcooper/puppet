@@ -139,7 +139,6 @@ end
 # This is really only ever going to be used for Catalogs.
 Puppet::Network::FormatHandler.create_serialized_formats(:dot, :required_methods => [:render_method])
 
-
 Puppet::Network::FormatHandler.create(:console,
                                       :mime   => 'text/x-console-text',
                                       :weight => 0) do

@@ -23,7 +23,6 @@ class CheckPuppet
       o.separator   ""
       o.separator   "Mandatory arguments to long options are mandatory for short options too."
 
-
         o.on(
           "-s", "--statefile=statefile", String, "The state file",
 

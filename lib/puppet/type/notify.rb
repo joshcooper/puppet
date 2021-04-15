@@ -1,7 +1,6 @@
 #
 # Simple module for logging messages on the client-side
 
-
 module Puppet
   Type.newtype(:notify) do
     @doc = "Sends an arbitrary message to the agent run-time log."

@@ -385,7 +385,6 @@ module Puppet::Functions
     end
   end
 
-
   # Public api methods of the DispatcherBuilder are available within dispatch()
   # blocks declared in a Puppet::Function.create_function() call.
   #
@@ -598,7 +597,6 @@ module Puppet::Functions
     private :internal_type_parse
   end
 
-
   # The LocalTypeAliasBuilder is used by the 'local_types' method to collect the individual
   # type aliases given by the function's author.
   #
@@ -799,7 +797,6 @@ module Puppet::Functions
       [from, to, names]
     end
   end
-
 
   # Injection and Weaving of parameters
   # ---

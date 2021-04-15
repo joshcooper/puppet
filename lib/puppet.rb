@@ -23,7 +23,6 @@ require 'puppet/external/pson/version'
 require 'puppet/external/pson/pure'
 require 'puppet/gettext/config'
 
-
 #------------------------------------------------------------
 # the top-level module
 #

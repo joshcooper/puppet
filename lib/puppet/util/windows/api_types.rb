@@ -114,7 +114,6 @@ module Puppet::Util::Windows::APITypes
       nil
     end
 
-
     alias_method :write_dword, :write_uint32
     alias_method :write_word, :write_uint16
   end

@@ -1,7 +1,6 @@
 module Puppet::Pops
 module Model
 
-
 class PNTransformer
   def self.visitor
     @visitor ||= Visitor.new(nil, 'transform', 0, 0)

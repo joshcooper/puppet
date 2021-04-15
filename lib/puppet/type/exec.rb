@@ -343,7 +343,6 @@ module Puppet
       defaultto 0
     end
 
-
     newcheck(:refreshonly) do
       desc <<-'EOT'
         The command should only be run as a

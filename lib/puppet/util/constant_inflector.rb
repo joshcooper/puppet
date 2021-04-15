@@ -6,7 +6,6 @@
 # A common module for converting between constants and
 # file names.
 
-
 module Puppet
   module Util
     module ConstantInflector

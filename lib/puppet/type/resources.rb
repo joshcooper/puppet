@@ -7,7 +7,6 @@ Puppet::Type.newtype(:resources) do
     so you can purge unmanaged resources but set `noop` to true so the
     purging is only logged and does not actually happen."
 
-
   newparam(:name) do
     desc "The name of the type to be managed."
 

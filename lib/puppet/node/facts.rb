@@ -4,7 +4,6 @@ require 'puppet/node'
 require 'puppet/indirector'
 require 'puppet/util/psych_support'
 
-
 # Manage a given node's facts.  This either accepts facts and stores them, or
 # returns facts for a given node.
 class Puppet::Node::Facts

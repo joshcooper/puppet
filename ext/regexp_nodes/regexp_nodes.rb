@@ -66,7 +66,6 @@ def log(message,level=:debug)
   Syslog.send(level,message)
 end
 
-
 # set our workingdir to be the directory we're executed from, regardless
 # of parent's cwd, symlinks, etc. via handy Pathname.realpath method
 require 'pathname'
@@ -260,7 +259,6 @@ class MyExternalNode < ExternalNode
   end
 
 end
-
 
 # Here we begin actual execution by calling methods defined above
 

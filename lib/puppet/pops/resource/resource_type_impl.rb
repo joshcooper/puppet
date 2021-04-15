@@ -256,7 +256,6 @@ class ResourceTypeImpl
   # DON'T KNOW YET
   ############################
 
-
   ##################################################
   # NEVER CALLED COMPILE SIDE FOR A COMPILATION
   ##################################################

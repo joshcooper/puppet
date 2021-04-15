@@ -650,7 +650,6 @@ module Util
       end
     end
 
-
     # Ideally, we would now fsync the directory as well, but Ruby doesn't
     # have support for that, and it doesn't matter /that/ much...
 
@@ -696,7 +695,6 @@ module Util
   module_function :deterministic_rand_int
 end
 end
-
 
 require 'puppet/util/errors'
 require 'puppet/util/metaid'

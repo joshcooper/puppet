@@ -111,7 +111,6 @@ module Puppet::Util::Windows::File
   end
   module_function :symlink
 
-
   def exist?(path)
     path = path.to_str if path.respond_to?(:to_str) # support WatchedFile
     path = path.to_s # support String and Pathname
@@ -143,7 +142,6 @@ module Puppet::Util::Windows::File
     false
   end
   module_function :exist?
-
 
   INVALID_FILE_ATTRIBUTES = 0xFFFFFFFF #define INVALID_FILE_ATTRIBUTES (DWORD (-1))
 

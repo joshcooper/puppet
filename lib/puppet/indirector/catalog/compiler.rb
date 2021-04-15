@@ -331,7 +331,6 @@ class Puppet::Resource::Catalog::Compiler < Puppet::Indirector::Code
       end
     end
 
-
     config
   end
 
@@ -349,7 +348,6 @@ class Puppet::Resource::Catalog::Compiler < Puppet::Indirector::Code
         Puppet.log_exception(detail, message)
         raise Puppet::Error, message, detail.backtrace
       end
-
 
       # Add any external data to the node.
       if node

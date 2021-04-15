@@ -62,7 +62,6 @@ module Puppet::Util::Windows
       SERVICE_CONTROL_TRIGGEREVENT          => :SERVICE_CONTROL_TRIGGEREVENT
     }
 
-
     # Service start type codes
     # https://docs.microsoft.com/en-us/windows/desktop/api/Winsvc/nf-winsvc-changeserviceconfigw
     SERVICE_AUTO_START = 0x00000002
@@ -151,7 +150,6 @@ module Puppet::Util::Windows
       SC_MANAGER_LOCK                |
       SC_MANAGER_MODIFY_BOOT_CONFIG  |
       SC_MANAGER_QUERY_LOCK_STATUS
-
 
     # Service access codes
     # https://docs.microsoft.com/en-us/windows/desktop/Services/service-security-and-access-rights
