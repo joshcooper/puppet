@@ -230,13 +230,32 @@ module Util
       seconds = Benchmark.realtime {
         yield
       }
-      object.send(level, msg % { seconds: "%0.2f" % seconds })
+      object.send(level, seconds_to_human_text(msg, seconds))
       return seconds
     else
       yield
     end
   end
   module_function :benchmark
+
+  def seconds_to_human_text(messages, seconds)
+    if messages.is_a?(Hash)
+      in_seconds = { seconds: seconds.to_i % 60  }
+      in_minutes = { minutes: seconds.to_i / 60 % 60 }.merge(in_seconds)
+      in_hours = { hours: seconds.to_i / 3600 }.merge(in_minutes)
+
+      if seconds >= 3600
+        messages[:hours] % in_hours
+      elsif seconds >= 60
+        messages[:minutes] % in_minutes
+      else
+        messages[:seconds] % in_seconds
+      end
+    else
+      messages % { seconds: "%0.2f" % seconds }
+    end
+  end
+  private :seconds_to_human_text
 
   # Resolve a path for an executable to the absolute path. This tries to behave
   # in the same manner as the unix `which` command and uses the `PATH`
