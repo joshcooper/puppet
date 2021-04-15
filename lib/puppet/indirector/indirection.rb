@@ -146,7 +146,7 @@ class Puppet::Indirector::Indirection
 
   # This is used by terminus_class= and cache=.
   def validate_terminus_class(terminus_class)
-    unless terminus_class and terminus_class.to_s != ""
+    unless terminus_class && terminus_class.to_s != ""
       raise ArgumentError, _("Invalid terminus name %{terminus_class}") % { terminus_class: terminus_class.inspect }
     end
     unless Puppet::Indirector::Terminus.terminus_class(self.name, terminus_class)
@@ -233,7 +233,7 @@ class Puppet::Indirector::Indirection
 
   def find_in_cache(request)
     # See if our instance is in the cache and up to date.
-    return nil unless cache? and ! request.ignore_cache? and cached = cache.find(request)
+    return nil unless cache? && ! request.ignore_cache? && (cached = cache.find(request))
     if cached.expired?
       Puppet.info _("Not using expired %{indirection} for %{request} from cache; expired at %{expiration}") % { indirection: self.name, request: request.key, expiration: cached.expiration }
       return nil
@@ -253,7 +253,7 @@ class Puppet::Indirector::Indirection
 
     result = terminus.destroy(request)
 
-    if cache? and cache.find(request(:find, key, nil, options))
+    if cache? && cache.find(request(:find, key, nil, options))
       # Reuse the existing request, since it's equivalent.
       cache.destroy(request)
     end

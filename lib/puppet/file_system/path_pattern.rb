@@ -90,7 +90,7 @@ module Puppet::FileSystem
 
     def validate
       super
-      if @pathname.to_s !~ ABSOLUTE_UNIX and @pathname.to_s !~ ABSOLUTE_WINDOWS
+      if @pathname.to_s !~ ABSOLUTE_UNIX && @pathname.to_s !~ ABSOLUTE_WINDOWS
         raise(InvalidPattern, _("An absolute PathPattern cannot be a relative path."))
       end
     end

@@ -452,7 +452,7 @@ module Pal
       # if 'title' is nil. (Other assertions are made by the catalog when looking up the resource).
       #
       # TRANSLATORS 'type' and 'title' are internal parameter names - do not translate
-      raise ArgumentError, _("Both type and title must be given") if type.nil? or title.nil?
+      raise ArgumentError, _("Both type and title must be given") if type.nil? || title.nil?
       r = possibly_filtered_catalog.resource(type, title)
       return nil if r.nil?
       r.to_data_hash.to_json(:pretty => pretty)

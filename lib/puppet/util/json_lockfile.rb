@@ -34,7 +34,7 @@ class Puppet::Util::JsonLockfile < Puppet::Util::Lockfile
   def lock_data
     return nil unless file_locked?
     file_contents = super
-    return nil if file_contents.nil? or file_contents.empty?
+    return nil if file_contents.nil? || file_contents.empty?
     Puppet::Util::Json.load(file_contents)
   rescue Puppet::Util::Json::ParseError
     Puppet.warning _("Unable to read lockfile data from %{path}: not in JSON") % { path: @file_path }

@@ -72,7 +72,7 @@ module Logging
   end
 
   def build_exception_trace(arr, exception, trace = true)
-    if trace and exception.backtrace
+    if trace && exception.backtrace
       exception.backtrace.each do |line|
         arr << line =~ /^(.+):(\d+.*)$/ ? ("#{Pathname($1).realpath}:#{$2}" rescue line) : line
       end
@@ -99,10 +99,10 @@ module Logging
       arr << message
     end
 
-    if trace and exception.backtrace
+    if trace && exception.backtrace
       arr << Puppet::Util.pretty_backtrace(exception.backtrace)
     end
-    if exception.respond_to?(:original) and exception.original
+    if exception.respond_to?(:original) && exception.original
       arr << _("Wrapped exception:")
       arr << format_exception(exception.original, :default, trace)
     end
@@ -171,7 +171,7 @@ module Logging
     if $unique_warnings.length < 100 then
       if (! $unique_warnings.has_key?(key)) then
         $unique_warnings[key] = message
-        call_trace = if file == :default and line == :default
+        call_trace = if file == :default && line == :default
                        # Suppress the file and line number output
                        ''
                      else
@@ -305,8 +305,11 @@ module Logging
 
   def log_source
     # We need to guard the existence of the constants, since this module is used by the base Puppet module.
-    (is_resource? or is_resource_parameter?) and respond_to?(:path) and return path.to_s
-    to_s
+    if (is_resource? || is_resource_parameter?) && respond_to?(:path)
+      path.to_s
+    else
+      to_s
+    end
   end
 end
 end

@@ -222,10 +222,10 @@ Licensed under the Apache 2.0 License
 
 
   def main
-    if options[:resource] and !options[:target]
+    if options[:resource] && !options[:target]
       raise _("resource command requires target")
     end
-    if options[:facts] and !options[:target]
+    if options[:facts] && !options[:target]
       raise _("facts command requires target")
     end
     unless options[:apply].nil?
@@ -364,7 +364,7 @@ Licensed under the Apache 2.0 License
       end
     end
 
-    if ! returns or returns.compact.empty?
+    if ! returns || returns.compact.empty?
       exit(1)
     elsif options[:detailed_exitcodes]
       # Bitwise OR the return codes together, puppet style
@@ -377,8 +377,9 @@ Licensed under the Apache 2.0 License
   end
 
   def parse_args(args)
-    type = args.shift or raise _("You must specify the type to display")
-    Puppet::Type.type(type) or raise _("Could not find type %{type}") % { type: type }
+    type = args.shift
+    raise(_("You must specify the type to display")) unless type
+    Puppet::Type.type(type) || raise(_("Could not find type %{type}") % { type: type })
     name = args.shift
 
     [type, name]

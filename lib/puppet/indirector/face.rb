@@ -137,7 +137,7 @@ class Puppet::Indirector::Face < Puppet::Face
   def indirection
     unless @indirection
       @indirection = Puppet::Indirector::Indirection.instance(indirection_name)
-      @indirection or raise _("Could not find terminus for %{indirection}") % { indirection: indirection_name }
+      @indirection || raise(_("Could not find terminus for %{indirection}") % { indirection: indirection_name })
     end
     @indirection
   end

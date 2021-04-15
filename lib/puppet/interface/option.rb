@@ -16,8 +16,8 @@ class Puppet::Interface::Option
     # Collect and sort the arguments in the declaration.
     dups = {}
     declaration.each do |item|
-      if item.is_a? String and item.to_s =~ /^-/ then
-        unless item =~ /^-[a-z]\b/ or item =~ /^--[^-]/ then
+      if item.is_a?(String) && item.to_s =~ /^-/ then
+        unless item =~ /^-[a-z]\b/ || item =~ /^--[^-]/ then
           raise ArgumentError, _("%{option}: long options need two dashes (--)") % { option: item.inspect }
         end
         @optparse << item
@@ -59,7 +59,7 @@ class Puppet::Interface::Option
     # incoherence here makes our life super-difficult, and we can more easily
     # relax this rule later if we find a valid use case for it. --daniel 2011-03-30
     @argument = @optparse.any? { |o| o =~ /[ =]/ }
-    if @argument and not @optparse.all? { |o| o =~ /[ =]/ } then
+    if @argument && (not @optparse.all? { |o| o =~ /[ =]/ }) then
       raise ArgumentError, _("Option %{name} is inconsistent about taking an argument") % { name: @name }
     end
 
@@ -69,7 +69,7 @@ class Puppet::Interface::Option
     if @optional_argument
       raise ArgumentError, _("Options with optional arguments are not supported")
     end
-    if @optional_argument and not @optparse.all? { |o| o=~/[ =]\[/ } then
+    if @optional_argument && (not @optparse.all? { |o| o=~/[ =]\[/ }) then
       raise ArgumentError, _("Option %{name} is inconsistent about the argument being optional") % { name: @name }
     end
   end
@@ -127,7 +127,7 @@ class Puppet::Interface::Option
   end
 
   def default
-    @default and @default.call
+    @default && @default.call
   end
 
   attr_reader   :parent, :name, :aliases, :optparse

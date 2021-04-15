@@ -49,8 +49,8 @@ module Puppet::Util::Yaml
     if(strip_classes) then
       data = YAML::parse_file(filename)
       data.root.each do |o|
-        if o.respond_to?(:tag=) and
-           o.tag != nil and
+        if o.respond_to?(:tag=) &&
+           o.tag != nil &&
            o.tag.start_with?("!ruby")
           o.tag = nil
         end

@@ -92,7 +92,7 @@ class Puppet::SSL::Host
     # If this CSR is for the current machine...
     if name == Puppet[:certname].downcase
       # ...add our configured dns_alt_names
-      if Puppet[:dns_alt_names] and Puppet[:dns_alt_names] != ''
+      if Puppet[:dns_alt_names] && Puppet[:dns_alt_names] != ''
         options[:dns_alt_names] ||= Puppet[:dns_alt_names]
       end
     end

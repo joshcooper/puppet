@@ -183,7 +183,7 @@ module Puppet::Parser::Functions
     arity = options[:arity] || -1
     ftype = options[:type] || :statement
 
-    unless ftype == :statement or ftype == :rvalue
+    unless ftype == :statement || ftype == :rvalue
       raise Puppet::DevError, _("Invalid statement type %{type}") % { type: ftype.inspect }
     end
 
@@ -198,9 +198,9 @@ module Puppet::Parser::Functions
     env_module.send(:define_method, fname) do |*args|
       Puppet::Util::Profiler.profile(_("Called %{name}") % { name: name }, [:functions, name]) do
         if args[0].is_a? Array
-          if arity >= 0 and args[0].size != arity
+          if arity >= 0 && args[0].size != arity
             raise ArgumentError, _("%{name}(): Wrong number of arguments given (%{arg_count} for %{arity})") % { name: name, arg_count: args[0].size, arity: arity }
-          elsif arity < 0 and args[0].size < (arity+1).abs
+          elsif arity < 0 && args[0].size < (arity+1).abs
             raise ArgumentError, _("%{name}(): Wrong number of arguments given (%{arg_count} for minimum %{min_arg_count})") % { name: name, arg_count: args[0].size, min_arg_count: (arity+1).abs }
           end
           r = Puppet::Pops::Evaluator::Runtime3FunctionArgumentConverter.convert_return(self.send(real_fname, args[0]))

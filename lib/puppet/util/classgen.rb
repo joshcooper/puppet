@@ -70,7 +70,7 @@ module Puppet::Util::ClassGen
       retval = true
     end
 
-    if hash = options[:hash] and hash.include? name
+    if (hash = options[:hash]) && hash.include?(name)
       hash.delete(name)
       retval = true
     end
@@ -198,7 +198,7 @@ module Puppet::Util::ClassGen
   # @api private
   def storeclass(klass, klassname, options)
     if hash = options[:hash]
-      if hash.include? klassname and ! options[:overwrite]
+      if hash.include?(klassname) && ! options[:overwrite]
         raise Puppet::SubclassAlreadyDefined,
           _("Already a generated class named %{klassname}") % { klassname: klassname }
       end
@@ -208,8 +208,8 @@ module Puppet::Util::ClassGen
 
     # If we were told to stick it in a hash, then do so
     if array = options[:array]
-      if (klass.respond_to? :name and
-              array.find { |c| c.name == klassname } and
+      if (klass.respond_to?(:name) &&
+              array.find { |c| c.name == klassname } &&
               ! options[:overwrite])
         raise Puppet::SubclassAlreadyDefined,
           _("Already a generated class named %{klassname}") % { klassname: klassname }

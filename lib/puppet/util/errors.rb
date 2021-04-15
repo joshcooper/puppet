@@ -20,11 +20,11 @@ module Puppet::Util::Errors
   # @param other [Exception] original exception, source of backtrace info
   # @return [Exception] error parameter
   def adderrorcontext(error, other = nil)
-    error.line ||= self.line if error.respond_to?(:line=) and self.respond_to?(:line) and self.line
-    error.file ||= self.file if error.respond_to?(:file=) and self.respond_to?(:file) and self.file
+    error.line ||= self.line if error.respond_to?(:line=) && self.respond_to?(:line) && self.line
+    error.file ||= self.file if error.respond_to?(:file=) && self.respond_to?(:file) && self.file
     error.original ||= other if error.respond_to?(:original=)
 
-    error.set_backtrace(other.backtrace) if other and other.respond_to?(:backtrace)
+    error.set_backtrace(other.backtrace) if other && other.respond_to?(:backtrace)
     # It is not meaningful to keep the wrapped exception since its backtrace has already
     # been adopted by the error. (The instance variable is private for good reasons).
     error.instance_variable_set(:@original, nil)
@@ -43,11 +43,11 @@ module Puppet::Util::Errors
     file = nil if (file.is_a?(String) && file.empty?)
     line = nil if (line.is_a?(String) && line.empty?)
     column = nil if (column.is_a?(String) && column.empty?)
-    if file and line and column
+    if file && line && column
       _("(file: %{file}, line: %{line}, column: %{column})") % { file: file, line: line, column: column }
-    elsif file and line
+    elsif file && line
       _("(file: %{file}, line: %{line})") % { file: file, line: line }
-    elsif line and column
+    elsif line && column
       _("(line: %{line}, column: %{column})") % { line: line, column: column }
     elsif line
       _("(line: %{line})") % { line: line }

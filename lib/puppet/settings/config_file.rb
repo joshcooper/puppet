@@ -109,7 +109,7 @@ private
 
     # Check to see if this is a file argument and it has extra options
     begin
-      if value.is_a?(String) and options = extract_fileinfo(value)
+      if value.is_a?(String) && (options = extract_fileinfo(value))
         section.with_setting(var, options[:value], Meta.new(options[:owner],
                                                             options[:group],
                                                             options[:mode]))
@@ -137,7 +137,7 @@ private
             raise ArgumentError, _("Invalid file option '%{parameter}'") % { parameter: param }
           end
 
-          if param == :mode and value !~ /^\d+$/
+          if param ==(:mode) && value !~ /^\d+$/
             raise ArgumentError, _("File modes must be numbers")
           end
         else

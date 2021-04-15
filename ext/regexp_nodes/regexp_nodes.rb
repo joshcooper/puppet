@@ -175,7 +175,7 @@ class ExternalNode
   def match_classes(fullpath)
     Dir.foreach(fullpath) do |patternfile|
       filepath = "#{fullpath}/#{patternfile}"
-      next unless File.file?(filepath) and
+      next unless File.file?(filepath) &&
         File.readable?(filepath)
         next if patternfile =~ /^\./
       log("Attempting to match [#{@hostname}] in [#{filepath}]")
@@ -192,7 +192,7 @@ class ExternalNode
   def match_environment(fullpath)
     Dir.foreach(fullpath) do |patternfile|
       filepath = "#{fullpath}/#{patternfile}"
-      next unless File.file?(filepath) and
+      next unless File.file?(filepath) &&
         File.readable?(filepath)
         next if patternfile =~ /^\./
       log("Attempting to match [#{@hostname}] in [#{filepath}]")
@@ -217,7 +217,7 @@ class ExternalNode
       filepath = "#{fullpath}/#{parametername}"
       next if File.basename(filepath) =~ /^\./   # skip over dotfiles
 
-      next unless File.directory?(filepath) and
+      next unless File.directory?(filepath) &&
         File.readable?(filepath)        # skip over non-directories
 
       log("Considering contents of #{filepath}")
@@ -225,7 +225,7 @@ class ExternalNode
       Dir.foreach("#{filepath}") do |patternfile|
         secondlevel = "#{filepath}/#{patternfile}"
         log("Found parameters patternfile at #{secondlevel}")
-        next unless File.file?(secondlevel) and
+        next unless File.file?(secondlevel) &&
           File.readable?(secondlevel)
         log("Attempting to match [#{@hostname}] in [#{secondlevel}]")
         if matched_in_patternfile?(secondlevel, @hostname)

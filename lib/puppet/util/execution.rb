@@ -290,7 +290,7 @@ module Puppet::Util::Execution
         end
       end
 
-      if options[:failonfail] and exit_status != 0
+      if options[:failonfail] && exit_status != 0
         raise Puppet::ExecutionFailure, _("Execution of '%{str}' returned %{exit_status}: %{output}") % { str: command_str, exit_status: exit_status, output: output.strip }
       end
     ensure

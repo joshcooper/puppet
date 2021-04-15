@@ -95,7 +95,7 @@ class Puppet::Daemon
 
   def restart
     Puppet::Application.restart!
-    reexec unless agent and agent.running?
+    reexec unless agent && agent.running?
   end
 
   def reopen_logs
@@ -140,7 +140,7 @@ class Puppet::Daemon
   def start
     create_pidfile
 
-    raise Puppet::DevError, _("Daemons must have an agent, server, or both") unless agent or server
+    raise Puppet::DevError, _("Daemons must have an agent, server, or both") unless agent || server
 
     # Start the listening server, if required.
     server.start if server

@@ -285,7 +285,7 @@ defaultfor :osfamily => :redhat, :operatingsystemmajrelease => (4..7).to_a
   def scan_options(options, key)
     return [] if options.nil?
     options.inject([]) do |repos, opt|
-      if opt.is_a? Hash and opt[key]
+      if opt.is_a?(Hash) && opt[key]
         repos << opt[key]
       end
       repos

@@ -31,7 +31,7 @@ class Puppet::Indirector::SslFile < Puppet::Indirector::Terminus
   def initialize
     Puppet.settings.use(:main, :ssl)
 
-    (collection_directory || file_location) or raise Puppet::DevError, _("No file or directory setting provided; terminus %{class_name} cannot function") % { class_name: self.class.name }
+    (collection_directory || file_location) || raise(Puppet::DevError, _("No file or directory setting provided; terminus %{class_name} cannot function") % { class_name: self.class.name })
   end
 
   def path(name)

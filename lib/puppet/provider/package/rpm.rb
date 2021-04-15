@@ -222,7 +222,7 @@ Puppet::Type.type(:package).provide :rpm, :source => :rpm, :parent => Puppet::Pr
 
     front_strip_re = /^[^A-Za-z0-9~]+/
 
-    while str1.length > 0 or str2.length > 0
+    while str1.length > 0 || str2.length > 0
       # trim anything that's in front_strip_re and != '~' off the beginning of each string
       str1 = str1.gsub(front_strip_re, '')
       str2 = str2.gsub(front_strip_re, '')
@@ -239,7 +239,7 @@ Puppet::Type.type(:package).provide :rpm, :source => :rpm, :parent => Puppet::Pr
         return 1
       end
 
-      break if str1.length == 0 or str2.length == 0
+      break if str1.length == 0 || str2.length == 0
 
       # "grab first completely alpha or completely numeric segment"
       isnum = false

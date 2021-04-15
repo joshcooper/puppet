@@ -150,9 +150,9 @@ Puppet::Type.type(:package).provide :gem, :parent => Puppet::Provider::Package::
 
     if Puppet::Util::Platform.windows?
       version = resource[:ensure]
-      command_options << "-v" << %Q["#{version}"] if (! resource[:ensure].is_a? Symbol) and useversion
+      command_options << "-v" << %Q["#{version}"] if (! resource[:ensure].is_a? Symbol) && useversion
     else
-      command_options << "-v" << resource[:ensure] if (! resource[:ensure].is_a? Symbol) and useversion
+      command_options << "-v" << resource[:ensure] if (! resource[:ensure].is_a? Symbol) && useversion
     end
 
     if Puppet::Util::Package.versioncmp(rubygem_version(command), '2.0.0') == -1

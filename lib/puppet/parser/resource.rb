@@ -348,7 +348,10 @@ class Puppet::Parser::Resource < Puppet::Resource
   def override_parameter(param)
     # This can happen if the override is defining a new parameter, rather
     # than replacing an existing one.
-    (set_parameter(param) and return) unless current = @parameters[param.name]
+    current = @parameters[param.name]
+    unless current
+      return if set_parameter(param)
+    end
 
     # Parameter is already set - if overriding with a default - simply ignore the setting of the default value
     return if scope.is_default?(type, param.name, param.value)

@@ -102,7 +102,7 @@ class Puppet::Interface::Action
       raise ArgumentError, msg
     end
 
-    if proc.arity != 1 and proc.arity != (@positional_arg_count + 1)
+    if proc.arity != 1 && proc.arity != (@positional_arg_count + 1)
       msg = if proc.arity < 0 then
               #TRANSLATORS 'when_rendering', 'when_invoked' are method names and should not be translated
               _("The when_rendering method for the %{face} face %{name} action takes either just one argument,"\
@@ -323,7 +323,7 @@ WRAPPER
 
   def get_option(name, with_inherited_options = true)
     option = @options_hash[name.to_sym]
-    if option.nil? and with_inherited_options
+    if option.nil? && with_inherited_options
       option = @face.get_option(name)
     end
     option

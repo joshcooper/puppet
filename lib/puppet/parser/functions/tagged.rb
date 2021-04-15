@@ -11,7 +11,7 @@ Puppet::Parser::Functions::newfunction(:tagged, :type => :rvalue, :arity => -2, 
 
     retval = true
     vals.each do |val|
-      unless compiler.catalog.tagged?(val) or resource.tagged?(val)
+      unless compiler.catalog.tagged?(val) || resource.tagged?(val)
         retval = false
         break
       end

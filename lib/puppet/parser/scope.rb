@@ -60,7 +60,7 @@ class Puppet::Parser::Scope
     end
 
     def include?(name)
-      (@parent and @parent.include?(name))
+      @parent && @parent.include?(name)
     end
 
     def bound?(name)
@@ -141,7 +141,7 @@ class Puppet::Parser::Scope
     end
 
     def include?(name)
-      bound?(name) or super
+      bound?(name) || super
     end
 
     def bound?(name)
@@ -472,7 +472,7 @@ class Puppet::Parser::Scope
   end
 
   def undef_as(x,v)
-    if v.nil? or v == :undef
+    if v.nil? || v == :undef
       x
     else
       v
@@ -663,7 +663,7 @@ class Puppet::Parser::Scope
   # shadow parent values. Ephemeral scopes for match results ($0 - $n) are not included.
   #
   def to_hash(recursive = true)
-    if recursive and has_enclosing_scope?
+    if recursive && has_enclosing_scope?
       target = enclosing_scope.to_hash(recursive)
       if !(inherited = inherited_scope).nil?
         target.merge!(inherited.to_hash(recursive))

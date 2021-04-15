@@ -426,7 +426,7 @@ module Puppet
           currently cannot daemonize).",
         :short    => "D",
         :hook     => proc do |value|
-          if value and Puppet::Util::Platform.windows?
+          if value && Puppet::Util::Platform.windows?
             raise "Cannot daemonize on Windows"
           end
       end
@@ -1388,7 +1388,7 @@ EOT
         auth.conf configuration on the Puppet Master.  Please see
         http://links.puppet.com/node_name_fact for more information.",
       :hook => proc do |value|
-        if !value.empty? and Puppet[:node_name_value] != Puppet[:certname]
+        if !value.empty? && Puppet[:node_name_value] != Puppet[:certname]
           raise "Cannot specify both the node_name_value and node_name_fact settings"
         end
       end

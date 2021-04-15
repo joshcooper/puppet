@@ -43,7 +43,7 @@ class Puppet::Indirector::FileServer < Puppet::Indirector::Terminus
   def search(request)
     mount, relative_path = configuration.split_path(request)
 
-    unless mount and paths = mount.search(relative_path, request)
+    unless mount && (paths = mount.search(relative_path, request))
       Puppet.info _("Could not find filesystem info for file '%{request}' in environment %{env}") % { request: request.key, env: request.environment }
       return nil
     end

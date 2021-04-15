@@ -58,7 +58,7 @@ Puppet::Type.newtype(:file) do
     end
 
     munge do |value|
-      if value.start_with?('//') and ::File.basename(value) == "/"
+      if value.start_with?('//') && ::File.basename(value) == "/"
         # This is a UNC path pointing to a share, so don't add a trailing slash
         ::File.expand_path(value)
       else
@@ -229,7 +229,7 @@ Puppet::Type.newtype(:file) do
       such as `*/*`."
 
     validate do |value|
-      unless value.is_a?(Array) or value.is_a?(String) or value == false
+      unless value.is_a?(Array) || value.is_a?(String) || value == false
         self.devfail "Ignore must be a string or an Array"
       end
     end
@@ -348,7 +348,7 @@ Puppet::Type.newtype(:file) do
         # The user/group property automatically converts to IDs
         next unless should = @parameters[property].shouldorig
         val = should[0]
-        if val.is_a?(Integer) or val =~ /^\d+$/
+        if val.is_a?(Integer) || val =~ /^\d+$/
           nil
         else
           val
@@ -425,11 +425,11 @@ Puppet::Type.newtype(:file) do
     return nil unless backup
     return nil if backup =~ /^\./
 
-    unless catalog or backup == "puppet"
+    unless catalog || backup == "puppet"
       fail _("Can not find filebucket for backups without a catalog")
     end
 
-    unless catalog and filebucket = catalog.resource(:filebucket, backup) or backup == "puppet"
+    unless catalog && (filebucket = catalog.resource(:filebucket, backup)) || backup == "puppet"
       fail _("Could not find filebucket %{backup} specified in backup") % { backup: backup }
     end
 
@@ -606,7 +606,7 @@ Puppet::Type.newtype(:file) do
 
   # A simple method for determining whether we should be recursing.
   def recurse?
-    self[:recurse] == true or self[:recurse] == :remote
+    self[:recurse] == true || self[:recurse] == :remote
   end
 
   # Recurse the target of the link.
@@ -670,7 +670,7 @@ Puppet::Type.newtype(:file) do
       end
 
       next unless result
-      return [] if top = result.find { |r| r.relative_path == "." } and top.ftype != "directory"
+      return [] if (top = result.find { |r| r.relative_path == "." }) && top.ftype != "directory"
       result.each do |data|
         if data.relative_path == '.'
           data.source = source
@@ -679,7 +679,7 @@ Puppet::Type.newtype(:file) do
           data.source = "#{source}/#{data.relative_path}"
         end
       end
-      break result if result and ! result.empty? and sourceselect == :first
+      break result if result && ! result.empty? && sourceselect == :first
       result
     end.flatten.compact
 
@@ -730,7 +730,7 @@ Puppet::Type.newtype(:file) do
       end
     end
 
-    if wanted_type != "link" and current_type == wanted_type
+    if wanted_type != "link" && current_type == wanted_type
       return false
     end
 
@@ -794,7 +794,7 @@ Puppet::Type.newtype(:file) do
     return true if self[:ensure] == :file
 
     # I.e., it's set to something like "directory"
-    return false if e = self[:ensure] and e != :present
+    return false if (e = self[:ensure]) && e != :present
 
     # The user doesn't really care, apparently
     if self[:ensure] == :present
@@ -804,7 +804,7 @@ Puppet::Type.newtype(:file) do
 
     # If we've gotten here, then :ensure isn't set
     return true if self[:content]
-    return true if stat and stat.ftype == "file"
+    return true if stat && stat.ftype == "file"
     false
   end
 
@@ -822,7 +822,7 @@ Puppet::Type.newtype(:file) do
     method = :stat
 
     # Files are the only types that support links
-    if (self.class.name == :file and self[:links] != :follow) or self.class.name == :tidy
+    if (self.class.name == :file && self[:links] != :follow) || self.class.name == :tidy
       method = :lstat
     end
 
@@ -940,11 +940,11 @@ Puppet::Type.newtype(:file) do
 
   # @return [Boolean] If the current file should be backed up and can be backed up.
   def can_backup?(type)
-    if type == "directory" and force?
+    if type == "directory" && force?
       # (#18110) Directories cannot be removed without :force,
       # so it doesn't make sense to back them up unless removing with :force.
       true
-    elsif type == "file" or type == "link"
+    elsif type == "file" || type == "link"
       true
     else
       # Including: “blockSpecial”, “characterSpecial”, "fifo", "socket", “unknown”
@@ -1006,7 +1006,7 @@ Puppet::Type.newtype(:file) do
   def write_temporary_file?
     # Unfortunately we don't know the source file size before fetching it so
     # let's assume the file won't be empty. Why isn't it part of the metadata?
-    (c = property(:content) and c.length) || @parameters[:source]
+    ((c = property(:content)) && c.length) || @parameters[:source]
   end
 
   # There are some cases where all of the work does not get done on

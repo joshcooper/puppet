@@ -112,7 +112,7 @@ class Puppet::Network::HTTP::API::IndirectedRoutes
 
     params.delete(:bucket_path)
 
-    if key == "" or key.nil?
+    if key == "" || key.nil?
       raise Puppet::Network::HTTP::Error::HTTPBadRequestError.new(
         _("No request key specified in %{uri}") % { uri: uri })
     end

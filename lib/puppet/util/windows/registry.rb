@@ -221,7 +221,7 @@ module Puppet::Util::Windows
       result = nil
 
       query_value_ex(key, name_ptr) do |type, data_ptr, byte_length|
-        unless rtype.empty? or rtype.include?(type)
+        unless rtype.empty? || rtype.include?(type)
           raise TypeError, _("Type mismatch (expect %{rtype} but %{type} present)") % { rtype: rtype.inspect, type: type }
         end
 

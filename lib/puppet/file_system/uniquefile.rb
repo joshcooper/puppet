@@ -40,7 +40,7 @@ class Puppet::FileSystem::Uniquefile < DelegateClass(File)
         @tmpname = tmpname
       end
       @mode = mode & ~(File::CREAT|File::EXCL)
-      perm or opts.freeze
+      perm || opts.freeze
       @opts = opts
     end
 
@@ -123,7 +123,7 @@ class Puppet::FileSystem::Uniquefile < DelegateClass(File)
       opts = []
     end
     tmpdir, = *rest
-    if $SAFE > 0 and tmpdir.tainted?
+    if $SAFE > 0 && tmpdir.tainted?
       tmpdir = '/tmp'
     else
       tmpdir ||= tmpdir()
@@ -135,7 +135,7 @@ class Puppet::FileSystem::Uniquefile < DelegateClass(File)
     rescue Errno::EEXIST
       n ||= 0
       n += 1
-      retry if !max_try or n < max_try
+      retry if !max_try || n < max_try
       raise _("cannot generate temporary name using `%{basename}' under `%{tmpdir}'") % { basename: basename, tmpdir: tmpdir }
     end
     path
@@ -157,7 +157,7 @@ class Puppet::FileSystem::Uniquefile < DelegateClass(File)
       @@systmpdir
     else
       for dir in [ Puppet::Util.get_env('TMPDIR'), Puppet::Util.get_env('TMP'), Puppet::Util.get_env('TEMP'), @@systmpdir, '/tmp']
-        if dir and stat = File.stat(dir) and stat.directory? and stat.writable?
+        if dir && (stat = File.stat(dir)) && stat.directory? && stat.writable?
           tmp = dir
           break
         end rescue nil

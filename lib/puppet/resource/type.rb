@@ -195,7 +195,7 @@ class Puppet::Resource::Type
         fail _("Cannot have code outside of a class/node/define because 'freeze_main' is enabled")
       end
     end
-    if parent and other.parent and parent != other.parent
+    if parent && other.parent && parent != other.parent
       fail _("Cannot merge classes with different parent classes (%{name} => %{parent} vs. %{other_name} => %{other_parent})") % { name: name, parent: parent, other_name: other.name, other_parent: other.parent }
     end
 
@@ -453,7 +453,7 @@ class Puppet::Resource::Type
   end
 
   def evaluate_parent_type(resource)
-    return unless klass = parent_type(resource.scope) and parent_resource = resource.scope.compiler.catalog.resource(:class, klass.name) || resource.scope.compiler.catalog.resource(:node, klass.name)
+    return unless (klass = parent_type(resource.scope)) && (parent_resource = resource.scope.compiler.catalog.resource(:class, klass.name) || resource.scope.compiler.catalog.resource(:node, klass.name))
     parent_resource.evaluate unless parent_resource.evaluated?
     parent_scope(resource.scope, klass)
   end

@@ -353,7 +353,7 @@ class Puppet::Configurer
       # facts may be used to determine which catalog we get, we need to
       # rerun the process if the environment is changed.
       tries = 0
-      while catalog.environment and not catalog.environment.empty? and catalog.environment != @environment
+      while catalog.environment && (not catalog.environment.empty?) && catalog.environment != @environment
         if tries > 3
           raise Puppet::Error, _("Catalog environment didn't stabilize after %{tries} fetches, aborting run") % { tries: tries }
         end
@@ -368,7 +368,7 @@ class Puppet::Configurer
         tries += 1
       end
 
-      execute_prerun_command or return nil
+      execute_prerun_command || (return nil)
 
       options[:report].code_id = catalog.code_id
       options[:report].catalog_uuid = catalog.catalog_uuid
@@ -379,7 +379,7 @@ class Puppet::Configurer
       Puppet.log_exception(detail, _("Failed to apply catalog: %{detail}") % { detail: detail })
       return nil
     ensure
-      execute_postrun_command or return nil
+      execute_postrun_command || (return nil)
     end
   ensure
     report.cached_catalog_status ||= @cached_catalog_status

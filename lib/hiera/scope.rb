@@ -73,7 +73,7 @@ class Hiera
     end
 
     def find_hostclass(scope)
-      if scope.source and scope.source.type == :hostclass
+      if scope.source && scope.source.type == :hostclass
         return scope.source.name.downcase
       elsif scope.parent
         return find_hostclass(scope.parent)

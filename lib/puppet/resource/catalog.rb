@@ -170,11 +170,11 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
     explicit_aliases.each {| given_alias | self.alias(resource, given_alias) }
 
     # Skip creating uniqueness key alias and checking collisions for non-isomorphic resources.
-    return unless resource.respond_to?(:isomorphic?) and resource.isomorphic?
+    return unless resource.respond_to?(:isomorphic?) && resource.isomorphic?
 
     # Add an alias if the uniqueness key is valid and not the title, which has already been checked.
     ukey = resource.uniqueness_key
-    if ukey.any? and ukey != [resource.title]
+    if ukey.any? && ukey != [resource.title]
       self.alias(resource, ukey)
     end
   end
@@ -360,7 +360,7 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
         @aliases.delete(ref)
       end
       remove_vertex!(resource) if vertex?(resource)
-      @relationship_graph.remove_vertex!(resource) if @relationship_graph and @relationship_graph.vertex?(resource)
+      @relationship_graph.remove_vertex!(resource) if @relationship_graph && @relationship_graph.vertex?(resource)
       @resources.delete(title_key)
       # Only Puppet::Type kind of resources respond to :remove, not Puppet::Resource
       resource.remove if resource.respond_to?(:remove)
@@ -620,7 +620,9 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
     map = {}
     resources.each do |resource|
       next if virtual_not_exported?(resource)
-      next if block_given? and yield resource
+      if block_given?
+        next if yield resource
+      end
 
       newres = resource.copy_as_resource
       newres.catalog = result
@@ -641,10 +643,14 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
     edges.each do |edge|
       # Skip edges between virtual resources.
       next if virtual_not_exported?(edge.source)
-      next if block_given? and yield edge.source
+      if block_given?
+        next if yield edge.source
+      end
 
       next if virtual_not_exported?(edge.target)
-      next if block_given? and yield edge.target
+      if block_given?
+        next if yield edge.target
+      end
 
       unless source = map[edge.source.ref]
         raise Puppet::DevError, _("Could not find resource %{resource} when converting %{message} resources") % { resource: edge.source.ref, message: message }

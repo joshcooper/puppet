@@ -221,12 +221,12 @@ module Util
     #TRANSLATORS 'benchmark' is a method name and should not be translated
     raise Puppet::DevError, _("Failed to provide level to benchmark") unless level
 
-    unless level == :none or object.respond_to? level
+    unless level == :none || object.respond_to?(level)
       raise Puppet::DevError, _("Benchmarked object does not respond to %{value}") % { value: level }
     end
 
     # Only benchmark if our log level is high enough
-    if level != :none and Puppet::Util::Log.sendlevel?(level)
+    if level != :none && Puppet::Util::Log.sendlevel?(level)
       seconds = Benchmark.realtime {
         yield
       }
@@ -247,7 +247,7 @@ module Util
   # @return [String] the absolute path to the found executable.
   def which(bin)
     if absolute_path?(bin)
-      return bin if FileTest.file? bin and FileTest.executable? bin
+      return bin if FileTest.file?(bin) && FileTest.executable?(bin)
     else
       exts = Puppet::Util.get_env('PATHEXT')
       exts = exts ? exts.split(File::PATH_SEPARATOR) : %w[.COM .EXE .BAT .CMD]
@@ -258,7 +258,7 @@ module Util
           # if the user's PATH contains a literal tilde (~) character and HOME is not set, we may get
           # an ArgumentError here.  Let's check to see if that is the case; if not, re-raise whatever error
           # was thrown.
-          if e.to_s =~ /HOME/ and (Puppet::Util.get_env('HOME').nil? || Puppet::Util.get_env('HOME') == "")
+          if e.to_s =~ /HOME/ && (Puppet::Util.get_env('HOME').nil? || Puppet::Util.get_env('HOME') == "")
             # if we get here they have a tilde in their PATH.  We'll issue a single warning about this and then
             # ignore this path element and carry on with our lives.
             #TRANSLATORS PATH and HOME are environment variables and should not be translated
@@ -274,10 +274,10 @@ module Util
           if Puppet::Util::Platform.windows? && File.extname(dest).empty?
             exts.each do |ext|
               destext = File.expand_path(dest + ext)
-              return destext if FileTest.file? destext and FileTest.executable? destext
+              return destext if FileTest.file?(destext) && FileTest.executable?(destext)
             end
           end
-          return dest if FileTest.file? dest and FileTest.executable? dest
+          return dest if FileTest.file?(dest) && FileTest.executable?(dest)
         end
       end
     end

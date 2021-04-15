@@ -71,7 +71,7 @@ module Puppet
     # Checksums need to invert how changes are printed.
     def change_to_s(currentvalue, newvalue)
       # Our "new" checksum value is provided by the source.
-      if source = resource.parameter(:source) and tmp = source.checksum
+      if (source = resource.parameter(:source)) && (tmp = source.checksum)
         newvalue = tmp
       end
       if currentvalue == :absent
@@ -84,7 +84,7 @@ module Puppet
     end
 
     def length
-      (actual_content and actual_content.length) || 0
+      (actual_content && actual_content.length) || 0
     end
 
     def content

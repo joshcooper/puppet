@@ -297,7 +297,7 @@ class PTypeSetType < PMetaType
           n = value.type_ref
           name = n.cased_value
           entries = []
-          unless name == 'Object' or name == 'TypeSet'
+          unless name == 'Object' || name == 'TypeSet'
             if value.operations.any? { |op| op.attribute_name == KEY_PARENT }
               case Puppet[:strict]
               when :warning

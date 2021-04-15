@@ -149,8 +149,8 @@ Puppet::Type.type(:user).provide :useradd, :parent => Puppet::Provider::NameServ
     Puppet::Type.type(:user).validproperties.sort.each do |property|
       next if property == :ensure
       next if property_manages_password_age?(property)
-      next if (property == :groups) && @resource.forcelocal?
-      next if (property == :expiry) && @resource.forcelocal?
+      next if property == :groups && @resource.forcelocal?
+      next if property == :expiry && @resource.forcelocal?
       # the value needs to be quoted, mostly because -c might
       # have spaces in it
       if (value = @resource.should(property)) && (value != "")

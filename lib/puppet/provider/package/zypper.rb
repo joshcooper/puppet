@@ -92,7 +92,7 @@ Puppet::Type.type(:package).provide :zypper, :parent => :rpm, :source => :rpm do
     options << :install
 
     #zypper 0.6.13 (OpenSuSE 10.2) does not support auto agree with licenses
-    options << '--auto-agree-with-licenses' unless major < 1 and minor <= 6 and patch <= 13
+    options << '--auto-agree-with-licenses' unless major < 1 && minor <= 6 && patch <= 13
     options << '--no-confirm'
     options += inst_opts unless inst_opts.empty?
 

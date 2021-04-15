@@ -30,7 +30,7 @@ module Puppet
       return :absent unless @resource.stat
       context = self.get_selinux_current_context(@resource[:path])
       is = parse_selinux_context(name, context)
-      if name == :selrange and selinux_support?
+      if name == :selrange && selinux_support?
         self.selinux_category_to_label(is)
       else
         is
