@@ -1,5 +1,6 @@
 require 'puppet/application'
 require 'puppet/configurer'
+require 'puppet/configurer/apply_run'
 require 'puppet/util/profiler/aggregate'
 
 class Puppet::Application::Apply < Puppet::Application
@@ -272,10 +273,11 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
 
         catalog.retrieval_duration = Time.now - starttime
 
-        if options[:write_catalog_summary]
-          catalog.write_class_file
-          catalog.write_resource_file
-        end
+        # DEAD CODE
+        # if options[:write_catalog_summary]
+        #   catalog.write_class_file
+        #   catalog.write_resource_file
+        # end
 
         exit_status = Puppet.override(:loaders => Puppet::Pops::Loaders.new(apply_environment)) { apply_catalog(catalog) }
 
@@ -340,6 +342,7 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
 
   def read_catalog(text)
     format = Puppet::Resource::Catalog.default_format
+    starttime = Time.now
     begin
       catalog = Puppet::Resource::Catalog.convert_from(format, text)
     rescue => detail
@@ -347,10 +350,13 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
     end
 
     catalog.to_ral
+    # SHOULDN'T WE FINALIZE?
+    catalog.finalize
+    catalog.retrieval_duration = Time.now - starttime
   end
 
   def apply_catalog(catalog)
     configurer = Puppet::Configurer.new
-    configurer.run(:catalog => catalog, :pluginsync => false)
+    configurer.run2(Puppet::Configurer::ApplyRun.new(catalog)) #:catalog => catalog, :pluginsync => false)
   end
 end

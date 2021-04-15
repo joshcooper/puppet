@@ -244,6 +244,45 @@ class Puppet::Configurer
     completed ? report.exit_status : nil
   end
 
+  def run2(run)
+    pool = Puppet::Network::HTTP::Pool.new(Puppet[:http_keepalive_timeout])
+    begin
+      Puppet.override(:http_pool => pool) do
+        run_internal2(run)
+      end
+    ensure
+      pool.close
+    end
+  end
+
+  def run_internal2(run)
+    report = run.report
+    init_storage
+    Puppet::Util::Log.newdestination(report)
+
+    begin
+      Puppet.push_context({:current_environment => run.local_node_environment}, "Local node environment for configurer transaction")
+      execute_prerun_command or return nil
+      run.run
+    rescue => detail
+      Puppet.log_exception(detail, "Failed to apply catalog: #{detail}")
+      return nil
+    ensure
+      execute_postrun_command or return nil
+    end
+  ensure
+    # Between Puppet runs we need to forget the cached values.  This lets us
+    # pick up on new functions installed by gems or new modules being added
+    # without the daemon being restarted.
+    $env_module_directories = nil
+
+    report.cached_catalog_status ||= @cached_catalog_status
+
+    Puppet::Util::Log.close(report)
+    send_report(report)
+    Puppet.pop_context
+  end
+
   def run_internal(options)
     start = Time.now
     report = options[:report]
@@ -362,10 +401,6 @@ class Puppet::Configurer
       end
 
       execute_prerun_command or return nil
-
-      options[:report].code_id = catalog.code_id
-      options[:report].catalog_uuid = catalog.catalog_uuid
-      options[:report].cached_catalog_status = @cached_catalog_status
       apply_catalog(catalog, options)
       true
     rescue => detail

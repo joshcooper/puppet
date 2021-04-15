@@ -9,7 +9,10 @@ require 'puppet/configurer/downloader'
 module Puppet::Configurer::FactHandler
   def find_facts
     # This works because puppet agent configures Facts to use 'facter' for
-    # finding facts and the 'rest' terminus for caching them.  Thus, we'll
+    # finding facts.
+
+    # THE REST OF THIS DOESN"T MAKE SENSE:
+    # and the 'rest' terminus for caching them.  Thus, we'll
     # compile them and then "cache" them on the server.
     begin
       facts = Puppet::Node::Facts.indirection.find(Puppet[:node_name_value], :environment => Puppet::Node::Environment.remote(@environment))
