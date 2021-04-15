@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A module to collect utility functions.
 
 require 'English'
@@ -448,7 +450,7 @@ module Util
     raise ArgumentError.new(_('path may not be nil')) if path.nil?
 
     # ensure string starts as UTF-8 for the sake of Ruby 1.9.3
-    encoded = ''.encode!(Encoding::UTF_8)
+    encoded = String.new('').encode!(Encoding::UTF_8)
 
     # parse uri into named matches, then reassemble properly encoded
     parts = path.match(RFC_3986_URI_REGEX)
