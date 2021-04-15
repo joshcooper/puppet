@@ -21,45 +21,6 @@ GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-# Offense count: 319
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: with_first_argument, with_fixed_indentation
-Layout/AlignArguments:
-  Enabled: false
-
-# Offense count: 20
-# Cop supports --auto-correct.
-Layout/AlignArray:
-  Exclude:
-    - 'lib/puppet/pops/model/model_tree_dumper.rb'
-    - 'lib/puppet/pops/parser/heredoc_support.rb'
-    - 'lib/puppet/pops/parser/lexer2.rb'
-    - 'lib/puppet/provider/service/init.rb'
-    - 'lib/puppet/resource/capability_finder.rb'
-    - 'lib/puppet/util/checksums.rb'
-    - 'lib/puppet/util/log/destinations.rb'
-    - 'lib/puppet/util/posix.rb'
-    - 'lib/puppet/util/windows/registry.rb'
-
-# Offense count: 1004
-# Cop supports --auto-correct.
-# Configuration parameters: AllowMultipleStyles, EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle.
-# SupportedHashRocketStyles: key, separator, table
-# SupportedColonStyles: key, separator, table
-# SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
-Layout/AlignHash:
-  Enabled: false
-
-# Offense count: 20
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: with_first_parameter, with_fixed_indentation
-Layout/AlignParameters:
-  Exclude:
-    - 'lib/puppet/pal/pal_impl.rb'
-    - 'lib/puppet/util/windows/file.rb'
-
 # Offense count: 11
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleAlignWith.

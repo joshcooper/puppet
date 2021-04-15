@@ -19,3 +19,18 @@ AllCops:
 
 Metrics:
   Enabled: false
+
+#################### Layout ###########################
+
+Layout/AlignArguments:
+  Enabled: false
+
+Layout/AlignArray:
+  Enabled: false
+
+Layout/AlignHash:
+  Enabled: false
+
+Layout/AlignParameters:
+  Enabled: false
+
