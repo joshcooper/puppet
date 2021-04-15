@@ -86,7 +86,7 @@ class Puppet::Provider::Exec < Puppet::Provider
       match = /^"([^"]+)"|^'([^']+)'/.match(command)
       if match
         # extract whichever of the two sides matched the content.
-        match[1] or match[2]
+        match[1] || match[2]
       else
         command.split(/ /)[0]
       end
@@ -96,6 +96,6 @@ class Puppet::Provider::Exec < Puppet::Provider
   def validatecmd(command)
     exe = extractexe(command)
     # if we're not fully qualified, require a path
-    self.fail _("'%{command}' is not qualified and no path was specified. Please qualify the command or specify a path.") % { command: command } if !absolute_path?(exe) and resource[:path].nil?
+    self.fail _("'%{command}' is not qualified and no path was specified. Please qualify the command or specify a path.") % { command: command } if !absolute_path?(exe) && resource[:path].nil?
   end
 end

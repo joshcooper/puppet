@@ -138,7 +138,7 @@ private
             raise ArgumentError, _("Invalid file option '%{parameter}'") % { parameter: param }
           end
 
-          if param == :mode and value !~ /^\d+$/
+          if param ==(:mode) && value !~ /^\d+$/
             raise ArgumentError, _("File modes must be numbers")
           end
         else

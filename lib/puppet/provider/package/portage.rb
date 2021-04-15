@@ -49,7 +49,7 @@ Puppet::Type.type(:package).provide :portage, :parent => Puppet::Provider::Packa
         if match
           package = {}
           result_fields.zip(match.captures) do |field, value|
-            package[field] = value unless !value or value.empty?
+            package[field] = value unless !value || value.empty?
           end
           package[:provider] = :portage
           packages << new(package)
@@ -127,7 +127,7 @@ Puppet::Type.type(:package).provide :portage, :parent => Puppet::Provider::Packa
           # some fields can be empty or (null) (if we are not passed a category in the package name for instance)
           if value == '(null)' || value == '<unset>'
             package_info[field] = nil
-          elsif !value or value.empty?
+          elsif !value || value.empty?
             package_info[field] = nil
           else
             package_info[field] = value
@@ -198,7 +198,7 @@ Puppet::Type.type(:package).provide :portage, :parent => Puppet::Provider::Packa
         if match
           package = {}
           result_fields.zip(match.captures) do |field, value|
-            package[field] = value unless !value or value.empty?
+            package[field] = value unless !value || value.empty?
           end
           # dev-lang python [3.4.5] [3.5.2] [2.7.12:2.7,3.4.5:3.4] [2.7.12:2.7,3.4.5:3.4,3.5.2:3.5] https://www.python.org/ An interpreted, interactive, object-oriented programming language
           # version_available is what we CAN install / update to

@@ -31,7 +31,8 @@ class Puppet::Application::FaceBase < Puppet::Application
 
   def render_as=(format)
     @render_as = Puppet::Network::FormatHandler.format(format)
-    @render_as or raise ArgumentError, _("I don't know how to render '%{format}'") % { format: format }
+    raise(ArgumentError, _("I don't know how to render '%{format}'") % { format: format }) unless @render_as
+    @render_as
   end
 
   def render(result, args_and_options)
@@ -72,7 +73,7 @@ class Puppet::Application::FaceBase < Puppet::Application
     # non-option word to use as the action.
     action_name = nil
     index       = -1
-    until action_name or (index += 1) >= command_line.args.length do
+    until action_name || (index += 1) >= command_line.args.length do
       item = command_line.args[index]
       if item =~ /^-/
         option = @face.options.find do |name|
@@ -84,9 +85,9 @@ class Puppet::Application::FaceBase < Puppet::Application
           # care about optional vs mandatory in that case because we do a real
           # parse later, and that will totally take care of raising the error
           # when we get there. --daniel 2011-04-04
-          if option.takes_argument? and !item.index('=')
+          if option.takes_argument? && !item.index('=')
             index += 1 unless
-              (option.optional_argument? and command_line.args[index + 1] =~ /^-/)
+              (option.optional_argument? && command_line.args[index + 1] =~ /^-/)
           end
         else
           option = find_global_settings_argument(item)
@@ -101,7 +102,7 @@ class Puppet::Application::FaceBase < Puppet::Application
           else 
             option = find_application_argument(item)
             if option
-              index += 1 if (option[:argument] and not option[:optional])
+              index += 1 if (option[:argument] && (not option[:optional]))
             else
               raise OptionParser::InvalidOption.new(item.sub(/=.*$/, ''))
             end
@@ -158,7 +159,7 @@ class Puppet::Application::FaceBase < Puppet::Application
         next unless arg =~ /^-/
         # sadly, we have to emulate some of optparse here...
         pattern = /^#{arg.sub('[no-]', '').sub(/[ =].*$/, '')}(?:[ =].*)?$/
-        pattern.match item and return object
+        pattern.match(item) && (return object)
       end
     end
     return nil                  # nothing found.

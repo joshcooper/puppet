@@ -176,7 +176,7 @@ class Puppet::Resource
   end
 
   def ==(other)
-    return false unless other.respond_to?(:title) and self.type == other.type and self.title == other.title
+    return false unless other.respond_to?(:title) && self.type == other.type && self.title == other.title
 
     return false unless to_hash == other.to_hash
     true
@@ -503,7 +503,7 @@ class Puppet::Resource
   def set_default_parameters(scope)
     Puppet.deprecation_warning(_('The method Puppet::Resource.set_default_parameters is deprecated and will be removed in the next major release of Puppet.'))
 
-    return [] unless resource_type and resource_type.respond_to?(:arguments)
+    return [] unless resource_type && resource_type.respond_to?(:arguments)
 
     unless is_a?(Puppet::Parser::Resource)
       fail Puppet::DevError, _("Cannot evaluate default parameters for %{resource} - not a parser resource") % { resource: self }
@@ -548,7 +548,7 @@ class Puppet::Resource
   def validate_complete
     Puppet.deprecation_warning(_('The method Puppet::Resource.validate_complete is deprecated and will be removed in the next major release of Puppet.'))
 
-    return unless resource_type and resource_type.respond_to?(:arguments)
+    return unless resource_type && resource_type.respond_to?(:arguments)
 
     resource_type.arguments.each do |param, default|
       param = param.to_sym
@@ -583,9 +583,9 @@ class Puppet::Resource
     properties = resource_type.properties.map(&:name)
 
     dup.collect do |attribute, value|
-      if value.to_s.empty? or Array(value).empty?
+      if value.to_s.empty? || Array(value).empty?
         delete(attribute)
-      elsif value.to_s == "absent" and attribute.to_s != "ensure"
+      elsif value.to_s == "absent" && attribute.to_s != "ensure"
         delete(attribute)
       end
 
@@ -631,7 +631,7 @@ class Puppet::Resource
   # Produce a canonical method name.
   def parameter_name(param)
     param = param.to_s.downcase.to_sym
-    if param == :name and namevar
+    if param == :name && namevar
       param = namevar
     end
     param

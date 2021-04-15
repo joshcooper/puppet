@@ -44,7 +44,7 @@ class Puppet::Pops::Evaluator::Collectors::AbstractCollector
 
     return false if objects.empty?
 
-    if @overrides and !objects.empty?
+    if @overrides && !objects.empty?
       overrides[:source].meta_def(:child_of?) do |klass|
         true
       end

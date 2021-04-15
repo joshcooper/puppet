@@ -154,7 +154,7 @@ Puppet::Type.type(:package).provide :pacman, :parent => Puppet::Provider::Packag
         end
       end
     rescue Puppet::ExecutionFailure
-      if pacman_check and self.class.yaourt?
+      if pacman_check && self.class.yaourt?
         pacman_check = false # now try the AUR
         retry
       else

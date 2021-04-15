@@ -148,7 +148,7 @@ class Puppet::Indirector::Indirection
 
   # This is used by terminus_class= and cache=.
   def validate_terminus_class(terminus_class)
-    unless terminus_class and terminus_class.to_s != ""
+    unless terminus_class && terminus_class.to_s != ""
       raise ArgumentError, _("Invalid terminus name %{terminus_class}") % { terminus_class: terminus_class.inspect }
     end
     unless Puppet::Indirector::Terminus.terminus_class(self.name, terminus_class)
@@ -257,7 +257,7 @@ class Puppet::Indirector::Indirection
 
     result = terminus.destroy(request)
 
-    if cache? and cache.find(request(:find, key, nil, options))
+    if cache? && cache.find(request(:find, key, nil, options))
       # Reuse the existing request, since it's equivalent.
       cache.destroy(request)
     end

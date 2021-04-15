@@ -351,7 +351,9 @@ class Puppet::Parser::Resource < Puppet::Resource
     # This can happen if the override is defining a new parameter, rather
     # than replacing an existing one.
     current = @parameters[param.name]
-    (set_parameter(param) and return) unless current
+    unless current
+      return if set_parameter(param)
+    end
 
     # Parameter is already set - if overriding with a default - simply ignore the setting of the default value
     return if scope.is_default?(type, param.name, param.value)

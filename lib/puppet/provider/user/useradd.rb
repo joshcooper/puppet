@@ -151,7 +151,7 @@ Puppet::Type.type(:user).provide :useradd, :parent => Puppet::Provider::NameServ
       next if property_manages_password_age?(property)
       next if (property == :groups) && @resource.forcelocal?
       next if (property == :expiry) && @resource.forcelocal?
-      
+
       value = @resource.should(property)
       if value && value != ""
         # the value needs to be quoted, mostly because -c might

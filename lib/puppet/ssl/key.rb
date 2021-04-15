@@ -32,7 +32,7 @@ DOC
   end
 
   def password
-    return nil unless password_file and Puppet::FileSystem.exist?(password_file)
+    return nil unless password_file && Puppet::FileSystem.exist?(password_file)
 
     # Puppet generates files at the default Puppet[:capass] using ASCII
     # User configured :passfile could be in any encoding

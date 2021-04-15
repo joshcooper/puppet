@@ -37,7 +37,7 @@ class Puppet::Provider::NameService < Puppet::Provider
 
     def option(name, option)
       name = name.intern if name.is_a? String
-      (defined?(@options) and @options.include? name and @options[name].include? option) ? @options[name][option] : nil
+      (defined?(@options) && @options.include?(name) && @options[name].include?(option)) ? @options[name][option] : nil
     end
 
     def options(name, hash)
@@ -216,7 +216,7 @@ class Puppet::Provider::NameService < Puppet::Provider
 
   def munge(name, value)
     block = self.class.option(name, :munge)
-    if block and block.is_a? Proc
+    if block && block.is_a?(Proc)
       block.call(value)
     else
       value
@@ -225,7 +225,7 @@ class Puppet::Provider::NameService < Puppet::Provider
 
   def unmunge(name, value)
     block = self.class.option(name, :unmunge)
-    if block and block.is_a? Proc
+    if block && block.is_a?(Proc)
       block.call(value)
     else
       value
@@ -234,7 +234,7 @@ class Puppet::Provider::NameService < Puppet::Provider
 
   # Retrieve what we can about our object
   def getinfo(refresh)
-    if @objectinfo.nil? or refresh == true
+    if @objectinfo.nil? || refresh == true
       @etcmethod ||= ("get" + self.class.section.to_s + "nam").intern
       begin
         @objectinfo = Puppet::Etc.send(@etcmethod, @canonical_name)

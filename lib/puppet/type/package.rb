@@ -155,7 +155,7 @@ module Puppet
             return false if is == :absent || is == :purged
 
             # Don't run 'latest' more than about every 5 minutes
-            if @latest and ((Time.now.to_i - @lateststamp) / 60) < 5
+            if @latest && ((Time.now.to_i - @lateststamp) / 60) < 5
               #self.debug "Skipping latest check"
             else
               begin

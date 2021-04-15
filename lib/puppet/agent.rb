@@ -84,7 +84,7 @@ class Puppet::Agent
   end
 
   def run_in_fork(forking = true)
-    return yield unless forking or Puppet.features.windows?
+    return yield unless forking || Puppet.features.windows?
 
     atForkHandler = Puppet::Util::AtFork.get_handler
 

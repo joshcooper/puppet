@@ -30,9 +30,9 @@ Puppet::Type.type(:user).provide :pw, :parent => Puppet::Provider::NameService::
   def addcmd
     cmd = [command(:pw), "useradd", @resource[:name]]
     @resource.class.validproperties.each do |property|
-      next if property == :ensure or property == :password
+      next if property == :ensure || property == :password
       value = @resource.should(property)
-      if value and value != ""
+      if value && value != ""
         cmd << flag(property) << munge(property,value)
       end
     end

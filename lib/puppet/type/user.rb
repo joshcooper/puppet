@@ -88,7 +88,7 @@ module Puppet
 
       def retrieve
         if provider.exists?
-          if provider.respond_to?(:is_role?) and provider.is_role?
+          if provider.respond_to?(:is_role?) && provider.is_role?
             return :role
           else
             return :present
@@ -136,7 +136,7 @@ module Puppet
         meaningful for domain accounts, which Puppet does not currently manage.)"
 
       munge do |value|
-        if value.is_a?(String) and value =~ /^[-0-9]+$/
+        if value.is_a?(String) && value =~ /^[-0-9]+$/
           Integer(value)
         else
           value
@@ -253,7 +253,7 @@ module Puppet
         }
 
       validate do |value|
-        raise ArgumentError, _("Passwords cannot include ':'") if value.is_a?(String) and value.include?(":")
+        raise ArgumentError, _("Passwords cannot include ':'") if value.is_a?(String) && value.include?(":")
       end
 
       sensitive true
@@ -419,7 +419,7 @@ module Puppet
 
       validate do |val|
         if munge(val)
-          raise ArgumentError, _("User provider %{name} can not manage home directories") % { name: provider.class.name } if provider and not provider.class.manages_homedir?
+          raise ArgumentError, _("User provider %{name} can not manage home directories") % { name: provider.class.name } if provider && (not provider.class.manages_homedir?)
         end
       end
     end
@@ -433,7 +433,7 @@ module Puppet
       newvalues(/^\d{4}-\d{2}-\d{2}$/)
 
       validate do |value|
-        if value.intern != :absent and value !~ /^\d{4}-\d{2}-\d{2}$/
+        if value.intern != :absent && value !~ /^\d{4}-\d{2}-\d{2}$/
           #TRANSLATORS YYYY-MM-DD represents a date with a four-digit year, a two-digit month, and a two-digit day,
           #TRANSLATORS separated by dashes.
           raise ArgumentError, _("Expiry dates must be YYYY-MM-DD or the string \"absent\"")
@@ -505,7 +505,7 @@ module Puppet
           prophash[property] = current_value
         end
 
-        if property.name == :ensure and current_value == :absent
+        if property.name == :ensure && current_value == :absent
           absent = true
         end
         prophash
@@ -678,7 +678,7 @@ module Puppet
             newer."
 
       munge do |value|
-        if value.is_a?(String) and value =~/^[-0-9]+$/
+        if value.is_a?(String) && value =~ /^[-0-9]+$/
           Integer(value)
         else
           value
@@ -753,14 +753,14 @@ module Puppet
 
         return [] if value == :false
         home = resource[:home]
-        if value == :true and not home
+        if value == :true && (not home)
           raise ArgumentError, _("purge_ssh_keys can only be true for users with a defined home directory")
         end
 
         return [ "#{home}/.ssh/authorized_keys" ] if value == :true
         # value is an array - munge each value
         [ value ].flatten.map do |entry|
-          if entry =~ /^~|^%h/ and not home
+          if entry =~ /^~|^%h/ && (not home)
             raise ArgumentError, _("purge_ssh_keys value '%{value}' meta character ~ or %{home_placeholder} only allowed for users with a defined home directory") % { value: value, home_placeholder: '%h' }
           end
           # make sure frozen value is duplicated by using a gsub, second mutating gsub! is then ok

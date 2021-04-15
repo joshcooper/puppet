@@ -98,7 +98,7 @@ module Puppet
       validate do |values|
         values = [values] unless values.is_a?(Array)
         values.each { |value|
-          unless  value.is_a?(String) and
+          unless  value.is_a?(String) &&
               value =~ /\d+(:\d+){0,2}\s*-\s*\d+(:\d+){0,2}/
             self.fail _("Invalid range value '%{value}'") % { value: value }
           end
@@ -126,11 +126,11 @@ module Puppet
 
           # Make sure the hours are valid
           [range[0][0], range[1][0]].each do |n|
-            raise ArgumentError, _("Invalid hour '%{n}'") % { n: n } if n < 0 or n > 23
+            raise ArgumentError, _("Invalid hour '%{n}'") % { n: n } if n < 0 || n > 23
           end
 
           [range[0][1], range[1][1]].each do |n|
-            raise ArgumentError, _("Invalid minute '%{n}'") % { n: n } if n and (n < 0 or n > 59)
+            raise ArgumentError, _("Invalid minute '%{n}'") % { n: n } if n && (n < 0 || n > 59)
           end
           ret << range
         }
@@ -241,7 +241,7 @@ module Puppet
         :weekly => proc do |prev, now|
           # Run the resource if the previous day was after this weekday (e.g., prev is wed, current is tue)
           # or if it's been more than a week since we ran
-          prev.wday > now.wday or (now - prev) > (24 * 3600 * 7)
+          prev.wday > now.wday || (now - prev) > (24 * 3600 * 7)
         end
       }
 
@@ -277,7 +277,7 @@ module Puppet
       defaultto 1
 
       validate do |value|
-        unless value.is_a?(Integer) or value =~ /^\d+$/
+        unless value.is_a?(Integer) || value =~ /^\d+$/
           raise Puppet::Error,
             _("Repeat must be a number")
         end
@@ -286,7 +286,7 @@ module Puppet
         # is, if there's no value, we assume it's a valid value.
         return unless @resource[:periodmatch]
 
-        if value != 1 and @resource[:periodmatch] != :distance
+        if value != 1 && @resource[:periodmatch] != :distance
           raise Puppet::Error,
             _("Repeat must be 1 unless periodmatch is 'distance', not '%{period}'") % { period: @resource[:periodmatch] }
         end
@@ -427,7 +427,7 @@ module Puppet
 
       # Pull them in order
       self.class.allattrs.each { |param|
-        if @parameters.include?(param) and
+        if @parameters.include?(param) &&
           @parameters[param].respond_to?(:match?)
           return false unless @parameters[param].match?(previous, now)
         end

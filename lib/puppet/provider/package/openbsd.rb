@@ -81,7 +81,7 @@ Puppet::Type.type(:package).provide :openbsd, :parent => Puppet::Provider::Packa
     output = Puppet::Util.withenv(e_vars) {pkginfo "-Q", query}
     version = properties[:ensure]
 
-    if output.nil? or output.size == 0 or output =~ /Error from /
+    if output.nil? || output.size == 0 || output =~ /Error from /
       debug "Failed to query for #{resource[:name]}"
       return version
     else

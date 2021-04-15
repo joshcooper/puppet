@@ -283,7 +283,7 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
 
     require 'puppet/file_bucket/dipper'
     begin
-      if options[:local] or options[:bucket]
+      if options[:local] || options[:bucket]
         path = options[:bucket] || Puppet[:clientbucketdir]
         @client = Puppet::FileBucket::Dipper.new(:Path => path)
       else
