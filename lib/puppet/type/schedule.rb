@@ -53,7 +53,7 @@ module Puppet
       resource could be checked & applied multiple times in the schedule as
       the information about when the resource was last checked will have
       expired from the cache.
-      EOT
+    EOT
 
     apply_to_all
 
@@ -71,7 +71,7 @@ module Puppet
               schedule => 'everyday',
             }
 
-        EOT
+      EOT
       isnamevar
     end
 

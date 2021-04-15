@@ -397,7 +397,7 @@ module Puppet
         feature.  This behavior is almost always appropriate for the server,
         and can result in a significant performance improvement for types and
         features that are checked frequently.
-      EOT
+        EOT
     },
     :diff_args => {
         :default  => lambda { default_diffargs },
@@ -622,7 +622,7 @@ Fine grained control of filetimeouts is deprecated. In future
 releases this value will only determine if file content is cached.
 
 Valid values are 0 (never cache) and 15 (15 second minimum wait time).
-            WARNING
+          WARNING
         end
       end
     },

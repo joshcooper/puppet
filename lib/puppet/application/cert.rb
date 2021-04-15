@@ -62,7 +62,7 @@ There are a couple important notes about previously-supported options.
   `puppetserver ca sign`, the `allow-authorization-extensions` setting must be
   set to true in the `certificate-authority` section of Puppet Server's
   config.
-HELP
+     HELP
   end
 
   def setup

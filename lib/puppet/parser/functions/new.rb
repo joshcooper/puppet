@@ -984,7 +984,7 @@ $fmt = Init[String,'%#x']
 notice($fmt(256)) # will notice '0x100'
 ```
 
-DOC
+  DOC
 ) do |args|
   Puppet::Parser::Functions::Error.is4x('new')
 end

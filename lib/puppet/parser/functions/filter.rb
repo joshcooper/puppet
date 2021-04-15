@@ -72,7 +72,7 @@ $filtered_data = $data.filter |$keys, $values| { $keys =~ /berry$/ and $values <
 ~~~
 
 - Since 4.0.0
-DOC
+  DOC
 ) do |args|
   Puppet::Parser::Functions::Error.is4x('filter')
 end

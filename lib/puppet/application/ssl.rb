@@ -74,7 +74,7 @@ ACTIONS
   `--localca` is specified, then also remove this host's local copy of the
   CA certificate(s) and CRL bundle. if `--target CERTNAME` is specified, then
   remove the files for the specified device on this host instead of this host.
-HELP
+    HELP
   end
 
   option('--target CERTNAME') do |arg|

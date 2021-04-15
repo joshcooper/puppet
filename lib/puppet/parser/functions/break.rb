@@ -33,7 +33,7 @@ Would notice the value `[10]`
 
 * Also see functions `next` and `return`
 * Since 4.8.0
-DOC
+  DOC
 ) do |args|
   Puppet::Parser::Functions::Error.is4x('break')
 end

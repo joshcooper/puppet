@@ -78,7 +78,7 @@ $transformed_data contains [0,50,100,150,200]
 
 * Since 4.4.0
 
-DOC
+  DOC
 ) do |args|
   Puppet::Parser::Functions::Error.is4x('step')
 end

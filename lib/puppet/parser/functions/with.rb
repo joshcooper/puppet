@@ -22,7 +22,7 @@ $check_var = $x
 ~~~
 
 - Since 4.0.0
-DOC
+  DOC
 ) do |args|
   Puppet::Parser::Functions::Error.is4x('with')
 end

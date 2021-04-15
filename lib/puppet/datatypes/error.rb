@@ -13,7 +13,7 @@ Puppet::DataTypes.create_type('Error') do
     functions => {
       message => Callable[[], String[1]]
     }
-    PUPPET
+  PUPPET
 
   require 'puppet/datatypes/impl/error'
 
