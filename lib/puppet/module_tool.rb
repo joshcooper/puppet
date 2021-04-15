@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 # Load standard libraries
 require 'pathname'
 require 'fileutils'

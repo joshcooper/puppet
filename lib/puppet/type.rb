@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 require 'puppet'
 require 'puppet/util/log'
 require 'puppet/util/metric'

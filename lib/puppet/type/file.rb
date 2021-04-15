@@ -1,4 +1,5 @@
 # coding: utf-8
+
 require 'digest/md5'
 require 'cgi'
 require 'etc'

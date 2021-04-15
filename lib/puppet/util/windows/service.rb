@@ -1,4 +1,5 @@
 # coding: utf-8
+
 require 'puppet/util/windows'
 require 'ffi'
 
