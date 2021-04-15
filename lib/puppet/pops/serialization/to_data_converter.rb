@@ -65,7 +65,7 @@ module Serialization
     private
 
     def path_to_s
-      s = @message_prefix || String.new('')
+      s = String.new(@message_prefix || '')
       s << JsonPath.to_json_path(@path)[1..-1]
       s
     end

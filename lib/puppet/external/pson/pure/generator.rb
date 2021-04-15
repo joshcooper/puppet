@@ -239,10 +239,10 @@ module PSON
             delim = ::String.new(',')
             if state
               delim << state.object_nl
-              result = '{'
+              result = ::String.new('{')
               result << state.object_nl
               result << map { |key,value|
-                s = pson_shift(state, depth + 1)
+                s = ::String.new(pson_shift(state, depth + 1))
                 s << key.to_s.to_pson(state, depth + 1)
                 s << state.space_before
                 s << ':'
@@ -253,7 +253,7 @@ module PSON
               result << pson_shift(state, depth)
               result << '}'
             else
-              result = '{'
+              result = ::String.new('{')
               result << map { |key,value|
                 key.to_s.to_pson << ':' << value.to_pson
               }.join(delim)
@@ -301,10 +301,10 @@ module PSON
             delim = ::String.new(',')
             if state
               delim << state.array_nl
-              result = '['
+              result = ::String.new('[')
               result << state.array_nl
               result << map { |value|
-                pson_shift(state, depth + 1) << value.to_pson(state, depth + 1)
+                "#{pson_shift(state, depth + 1)}#{value.to_pson(state, depth + 1)}"
               }.join(delim)
               result << state.array_nl
               result << pson_shift(state, depth)
