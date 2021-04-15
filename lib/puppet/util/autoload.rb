@@ -15,12 +15,33 @@ def debug(str)
   puts str
 end
 
+LIBDIR  = Pathname.new(File.expand_path(File.join(__FILE__, '../../..')))
+
 # Autoload paths, either based on names or all at once.
 class Puppet::Util::Autoload
   @loaded = {}
 
   class << self
     attr_accessor :loaded
+
+    def preload
+      unless @preloaded
+        #        Dir.glob(File.join(dir, 'puppet/indirector/*/*.rb')) do |file|
+
+        fun = ["puppet/indirector/resource/ral","puppet/indirector/report/processor","puppet/indirector/key/file","puppet/indirector/certificate/file","puppet/indirector/certificate_request/file","puppet/indirector/certificate_revocation_list/file","puppet/indirector/certificate_status/file","puppet/indirector/status/local","puppet/indirector/file_bucket_file/selector","puppet/type/file","puppet/indirector/file_content/selector","puppet/indirector/file_metadata/selector","puppet/feature/zlib","puppet/feature/selinux","puppet/type/user","puppet/feature/cfpropertylist","puppet/provider/user/useradd","puppet/feature/libuser","puppet/type/group","puppet/type/stage","puppet/type/whit","puppet/type/component","puppet/indirector/report/yaml","puppet/indirector/node/plain","puppet/indirector/catalog/compiler","puppet/type/notify","puppet/type/class","puppet/type/class","puppet/type/schedule","puppet/type/filebucket","puppet/reports/store"]
+        fun.each do |f|
+          path = Pathname.new(File.join(LIBDIR, f) + '.rb')
+          if path.exist?
+            name = f #path.relative_path_from(dir)
+            unless loaded?(name)
+              puts "PRELOAD #{name}"
+              load_path(name, path)
+            end
+          end
+        end
+        @preloaded = true
+      end
+    end
 
     # @api private
     def gem_source
@@ -41,6 +62,7 @@ class Puppet::Util::Autoload
     # @api private
     def mark_loaded(name, file)
       name = cleanpath(name).chomp('.rb')
+      ##debug "MARKED #{name}=>#{file}"
       # WHY expand path? Should this be cleanpath too? What does $LOADED_FEATURES look like on Windows?
       file = File.expand_path(file)
       $LOADED_FEATURES << file unless $LOADED_FEATURES.include?(file)
@@ -73,7 +95,7 @@ class Puppet::Util::Autoload
     #
     # @api private
     def load_file(name, env)
-      # debug "LOAD_FILE #{name.inspect}"
+      #debug "LOAD_FILE #{name.inspect}"
       file = get_file(name.to_s, env)
       return false unless file
       load_path(name, file)
@@ -83,7 +105,7 @@ class Puppet::Util::Autoload
     def load_path(name, file)
       begin
         mark_loaded(name, file)
-        # debug "KERNEL load #{file}"
+        #debug "KERNEL load #{file}"
         Kernel.load file
         return true
       rescue SystemExit,NoMemoryError
@@ -98,10 +120,10 @@ class Puppet::Util::Autoload
 
     # @api private
     def loadall(path, env)
+      #preload
       # Load every instance of everything we can find.
-      paths_to_load(path, env).each do |file|
-        name = file.chomp(".rb")
-        # WHY does loadall check if it's already loaded but load_file doesn't?
+      names_to_paths(path, env).each_pair do |name, file|
+        # while loading WHY does loadall check if it's already loaded but load_file doesn't?
         load_path(name, file) unless loaded?(name)
       end
     end
@@ -129,31 +151,51 @@ class Puppet::Util::Autoload
       dirs = 0
       path = search_directories(env).find do |dir|
         dirs += 1
-#        # debug "  STAT #{File.join(dir, name)}"
+#        # #debug "  STAT #{File.join(dir, name)}"
         Puppet::FileSystem.exist?(File.join(dir, name))
       end
 
-
       if path
         path = File.join(path, name)
-        # debug "GET_FILE: scanned #{dirs} directories, resolved #{path}"
+        #debug "GET_FILE: scanned #{dirs} directories, resolved #{path}"
         path
       else
-        # debug "GET_FILE: scanned #{dirs} directories, #{name.to_s} not found"
+        #debug "GET_FILE: scanned #{dirs} directories, #{name.to_s} not found"
         nil
       end
     end
 #    private :get_file
 
     # @api private
-    def paths_to_load(path, env)
+    # def paths_to_load(path, env)
+    #   dirs = 0
+    #   paths = search_directories(env).map do |dir|
+    #     dirs += 1
+    #     files_in_dir(dir, path)
+    #   end.flatten
+    #   # #debug "PATHS_TO_LOAD: scanned #{dirs} directories and #{paths.count} files"
+    #   paths.uniq
+    # end
+
+    def names_to_paths(path, env)
+      paths = {}
+
+      #require 'byebug'; byebug if path == 'puppet/provider/filebucket'
+
       dirs = 0
-      paths = search_directories(env).map do |dir|
+      search_directories(env).each do |dir|
         dirs += 1
-        files_in_dir(dir, path)
-      end.flatten
-      # debug "PATHS_TO_LOAD: scanned #{dirs} directories and #{paths.count} files"
-      paths.uniq
+        dir = Pathname.new(File.expand_path(dir))
+        Dir.glob(File.join(dir, path, "*.rb")) do |file|
+          abspath = Pathname.new(file)
+          relpath = abspath.relative_path_from(dir)
+          paths[relpath] = file unless paths.include?(relpath)
+        end
+      end
+
+      #debug "PATHS_TO_LOAD: #{path} scanned #{dirs} directories and #{paths.count} files"
+
+      paths
     end
 
     # @api private
@@ -166,7 +208,7 @@ class Puppet::Util::Autoload
           Pathname.new(file).relative_path_from(dir).to_s
         end
       end.flatten
-      # debug "FILES_TO_LOAD: scanned #{dirs} directories and #{files.count} files"
+      #debug "FILES_TO_LOAD: scanned #{dirs} directories and #{files.count} files"
       files.uniq
     end
 #    private :files_to_load
@@ -174,7 +216,7 @@ class Puppet::Util::Autoload
     # @api private
     def files_in_dir(dir, path)
       dir = File.expand_path(dir)
-#      # debug "  GLOB #{File.join(dir, path, '*.rb')}"
+#      # #debug "  GLOB #{File.join(dir, path, '*.rb')}"
       Dir.glob(File.join(dir, path, "*.rb"))
     end
 #    private :files_in_dir
@@ -206,10 +248,10 @@ class Puppet::Util::Autoload
         # if the app defaults have been initialized then it should be safe to access the module path setting.
         Puppet::Util::ModuleDirectoriesAdapter.adapt(env) do |a|
           a.directories ||= env.modulepath.collect do |dir|
-            # debug "  ENTRIES #{dir}"
+            # #debug "  ENTRIES #{dir}"
             Dir.entries(dir).reject { |f| f =~ /^\./ }.collect { |f| File.join(dir, f, "lib") }
           end.flatten.find_all do |d|
-#            # debug "  STAT #{d}"
+#            # #debug "  STAT #{d}"
             FileTest.directory?(d)
           end
         end.directories
@@ -235,14 +277,14 @@ class Puppet::Util::Autoload
     # @api private
     def vendored_modules
       dir = Puppet[:vendormoduledir]
-#      # debug "  STAT #{dir}"
+#      # #debug "  STAT #{dir}"
       if dir && File.directory?(dir)
-        # debug "  ENTRIES #{dir}"
+        # #debug "  ENTRIES #{dir}"
         Dir.entries(dir)
           .reject { |f| f =~ /^\./ }
           .collect { |f| File.join(dir, f, "lib") }
           .find_all do |d|
-#          # debug "  STAT #{d}"
+#          # #debug "  STAT #{d}"
           FileTest.directory?(d)
           end
       else
@@ -258,7 +300,8 @@ class Puppet::Util::Autoload
 
     # @api private
     def search_directories(env)
-      [gem_directories, module_directories(env), libdirs, $LOAD_PATH, vendored_modules].flatten
+      [LIBDIR, gem_directories, module_directories(env), libdirs, $LOAD_PATH, vendored_modules].flatten
+      #[gem_directories, module_directories(env), libdirs, $LOAD_PATH, vendored_modules].flatten
     end
 #    private :search_directories
 
@@ -283,15 +326,14 @@ class Puppet::Util::Autoload
   #
   # @api public
   def require(name)
-    # debug "REQUIRE: #{@path}/#{name.inspect}"
+    #debug "REQUIRE: #{@path}/#{name.inspect}"
     Kernel.require expand(name)
   end
 
   # Load a file based on the Autoload#path namespace.
   # @api public
   def load(name, env)
-    # debug "LOAD: #{@path}/#{name.inspect}"
-    #    self.class.send(:load_file, expand(name), env)
+    #debug "LOAD: #{@path}/#{name.inspect}"
     self.class.load_file(expand(name), env)
   end
 
@@ -306,8 +348,7 @@ class Puppet::Util::Autoload
   #
   # @api public
   def loadall(env)
-    # debug "LOADALL: #{@path} env=#{env.to_s}"
-#    self.class.send(:loadall, @path, env)
+    #debug "LOADALL: #{@path} env=#{env.to_s}"
     self.class.loadall(@path, env)
   end
 
@@ -317,8 +358,7 @@ class Puppet::Util::Autoload
   #
   # @api public
   def loaded?(name)
-#    self.class.send(:loaded?, expand(name))
-    self.class.loaded?(expand(name))
+    self.class.loaded?(Pathname.new(expand(name)))
   end
 
   # For testing only
@@ -337,10 +377,9 @@ class Puppet::Util::Autoload
   # @return Array[String] An array of relative paths.
   # @api public
   def files_to_load(env)
-    # debug "FILES_TO_LOAD: #{@path} env=#{env}"
-#    files = self.class.send(:files_to_load, @path, env)
+    #debug "FILES_TO_LOAD: #{@path} env=#{env}"
     files = self.class.files_to_load(@path, env)
- #   # debug "  -> #{files.count}"
+    #debug "  -> #{files.count}"
     files
   end
 

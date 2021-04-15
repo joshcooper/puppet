@@ -1007,6 +1007,11 @@ Generated on #{Time.now}.
       Puppet.log_and_raise(detail, "Could not create resources for managing Puppet's files and directories in sections #{sections.inspect}: #{detail}")
     end
 
+    # env = Puppet.lookup(:current_environment)
+    # Puppet::Type.type(:file).providerloader.loadall(env)
+    # Puppet::Type.type(:user).providerloader.loadall(env)
+    # Puppet::Type.type(:group).providerloader.loadall(env)
+
     catalog.host_config = false
     catalog.apply do |transaction|
       if transaction.any_failed?
