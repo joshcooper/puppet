@@ -11,6 +11,10 @@ class Puppet::Util::ModuleDirectoriesAdapter < Puppet::Pops::Adaptable::Adapter
   attr_accessor :directories
 end
 
+def debug(str)
+  puts str
+end
+
 # Autoload paths, either based on names or all at once.
 class Puppet::Util::Autoload
   @loaded = {}
@@ -22,12 +26,14 @@ class Puppet::Util::Autoload
     def gem_source
       @gem_source ||= Puppet::Util::RubyGems::Source.new
     end
+#    private :gem_source
 
     # @api private
     def loaded?(path)
       path = cleanpath(path).chomp('.rb')
       loaded.include?(path)
     end
+#    private :loaded?
 
     # Save the fact that a given path has been loaded.  This is so
     # we can load downloaded plugins if they've already been loaded
@@ -35,10 +41,12 @@ class Puppet::Util::Autoload
     # @api private
     def mark_loaded(name, file)
       name = cleanpath(name).chomp('.rb')
+      # WHY expand path? Should this be cleanpath too? What does $LOADED_FEATURES look like on Windows?
       file = File.expand_path(file)
       $LOADED_FEATURES << file unless $LOADED_FEATURES.include?(file)
       loaded[name] = [file, File.mtime(file)]
     end
+#    private :mark_loaded
 
     # Return false if we've already loaded *name*, it still resolves
     # to the same absolute path, and the mtime of the file is unchanged
@@ -58,12 +66,14 @@ class Puppet::Util::Autoload
         true
       end
     end
+#    private :changed?
 
     # Load a single plugin by name.  We use 'load' here so we can reload a
     # given plugin.
     #
     # @api private
     def load_file(name, env)
+      # debug "LOAD_FILE #{name.inspect}"
       file = get_file(name.to_s, env)
       return false unless file
       load_path(name, file)
@@ -73,6 +83,7 @@ class Puppet::Util::Autoload
     def load_path(name, file)
       begin
         mark_loaded(name, file)
+        # debug "KERNEL load #{file}"
         Kernel.load file
         return true
       rescue SystemExit,NoMemoryError
@@ -83,15 +94,18 @@ class Puppet::Util::Autoload
         raise Puppet::Error, message, detail.backtrace
       end
     end
+#    private :load_file
 
     # @api private
     def loadall(path, env)
       # Load every instance of everything we can find.
       paths_to_load(path, env).each do |file|
         name = file.chomp(".rb")
+        # WHY does loadall check if it's already loaded but load_file doesn't?
         load_path(name, file) unless loaded?(name)
       end
     end
+#    private :loadall
 
     # Reload all of the files that we've previously loaded.
     #
@@ -100,6 +114,8 @@ class Puppet::Util::Autoload
     def reload_changed(env)
       loaded.keys.each do |file|
         if changed?(file, env)
+          # REMIND: if a file was loaded, but is now deleted, then
+          # we never remove the file from the loaded hash
           load_file(file, env)
         end
       end
@@ -110,32 +126,58 @@ class Puppet::Util::Autoload
     # @api private
     def get_file(name, env)
       name = name + '.rb' unless name =~ /\.rb$/
-      path = search_directories(env).find { |dir| Puppet::FileSystem.exist?(File.join(dir, name)) }
-      path and File.join(path, name)
+      dirs = 0
+      path = search_directories(env).find do |dir|
+        dirs += 1
+#        # debug "  STAT #{File.join(dir, name)}"
+        Puppet::FileSystem.exist?(File.join(dir, name))
+      end
+
+
+      if path
+        path = File.join(path, name)
+        # debug "GET_FILE: scanned #{dirs} directories, resolved #{path}"
+        path
+      else
+        # debug "GET_FILE: scanned #{dirs} directories, #{name.to_s} not found"
+        nil
+      end
     end
+#    private :get_file
 
     # @api private
     def paths_to_load(path, env)
-      search_directories(env).map do |dir|
+      dirs = 0
+      paths = search_directories(env).map do |dir|
+        dirs += 1
         files_in_dir(dir, path)
-      end.flatten.uniq
+      end.flatten
+      # debug "PATHS_TO_LOAD: scanned #{dirs} directories and #{paths.count} files"
+      paths.uniq
     end
 
     # @api private
     def files_to_load(path, env)
-      search_directories(env).map do |dir|
+      dirs = 0
+      files = search_directories(env).map do |dir|
+        dirs += 1
         dir = Pathname.new(dir)
         files_in_dir(dir, path).collect do |file|
           Pathname.new(file).relative_path_from(dir).to_s
         end
-      end.flatten.uniq
+      end.flatten
+      # debug "FILES_TO_LOAD: scanned #{dirs} directories and #{files.count} files"
+      files.uniq
     end
+#    private :files_to_load
 
     # @api private
     def files_in_dir(dir, path)
       dir = File.expand_path(dir)
+#      # debug "  GLOB #{File.join(dir, path, '*.rb')}"
       Dir.glob(File.join(dir, path, "*.rb"))
     end
+#    private :files_in_dir
 
     # @api private
     def module_directories(env)
@@ -164,8 +206,10 @@ class Puppet::Util::Autoload
         # if the app defaults have been initialized then it should be safe to access the module path setting.
         Puppet::Util::ModuleDirectoriesAdapter.adapt(env) do |a|
           a.directories ||= env.modulepath.collect do |dir|
+            # debug "  ENTRIES #{dir}"
             Dir.entries(dir).reject { |f| f =~ /^\./ }.collect { |f| File.join(dir, f, "lib") }
           end.flatten.find_all do |d|
+#            # debug "  STAT #{d}"
             FileTest.directory?(d)
           end
         end.directories
@@ -174,6 +218,7 @@ class Puppet::Util::Autoload
         []
       end
     end
+#    private :module_directories
 
     # @api private
     def libdirs
@@ -185,15 +230,21 @@ class Puppet::Util::Autoload
         []
       end
     end
+#    private :libdirs
 
     # @api private
     def vendored_modules
       dir = Puppet[:vendormoduledir]
+#      # debug "  STAT #{dir}"
       if dir && File.directory?(dir)
+        # debug "  ENTRIES #{dir}"
         Dir.entries(dir)
           .reject { |f| f =~ /^\./ }
           .collect { |f| File.join(dir, f, "lib") }
-          .find_all { |d| FileTest.directory?(d) }
+          .find_all do |d|
+#          # debug "  STAT #{d}"
+          FileTest.directory?(d)
+          end
       else
         []
       end
@@ -203,11 +254,13 @@ class Puppet::Util::Autoload
     def gem_directories
       gem_source.directories
     end
+#    private :gem_directories
 
     # @api private
     def search_directories(env)
       [gem_directories, module_directories(env), libdirs, $LOAD_PATH, vendored_modules].flatten
     end
+#    private :search_directories
 
     # Normalize a path. This converts ALT_SEPARATOR to SEPARATOR on Windows
     # and eliminates unnecessary parts of a path.
@@ -230,12 +283,15 @@ class Puppet::Util::Autoload
   #
   # @api public
   def require(name)
+    # debug "REQUIRE: #{@path}/#{name.inspect}"
     Kernel.require expand(name)
   end
 
   # Load a file based on the Autoload#path namespace.
   # @api public
   def load(name, env)
+    # debug "LOAD: #{@path}/#{name.inspect}"
+    #    self.class.send(:load_file, expand(name), env)
     self.class.load_file(expand(name), env)
   end
 
@@ -250,6 +306,8 @@ class Puppet::Util::Autoload
   #
   # @api public
   def loadall(env)
+    # debug "LOADALL: #{@path} env=#{env.to_s}"
+#    self.class.send(:loadall, @path, env)
     self.class.loadall(@path, env)
   end
 
@@ -259,9 +317,12 @@ class Puppet::Util::Autoload
   #
   # @api public
   def loaded?(name)
+#    self.class.send(:loaded?, expand(name))
     self.class.loaded?(expand(name))
   end
 
+  # For testing only
+  # @api private
   def changed?(name, env)
     self.class.changed?(expand(name), env)
   end
@@ -276,11 +337,16 @@ class Puppet::Util::Autoload
   # @return Array[String] An array of relative paths.
   # @api public
   def files_to_load(env)
-    self.class.files_to_load(@path, env)
+    # debug "FILES_TO_LOAD: #{@path} env=#{env}"
+#    files = self.class.send(:files_to_load, @path, env)
+    files = self.class.files_to_load(@path, env)
+ #   # debug "  -> #{files.count}"
+    files
   end
 
   # @api private
   def expand(name)
     ::File.join(@path, name.to_s)
   end
+#  private :expand
 end
