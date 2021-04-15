@@ -44,6 +44,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("rake", "~> 12.2")
   s.add_development_dependency("rspec", "~> 3.1")
   s.add_development_dependency("rspec-its", "~> 1.1")
+  s.add_development_dependency("rspec-expectations", "~> 3.9.0")
   s.add_development_dependency("vcr", "~> 5.0")
   s.add_development_dependency("webmock", "~> 3.0")
   s.add_development_dependency("yard")

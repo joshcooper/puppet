@@ -32,6 +32,7 @@ gem_development_dependencies:
   rake: '~> 12.2'
   rspec: '~> 3.1'
   rspec-its: '~> 1.1'
+  rspec-expectations: '~> 3.9.0'
   vcr: '~> 5.0'
   webmock: '~> 3.0'
   yard:
