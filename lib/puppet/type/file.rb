@@ -357,38 +357,38 @@ Puppet::Type.newtype(:file) do
     end
   end
 
-  CREATORS = [:content, :source, :target]
-  SOURCE_ONLY_CHECKSUMS = [:none, :ctime, :mtime]
+  # CREATORS = [:content, :source, :target]
+  # SOURCE_ONLY_CHECKSUMS = [:none, :ctime, :mtime]
 
   validate do
-    creator_count = 0
-    CREATORS.each do |param|
-      creator_count += 1 if self.should(param)
-    end
-    creator_count += 1 if @parameters.include?(:source)
+    # creator_count = 0
+    # CREATORS.each do |param|
+    #   creator_count += 1 if self.should(param)
+    # end
+    # creator_count += 1 if @parameters.include?(:source)
 
-    self.fail _("You cannot specify more than one of %{creators}") % { creators: CREATORS.collect { |p| p.to_s}.join(", ") } if creator_count > 1
+    # self.fail _("You cannot specify more than one of %{creators}") % { creators: CREATORS.collect { |p| p.to_s}.join(", ") } if creator_count > 1
 
-    self.fail _("You cannot specify a remote recursion without a source") if !self[:source] && self[:recurse] == :remote
+    # self.fail _("You cannot specify a remote recursion without a source") if !self[:source] && self[:recurse] == :remote
 
-    self.fail _("You cannot specify source when using checksum 'none'") if self[:checksum] == :none && !self[:source].nil?
+    # self.fail _("You cannot specify source when using checksum 'none'") if self[:checksum] == :none && !self[:source].nil?
 
-    SOURCE_ONLY_CHECKSUMS.each do |checksum_type|
-      self.fail _("You cannot specify content when using checksum '%{checksum_type}'") % { checksum_type: checksum_type } if self[:checksum] == checksum_type && !self[:content].nil?
-    end
+    # SOURCE_ONLY_CHECKSUMS.each do |checksum_type|
+    #   self.fail _("You cannot specify content when using checksum '%{checksum_type}'") % { checksum_type: checksum_type } if self[:checksum] == checksum_type && !self[:content].nil?
+    # end
 
-    self.warning _("Possible error: recurselimit is set but not recurse, no recursion will happen") if !self[:recurse] && self[:recurselimit]
+    # self.warning _("Possible error: recurselimit is set but not recurse, no recursion will happen") if !self[:recurse] && self[:recurselimit]
 
-    if @parameters[:content] && @parameters[:content].actual_content
-      # Now that we know the checksum, update content (in case it was created before checksum was known).
-      @parameters[:content].value = @parameters[:checksum].sum(@parameters[:content].actual_content)
-    end
+    # if @parameters[:content] && @parameters[:content].actual_content
+    #   # Now that we know the checksum, update content (in case it was created before checksum was known).
+    #   @parameters[:content].value = @parameters[:checksum].sum(@parameters[:content].actual_content)
+    # end
 
-    if self[:checksum] && self[:checksum_value] && !send("#{self[:checksum]}?", self[:checksum_value])
-      self.fail _("Checksum value '%{value}' is not a valid checksum type %{checksum}") % { value: self[:checksum_value], checksum: self[:checksum] }
-    end
+    # if self[:checksum] && self[:checksum_value] && !send("#{self[:checksum]}?", self[:checksum_value])
+    #   self.fail _("Checksum value '%{value}' is not a valid checksum type %{checksum}") % { value: self[:checksum_value], checksum: self[:checksum] }
+    # end
 
-    self.warning _("Checksum value is ignored unless content or source are specified") if self[:checksum_value] && !self[:content] && !self[:source]
+    # self.warning _("Checksum value is ignored unless content or source are specified") if self[:checksum_value] && !self[:content] && !self[:source]
 
     provider.validate if provider.respond_to?(:validate)
   end
@@ -403,6 +403,7 @@ Puppet::Type.newtype(:file) do
   end
 
   # Determine the user to write files as.
+  # DEAD CODE
   def asuser
     if self.should(:owner) && ! self.should(:owner).is_a?(Symbol)
       writeable = Puppet::Util::SUIDManager.asuser(self.should(:owner)) {
@@ -446,7 +447,9 @@ Puppet::Type.newtype(:file) do
 
   # Does the file currently exist?  Just checks for whether
   # we have a stat
+  # REMIND: Think this is dead code
   def exist?
+    require 'byebug'; byebug
     stat ? true : false
   end
 
@@ -476,15 +479,15 @@ Puppet::Type.newtype(:file) do
   end
 
   def flush
-    # We want to make sure we retrieve metadata anew on each transaction.
-    @parameters.each do |name, param|
-      param.flush if param.respond_to?(:flush)
-    end
-    @stat = :needs_stat
+    provider.flush
+  end
+
+  def retrieve
+    provider.retrieve
   end
 
   def initialize(hash)
-    # Used for caching clients
+    # Used for caching clients: WTF?
     @clients = {}
 
     super
@@ -745,31 +748,31 @@ Puppet::Type.newtype(:file) do
     end
   end
 
-  def retrieve
-    # This check is done in retrieve to ensure it happens before we try to use
-    # metadata in `copy_source_values`, but so it only fails the resource and not
-    # catalog validation (because that would be a breaking change from Puppet 4).
-    if Puppet.features.microsoft_windows? && parameter(:source) &&
-      [:use, :use_when_creating].include?(self[:source_permissions])
-      #TRANSLATORS "source_permissions => ignore" should not be translated
-      err_msg = _("Copying owner/mode/group from the source file on Windows is not supported; use source_permissions => ignore.")
-      if self[:owner] == nil || self[:group] == nil || self[:mode] == nil
-        # Fail on Windows if source permissions are being used and the file resource
-        # does not have mode owner, group, and mode all set (which would take precedence).
-        self.fail err_msg
-      else
-        # Warn if use source permissions is specified on Windows
-        self.warning err_msg
-      end
-    end
+  # def retrieve
+  #   # This check is done in retrieve to ensure it happens before we try to use
+  #   # metadata in `copy_source_values`, but so it only fails the resource and not
+  #   # catalog validation (because that would be a breaking change from Puppet 4).
+  #   if Puppet.features.microsoft_windows? && parameter(:source) &&
+  #     [:use, :use_when_creating].include?(self[:source_permissions])
+  #     #TRANSLATORS "source_permissions => ignore" should not be translated
+  #     err_msg = _("Copying owner/mode/group from the source file on Windows is not supported; use source_permissions => ignore.")
+  #     if self[:owner] == nil || self[:group] == nil || self[:mode] == nil
+  #       # Fail on Windows if source permissions are being used and the file resource
+  #       # does not have mode owner, group, and mode all set (which would take precedence).
+  #       self.fail err_msg
+  #     else
+  #       # Warn if use source permissions is specified on Windows
+  #       self.warning err_msg
+  #     end
+  #   end
 
     # `checksum_value` implies explicit management of all metadata, so skip metadata
     # retrieval. Otherwise, if source is set, retrieve metadata for source.
-    if (source = parameter(:source)) && property(:checksum_value).nil?
-      source.copy_source_values
-    end
-    super
-  end
+  #   if (source = parameter(:source)) && property(:checksum_value).nil?
+  #     source.copy_source_values
+  #   end
+  #   super
+  # end
 
   # Set the checksum, from another property.  There are multiple
   # properties that modify the contents of a file, and they need the
@@ -1008,32 +1011,51 @@ Puppet::Type.newtype(:file) do
 
   # There are some cases where all of the work does not get done on
   # file creation/modification, so we have to do some extra checking.
-  def property_fix
-    properties.each do |thing|
-      next unless [:mode, :owner, :group, :seluser, :selrole, :seltype, :selrange].include?(thing.name)
+  # def property_fix
+  #   properties.each do |thing|
+  #     next unless [:mode, :owner, :group, :seluser, :selrole, :seltype, :selrange].include?(thing.name)
 
-      # Make sure we get a new stat object
-      @stat = :needs_stat
-      currentvalue = thing.retrieve
-      thing.sync unless thing.safe_insync?(currentvalue)
-    end
+  #     # Make sure we get a new stat object
+  #     @stat = :needs_stat
+  #     currentvalue = thing.retrieve
+  #     thing.sync unless thing.safe_insync?(currentvalue)
+  #   end
+  # end
+
+  newparam(:checksum)
+  newparam(:content)
+  newparam(:source)
+  newparam(:source_permissions)
+  newproperty(:checksum_value)
+  newproperty(:target)
+  ensurable do
+    nodefault
+    newvalues(:absent, :file, :directory)
+    #newvalue(:present) # Not yet
+    #newvalue(:link, :required_features => :manages_symlinks)
+    aliasvalue(:false, :absent)
   end
-
+  newproperty(:owner)
+  newproperty(:group)
+  newproperty(:mode)
+  newproperty(:type) # READONLY
+  newproperty(:ctime) # READONLY
+  newproperty(:mtime) # READONLY
 end
 
 # We put all of the properties in separate files, because there are so many
 # of them.  The order these are loaded is important, because it determines
 # the order they are in the property lit.
-require 'puppet/type/file/checksum'
-require 'puppet/type/file/content'     # can create the file
-require 'puppet/type/file/source'      # can create the file
-require 'puppet/type/file/checksum_value' # can create the file, in place of content
-require 'puppet/type/file/target'      # creates a different type of file
-require 'puppet/type/file/ensure'      # can create the file
-require 'puppet/type/file/owner'
-require 'puppet/type/file/group'
-require 'puppet/type/file/mode'
-require 'puppet/type/file/type'
-require 'puppet/type/file/selcontext'  # SELinux file context
-require 'puppet/type/file/ctime'
-require 'puppet/type/file/mtime'
+# require 'puppet/type/file/checksum'
+# require 'puppet/type/file/content'     # can create the file
+# require 'puppet/type/file/source'      # can create the file
+# require 'puppet/type/file/checksum_value' # can create the file, in place of content
+# require 'puppet/type/file/target'      # creates a different type of file
+# require 'puppet/type/file/ensure'      # can create the file
+# require 'puppet/type/file/owner'
+# require 'puppet/type/file/group'
+# require 'puppet/type/file/mode'
+# require 'puppet/type/file/type'
+# require 'puppet/type/file/selcontext'  # SELinux file context
+# require 'puppet/type/file/ctime'
+# require 'puppet/type/file/mtime'
