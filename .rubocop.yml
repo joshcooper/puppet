@@ -49,3 +49,5 @@ Layout/ElseAlignment:
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 
+Layout/EndAlignment:
+  Enabled: false
