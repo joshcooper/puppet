@@ -70,7 +70,6 @@ module Puppet
       end
     end
 
-
     def retrieve
       if stat = @resource.stat
         if stat.ftype == "link"

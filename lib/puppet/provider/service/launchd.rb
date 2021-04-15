@@ -282,7 +282,6 @@ Puppet::Type.type(:service).provide :launchd, :parent => :base do
     self.disable if did_enable_job and resource[:enable] == :false
   end
 
-
   def stop
     return ucommand(:stop) if resource[:stop]
     job_path, _ = plist_from_label(resource[:name])

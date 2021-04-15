@@ -362,7 +362,6 @@ class Puppet::Settings
     [opt, val]
   end
 
-
   def app_defaults_initialized?
     @app_defaults_initialized
   end

@@ -1,6 +1,7 @@
 class Object
   # The hidden singleton lurks behind everyone
   def singleton_class; class << self; self; end; end
+
   def meta_eval(&blk); singleton_class.instance_eval(&blk); end
 
   # Adds methods to a singleton_class

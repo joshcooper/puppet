@@ -21,12 +21,6 @@ GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-# Offense count: 137
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs, NumberOfEmptyLines.
-Layout/EmptyLineBetweenDefs:
-  Enabled: false
-
 # Offense count: 126
 # Cop supports --auto-correct.
 Layout/EmptyLines:

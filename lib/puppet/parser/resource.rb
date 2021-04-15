@@ -25,7 +25,9 @@ class Puppet::Parser::Resource < Puppet::Resource
 
   # Set up some boolean test methods
   def translated?; !!@translated; end
+
   def override?;   !!@override;   end
+
   def evaluated?;  !!@evaluated;  end
 
   def [](param)

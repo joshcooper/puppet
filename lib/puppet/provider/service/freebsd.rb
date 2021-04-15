@@ -6,7 +6,9 @@ Puppet::Type.type(:service).provide :freebsd, :parent => :init do
   defaultfor :operatingsystem => [:freebsd, :dragonfly]
 
   def rcconf()        '/etc/rc.conf' end
+
   def rcconf_local()  '/etc/rc.conf.local' end
+
   def rcconf_dir()    '/etc/rc.conf.d' end
 
   def self.defpath

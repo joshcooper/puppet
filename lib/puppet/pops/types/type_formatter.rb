@@ -95,7 +95,6 @@ class TypeFormatter
     end
   end
 
-
   def append_default
     @bld << 'default'
   end
@@ -329,7 +328,6 @@ class TypeFormatter
   def string_PPatternType(t)
     append_array('Pattern', t.patterns.empty?) { append_strings(t.patterns.map(&:regexp)) }
   end
-
 
   # @api private
   def string_PCollectionType(t)

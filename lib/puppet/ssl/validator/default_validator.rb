@@ -27,7 +27,6 @@ class Puppet::SSL::Validator::DefaultValidator #< class Puppet::SSL::Validator
     @ca_path = ca_path
   end
 
-
   # Resets this validator to its initial validation state. The ssl configuration is not changed.
   #
   # @api private

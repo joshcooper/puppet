@@ -203,7 +203,6 @@ class ExternalNode
     end
   end
 
-
   # Parameters are handled slightly differently; we make another level of
   # directories to get the parameter name, then use the names of the files
   # contained in there for the values of those parameters.

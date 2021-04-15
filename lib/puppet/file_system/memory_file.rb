@@ -32,7 +32,9 @@ class Puppet::FileSystem::MemoryFile
   end
 
   def directory?; @properties[:directory?]; end
+
   def exist?; @properties[:exist?]; end
+
   def executable?; @properties[:executable?]; end
 
   def each_line(&block)

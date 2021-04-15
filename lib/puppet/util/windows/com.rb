@@ -9,6 +9,7 @@ module Puppet::Util::Windows::COM
   S_FALSE = 1
 
   def SUCCEEDED(hr) hr >= 0 end
+
   def FAILED(hr) hr < 0 end
 
   module_function :SUCCEEDED, :FAILED

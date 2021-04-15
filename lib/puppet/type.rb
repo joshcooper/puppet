@@ -1230,7 +1230,6 @@ class Type
     resource
   end
 
-
   # Returns an array of strings representing the containment hierarchy
   # (types/classes) that make up the path to the resource from the root
   # of the catalog.  This is mostly used for logging purposes.
@@ -2657,6 +2656,7 @@ EOS
 
   # @return [Boolean] Returns whether the resource is virtual or not
   def virtual?;  !!@virtual;  end
+
   # @return [Boolean] Returns whether the resource is exported or not
   def exported?; !!@exported; end
 

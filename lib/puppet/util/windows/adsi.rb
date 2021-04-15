@@ -167,7 +167,6 @@ module Puppet::Util::Windows::ADSI
         Hash[ sids ]
       end
 
-
       def delete(name)
         Puppet::Util::Windows::ADSI.delete(name, @object_class)
       end

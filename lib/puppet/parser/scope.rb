@@ -1027,7 +1027,6 @@ class Puppet::Parser::Scope
     raise Puppet::DevError, _("Scope#find_defined_resource_type() is no longer supported, use Puppet::Pops::Evaluator::Runtime3ResourceSupport instead")
   end
 
-
   def method_missing(method, *args, &block)
     method.to_s =~ /^function_(.*)$/
     name = $1

@@ -1679,7 +1679,6 @@ class PRegexpType < PScalarType
       })
   end
 
-
   # Returns a new function that produces a Regexp instance
   #
   def self.new_function(type)
@@ -3170,6 +3169,7 @@ class PClassType < PCatalogEntryType
   def hash
     11 ^ @class_name.hash
   end
+
   def eql?(o)
     self.class == o.class && @class_name == o.class_name
   end

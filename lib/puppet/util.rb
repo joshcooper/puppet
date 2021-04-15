@@ -145,7 +145,6 @@ module Util
     end
   end
 
-
   # Change the process to a different user
   def self.chuser
     if group = Puppet[:group]

@@ -326,6 +326,7 @@ ERROR_STRING
       end
     end
   end
+
   # Submit the CSR to the CA via an HTTP PUT request.
   # @param [Puppet::SSL::CertificateRequest] csr the request to submit
   def submit_certificate_request(csr)
