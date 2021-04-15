@@ -58,7 +58,7 @@ describe Puppet::Util::Autoload do
     with_loader("foo", "bar") { |dir,loader|
       with_file(:mything, dir, "mything.rb") {
         expect(loader.load(:mything, env)).to be_truthy
-        expect(loader.class).to be_loaded("bar/mything")
+        expect(loader).to be_loaded("mything")
         expect(AutoloadIntegrator).to be_thing(:mything)
       }
     }
@@ -68,7 +68,7 @@ describe Puppet::Util::Autoload do
     with_loader("foo", "bar") { |dir,loader|
       with_file(:noext, dir, "noext.rb") {
         loader.load(:noext, env)
-        expect(loader.class).to be_loaded("bar/noext")
+        expect(loader).to be_loaded("noext")
       }
     }
   end
@@ -77,7 +77,7 @@ describe Puppet::Util::Autoload do
     with_loader("foo", "bar") { |dir,loader|
       with_file(:noext, dir, "withext.rb") {
         loader.load(:withext, env)
-        expect(loader.class).to be_loaded("bar/withext.rb")
+        expect(loader).to be_loaded("withext.rb")
       }
     }
   end
@@ -97,7 +97,7 @@ describe Puppet::Util::Autoload do
       with_loader("foo", "foo") do |dir, loader|
         with_file(:plugin, file.split("/")) do
           loader.load(:plugin, env)
-          expect(loader.class).to be_loaded("foo/plugin.rb")
+          expect(loader).to be_loaded("plugin.rb")
         end
       end
     end

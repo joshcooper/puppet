@@ -113,7 +113,7 @@ describe Puppet::Util::Autoload do
       Kernel.stubs(:load)
       @autoload.load("myfile", env)
 
-      expect(@autoload.class.loaded?("tmp/myfile.rb")).to be
+      expect(@autoload).to be_loaded("myfile.rb")
     end
 
     it "should be seen by loaded? on the instance using the short name" do
@@ -121,7 +121,7 @@ describe Puppet::Util::Autoload do
       Kernel.stubs(:load)
       @autoload.load("myfile", env)
 
-      expect(@autoload.loaded?("myfile.rb")).to be
+      expect(@autoload).to be_loaded("myfile.rb")
     end
 
     it "should register loaded files with the main loaded file list so they are not reloaded by ruby" do
@@ -147,10 +147,9 @@ describe Puppet::Util::Autoload do
       Kernel.stubs(:load)
       @autoload.load("myfile", env)
 
-      expect(@autoload.class.loaded?("tmp/myfile")).to be
-      expect(@autoload.class.loaded?("tmp/./myfile.rb")).to be
-      expect(@autoload.class.loaded?("./tmp/myfile.rb")).to be
-      expect(@autoload.class.loaded?("tmp/../tmp/myfile.rb")).to be
+      expect(@autoload).to be_loaded("myfile")
+      expect(@autoload).to be_loaded("./myfile.rb")
+      expect(@autoload).to be_loaded("../tmp/myfile.rb")
     end
   end
 
@@ -203,7 +202,7 @@ describe Puppet::Util::Autoload do
       Puppet::FileSystem.stubs(:exist?).returns true
       Kernel.stubs(:load)
       @autoload.load("myfile", env)
-      expect(@autoload.loaded?("myfile")).to be
+      expect(@autoload).to be_loaded("myfile")
       expect(@autoload.changed?("myfile", env)).not_to be
 
       File.stubs(:mtime).returns(@second_time)
