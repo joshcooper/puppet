@@ -103,16 +103,15 @@ module Puppet::Interface::FaceCollection
   end
 
   def self.safely_require(name, version = nil)
-    path = @loader.expand(version ? ::File.join(version.to_s, name.to_s) : name)
-    require path
+    @loader.require(version ? ::File.join(version.to_s, name.to_s) : name.to_s)
     true
 
   rescue LoadError => e
-    raise unless e.message =~ %r{-- #{path}$}
+    raise unless e.message =~ %r{-- .*#{name}}
     # ...guess we didn't find the file; return a much better problem.
     nil
   rescue SyntaxError => e
-    raise unless e.message =~ %r{#{path}\.rb:\d+: }
+    raise unless e.message =~ %r{#{name}\.rb:\d+: }
     Puppet.err _("Failed to load face %{name}:\n%{detail}") % { name: name, detail: e }
     # ...but we just carry on after complaining.
     nil

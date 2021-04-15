@@ -205,6 +205,11 @@ class Puppet::Util::Autoload
     @object = obj
   end
 
+  # @api public
+  def require(name)
+    Kernel.require expand(name)
+  end
+
   def load(name, env)
     self.class.load_file(expand(name), env)
   end
@@ -236,6 +241,7 @@ class Puppet::Util::Autoload
     self.class.files_to_load(@path, env)
   end
 
+  # @api private
   def expand(name)
     ::File.join(@path, name.to_s)
   end

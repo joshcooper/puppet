@@ -46,6 +46,8 @@ describe Puppet::Interface::FaceCollection do
   end
 
   describe "::[]" do
+    let(:loader) { subject.instance_variable_get(:@loader) }
+
     before :each do
       subject.instance_variable_get("@faces")[:foo][SemanticPuppet::Version.parse('0.0.1')] = 10
     end
@@ -55,13 +57,13 @@ describe Puppet::Interface::FaceCollection do
     end
 
     it "should attempt to load the face if it isn't found" do
-      subject.expects(:require).once.with('puppet/face/bar')
-      subject.expects(:require).once.with('puppet/face/0.0.1/bar')
+      loader.expects(:require).once.with('bar')
+      loader.expects(:require).once.with('0.0.1/bar')
       subject["bar", '0.0.1']
     end
 
     it "should attempt to load the default face for the specified version :current" do
-      subject.expects(:require).with('puppet/face/fozzie')
+      loader.expects(:require).with('fozzie')
       subject['fozzie', :current]
     end
 
@@ -71,29 +73,29 @@ describe Puppet::Interface::FaceCollection do
     end
 
     it "should attempt to require the face if it is not registered" do
-      subject.expects(:require).with do |file|
+      loader.expects(:require).with do |file|
         subject.instance_variable_get("@faces")[:bar][SemanticPuppet::Version.parse('0.0.1')] = true
-        file == 'puppet/face/bar'
+        file == 'bar'
       end
       expect(subject["bar", '0.0.1']).to be_truthy
     end
 
     it "should return false if the face is not registered" do
-      subject.stubs(:require).returns(true)
+      loader.stubs(:require).returns(true)
       expect(subject["bar", '0.0.1']).to be_falsey
     end
 
     it "should return false if the face file itself is missing" do
-      subject.stubs(:require).
+      loader.stubs(:require).
         raises(LoadError, 'no such file to load -- puppet/face/bar').then.
         raises(LoadError, 'no such file to load -- puppet/face/0.0.1/bar')
       expect(subject["bar", '0.0.1']).to be_falsey
     end
 
     it "should register the version loaded by `:current` as `:current`" do
-      subject.expects(:require).with do |file|
+      loader.expects(:require).with do |file|
         subject.instance_variable_get("@faces")[:huzzah]['2.0.1'] = :huzzah_face
-        file == 'puppet/face/huzzah'
+        file == 'huzzah'
       end
       subject["huzzah", :current]
       expect(subject.instance_variable_get("@faces")[:huzzah][:current]).to eq(:huzzah_face)
@@ -108,7 +110,7 @@ describe Puppet::Interface::FaceCollection do
 
       it "should index :current when the code was pre-required" do
         expect(subject.instance_variable_get("@faces")[:huzzah]).not_to be_key :current
-        require 'puppet/face/huzzah'
+        loader.require 'huzzah'
         expect(subject[:huzzah, :current]).to be_truthy
       end
     end

@@ -233,7 +233,7 @@ class Application
     # @api public
     def find(application_name)
       begin
-        require @loader.expand(application_name.to_s.downcase)
+        @loader.require(application_name.to_s.downcase)
       rescue LoadError => e
         Puppet.log_and_raise(e, _("Unable to find application '%{application_name}'. %{error}") % { application_name: application_name, error: e })
       end
