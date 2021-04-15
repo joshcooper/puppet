@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/face'
 require 'puppet/pops'
 require 'puppet/parser/files'
@@ -366,7 +368,7 @@ Puppet::Face.define(:epp, '0.0.1') do
   end
 
   def dump_parse(source, filename, options, show_filename = true)
-    output = ""
+    output = String.new("")
     evaluating_parser = Puppet::Pops::Parser::EvaluatingParser::EvaluatingEppParser.new
     begin
       if options[:validate]
@@ -445,7 +447,7 @@ Puppet::Face.define(:epp, '0.0.1') do
 
   def render_file(epp_template_name, compiler, options, show_filename, file_nbr)
     template_args = get_values(compiler, options)
-    output = ""
+    output = String.new("")
     begin
       if show_filename && options[:header]
         output << "\n" unless file_nbr == 1

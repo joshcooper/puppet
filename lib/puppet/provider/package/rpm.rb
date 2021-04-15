@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/package'
 
 # RPM packaging.  Should work anywhere that has rpm installed.
@@ -413,7 +415,7 @@ These options should be specified as an array where each element is either a str
     if match
       self::NEVRA_FIELDS.zip(match.captures) { |f, v| hash[f] = v }
       hash[:provider] = self.name
-      hash[:ensure] = "#{hash[:version]}-#{hash[:release]}"
+      hash[:ensure] = String.new("#{hash[:version]}-#{hash[:release]}")
       hash[:ensure].prepend("#{hash[:epoch]}:") if hash[:epoch] != '0'
     else
       Puppet.debug("Failed to match rpm line #{line}")

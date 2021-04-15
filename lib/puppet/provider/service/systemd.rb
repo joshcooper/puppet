@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Manage systemd services using systemctl
 
 require 'puppet/file_system'
@@ -193,7 +195,7 @@ Puppet::Type.type(:service).provide :systemd, :parent => :base do
   end
 
   def prepare_error_message(name, action, exception)
-    error_return = "Systemd #{action} for #{name} failed!\n"
+    error_return = String.new("Systemd #{action} for #{name} failed!\n")
     journalctl_command = "journalctl -n 50 --since '5 minutes ago' -u #{name} --no-pager"
     Puppet.debug("Running journalctl command to get logs for systemd #{action} failure: #{journalctl_command}")
     journalctl_output = execute(journalctl_command)

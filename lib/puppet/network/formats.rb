@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/network/format_handler'
 require 'puppet/util/json'
 
@@ -153,7 +155,7 @@ Puppet::Network::FormatHandler.create(:console,
 
     # Simple hash to table
     if datum.is_a?(Hash) && datum.keys.all? { |x| x.is_a?(String) || x.is_a?(Numeric) }
-      output = ''
+      output = String.new('')
       column_a = datum.empty? ? 2 : datum.map{ |k,v| k.to_s.length }.max + 2
       datum.sort_by { |k,v| k.to_s } .each do |key, value|
         output << key.to_s.ljust(column_a)
@@ -166,7 +168,7 @@ Puppet::Network::FormatHandler.create(:console,
 
     # Print one item per line for arrays
     if datum.is_a? Array
-      output = ''
+      output = String.new('')
       datum.each do |item|
         output << item.to_s
         output << "\n"

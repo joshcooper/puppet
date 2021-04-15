@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'strscan'
 
 module PSON
@@ -184,7 +186,7 @@ module PSON
             if u
               u
             else # \uXXXX
-              bytes = ''
+              bytes = String.new('')
               i = 0
               while c[6 * i] == ?\\ && c[6 * i + 1] == ?u
                 bytes << c[6 * i + 2, 2].to_i(16) << c[6 * i + 4, 2].to_i(16)

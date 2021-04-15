@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/face'
 require 'puppet/parser'
 
@@ -173,7 +175,7 @@ Puppet::Face.define(:parser, '0.0.1') do
   end
 
   def dump_parse(source, filename, options, show_filename = true)
-    output = ""
+    output = String.new("")
     evaluating_parser = Puppet::Pops::Parser::EvaluatingParser.new
     begin
       if options[:validate]

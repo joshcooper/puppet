@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/ssl/openssl_loader'
 require 'puppet/ssl'
 
@@ -175,7 +177,7 @@ class Puppet::SSL::Validator::DefaultValidator #< class Puppet::SSL::Validator
     authz_ca_certs = decode_cert_bundle(read_file(@ca_path))
 
     if not has_authz_peer_cert(descending_cert_chain, authz_ca_certs)
-      msg = "The server presented a SSL certificate chain which does not include a " <<
+      msg = String.new("The server presented a SSL certificate chain which does not include a ") <<
         "CA listed in the ssl_client_ca_auth file.  "
       msg << "Authorized Issuers: #{authz_ca_certs.collect {|c| c.subject.to_utf8}.join(', ')}  " <<
         "Peer Chain: #{descending_cert_chain.collect {|c| c.subject.to_utf8}.join(' => ')}"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Some simple methods for helping manage automatic documentation generation.
 module Puppet::Util::Docs
   # Specify the actual doc string.
@@ -31,7 +33,7 @@ module Puppet::Util::Docs
 
   # Build a table
   def doctable(headers, data)
-    str = "\n\n"
+    str = String.new("\n\n")
 
     lengths = []
     # Figure out the longest field for all columns
@@ -77,12 +79,12 @@ module Puppet::Util::Docs
   HEADER_LEVELS = [nil, "#", "##", "###", "####", "#####"]
 
   def markdown_header(name, level)
-    "#{HEADER_LEVELS[level]} #{name}\n\n"
+    String.new("#{HEADER_LEVELS[level]} #{name}\n\n")
   end
 
   def markdown_definitionlist(term, definition)
     lines = scrub(definition).split("\n")
-    str = "#{term}\n: #{lines.shift}\n"
+    str = String.new("#{term}\n: #{lines.shift}\n")
     lines.each do |line|
       str << "  " if line =~ /\S/
       str << "#{line}\n"

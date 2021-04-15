@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/concurrent/thread_local_singleton'
 
 module Puppet::Pops
@@ -10,7 +12,7 @@ module JsonPath
   #
   # @api private
   def self.to_json_path(path)
-    p = '$'
+    p = String.new('$')
     path.each do |seg|
       if seg.nil?
         p << '[null]'

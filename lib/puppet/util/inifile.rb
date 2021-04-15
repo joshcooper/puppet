@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Module Puppet::IniConfig
 # A generic way to parse .ini style files and manipulate them in memory
 # One 'file' can be made up of several physical files. Changes to sections
@@ -80,7 +82,7 @@ module Puppet::Util::IniConfig
       if @destroy
         text = ""
       else
-        text = "[#{name}]\n"
+        text = String.new("[#{name}]\n")
         @entries.each do |entry|
           if entry.is_a?(Array)
             key, value = entry
@@ -207,7 +209,7 @@ module Puppet::Util::IniConfig
     end
 
     def format
-      text = ""
+      text = String.new("")
 
       @contents.each do |content|
         if content.is_a? Section

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 providers = Puppet::Util::Reference.newreference :providers, :title => "Provider Suitability Report", :depth => 1, :dynamic => true, :doc => "Which providers are valid for this machine" do
   types = []
   Puppet::Type.loadall
@@ -10,7 +12,7 @@ providers = Puppet::Util::Reference.newreference :providers, :title => "Provider
   command_line = Puppet::Util::CommandLine.new
   types.reject! { |type| ! command_line.args.include?(type.name.to_s) } unless command_line.args.empty?
 
-  ret = "Details about this host:\n\n"
+  ret = String.new("Details about this host:\n\n")
 
   # Throw some facts in there, so we know where the report is from.
   ["Ruby Version", "Puppet Version", "Operating System", "Operating System Release"].each do |label|
@@ -51,7 +53,7 @@ providers = Puppet::Util::Reference.newreference :providers, :title => "Provider
 
       # Add a footnote with the details about why this provider is unsuitable, if that's the case
       unless suit
-        details = ".. [#{count}]\n"
+        details = String.new(".. [#{count}]\n")
         missing.each do |test, values|
           case test
           when :exists

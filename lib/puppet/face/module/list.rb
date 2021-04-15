@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # encoding: UTF-8
 
 Puppet::Face.define(:module, '1.0.0') do
@@ -71,7 +72,7 @@ Puppet::Face.define(:module, '1.0.0') do
       environment     = result[:environment]
       modules_by_path = result[:modules_by_path]
 
-      output = ''
+      output = String.new('')
 
       warn_unmet_dependencies(environment)
 
@@ -214,7 +215,7 @@ Puppet::Face.define(:module, '1.0.0') do
           dep[:reason] == :missing
         end
         missing_deps.map do |mis_mod|
-          str = "#{colorize(:bg_red, _('UNMET DEPENDENCY'))} #{mis_mod[:name].tr('/', '-')} "
+          str = String.new("#{colorize(:bg_red, _('UNMET DEPENDENCY'))} #{mis_mod[:name].tr('/', '-')} ")
           str << "(#{colorize(:cyan, mis_mod[:version_constraint])})"
           node[:dependencies] << { :text => str }
         end
@@ -238,7 +239,7 @@ Puppet::Face.define(:module, '1.0.0') do
   # Returns a Hash
   #
   def list_build_node(mod, parent, params)
-    str = ''
+    str = String.new('')
     str << (mod.forge_name ? mod.forge_name.tr('/', '-') : mod.name)
     str << ' (' + colorize(:cyan, mod.version ? "v#{mod.version}" : '???') + ')'
 

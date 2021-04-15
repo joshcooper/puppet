@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Base class for formatted textual dump of a "model"
 #
 class Puppet::Pops::Model::TreeDumper
@@ -20,7 +22,7 @@ class Puppet::Pops::Model::TreeDumper
   end
 
   def format(x)
-    result = ""
+    result = String.new("")
     parts = format_r(x)
     parts.each_index do |i|
       if i > 0

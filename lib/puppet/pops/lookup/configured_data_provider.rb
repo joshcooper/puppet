@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'hiera_config'
 require_relative 'data_provider'
 
@@ -29,7 +31,7 @@ class ConfiguredDataProvider
 
   # @return [String] the name of this provider
   def name
-    n = "#{place} "
+    n = String.new("#{place} ")
     n << '"' << module_name << '" ' unless module_name.nil?
     n << 'Data Provider'
     n << " (#{@config.name})" unless @config.nil?

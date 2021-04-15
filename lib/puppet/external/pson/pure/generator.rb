@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PSON
   MAP = {
     "\x0" => '\u0000',
@@ -234,7 +236,7 @@ module PSON
           end
 
           def pson_transform(state, depth)
-            delim = ','
+            delim = ::String.new(',')
             if state
               delim << state.object_nl
               result = '{'
@@ -296,7 +298,7 @@ module PSON
           end
 
           def pson_transform(state, depth)
-            delim = ','
+            delim = ::String.new(',')
             if state
               delim << state.array_nl
               result = '['
@@ -308,7 +310,7 @@ module PSON
               result << pson_shift(state, depth)
               result << ']'
             else
-              '[' << map { |value| value.to_pson }.join(delim) << ']'
+              ::String.new('[') << map { |value| value.to_pson }.join(delim) << ']'
             end
           end
         end
@@ -338,7 +340,7 @@ module PSON
           # returns a PSON string encoded with UTF16 big endian characters as
           # \u????.
           def to_pson(*)
-            '"' << PSON.utf8_to_pson(self) << '"'
+            ::String.new('"') << PSON.utf8_to_pson(self) << '"'
           end
 
           # Module that holds the extending methods if, the String module is
