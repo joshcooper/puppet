@@ -244,7 +244,24 @@ module Util
       seconds = Benchmark.realtime {
         yield
       }
-      object.send(level, msg % { seconds: "%0.2f" % seconds })
+
+      if seconds >= 3600
+        object.send(level, msg + _(" in %{hours} hours, %{minutes} minutes, %{seconds} seconds") % {
+            hours: (seconds.to_i / 3600).to_s,
+            minutes: (seconds.to_i / 60 % 60).to_s,
+            seconds: "%0.2f" % (seconds.to_i % 60)
+          })
+      elsif seconds >= 60
+        object.send(level, msg + _(" in %{minutes} minutes, %{seconds} seconds") % {
+          minutes: (seconds.to_i / 60 % 60).to_s,
+          seconds: "%0.2f" % (seconds.to_i % 60)
+        })
+      else
+        object.send(level, msg + _(" in %{seconds} seconds") % {
+          seconds: "%0.2f" % (seconds.to_i % 60)
+        })
+      end
+
       return seconds
     else
       yield
