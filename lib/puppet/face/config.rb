@@ -135,7 +135,6 @@ Puppet::Face.define(:config, '0.0.1') do
     EOT
 
     when_invoked do |name, value, options|
-
       @default_section = false
       if options[:section] == DEFAULT_SECTION_MARKER
         options[:section] = DEFAULT_SECTION
@@ -191,7 +190,6 @@ https://puppet.com/docs/puppet/latest/configuration.html#environment
     EOT
 
     when_invoked do |name, options|
-
       @default_section = false
       if options[:section] == DEFAULT_SECTION_MARKER
         options[:section] = DEFAULT_SECTION

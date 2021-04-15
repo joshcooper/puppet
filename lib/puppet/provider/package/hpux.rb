@@ -3,7 +3,6 @@
 require 'puppet/provider/package'
 
 Puppet::Type.type(:package).provide :hpux, :parent => Puppet::Provider::Package do
-
   desc "HP-UX's packaging system."
 
   commands :swinstall => "/usr/sbin/swinstall",

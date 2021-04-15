@@ -155,5 +155,4 @@ Puppet::Type.type(:package).provide :pkgng, :parent => Puppet::Provider::Package
   def origin
     @property_hash[:origin]
   end
-
 end

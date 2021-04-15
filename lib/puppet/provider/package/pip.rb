@@ -5,7 +5,6 @@ require 'puppet/provider/package_targetable'
 require 'puppet/util/http_proxy'
 
 Puppet::Type.type(:package).provide :pip, :parent => ::Puppet::Provider::Package::Targetable do
-
   desc "Python packages via `pip`.
 
   This provider supports the `install_options` attribute, which allows command-line flags to be passed to pip.

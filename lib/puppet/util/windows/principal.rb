@@ -109,7 +109,6 @@ module Puppet::Util::Windows::SID
           FFI::MemoryPointer.new(:dword, 1) do |name_length_ptr|
             FFI::MemoryPointer.new(:dword, 1) do |domain_length_ptr|
               FFI::MemoryPointer.new(:uint32, 1) do |name_use_enum_ptr|
-
                 sid_ptr.write_array_of_uchar(sid_bytes)
                 success = LookupAccountSidW(system_name_ptr, sid_ptr, FFI::Pointer::NULL, name_length_ptr,
                   FFI::Pointer::NULL, domain_length_ptr, name_use_enum_ptr)

@@ -3,7 +3,6 @@ require 'puppet/util/user_attr'
 require 'date'
 
 Puppet::Type.type(:user).provide :user_role_add, :parent => :useradd, :source => :useradd do
-
   desc "User and role management on Solaris, via `useradd` and `roleadd`."
 
   defaultfor :osfamily => :solaris

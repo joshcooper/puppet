@@ -24,7 +24,6 @@ require 'puppet/util/package'
 # `package` type.
 #
 Puppet::Functions.create_function(:versioncmp) do
-
   dispatch :versioncmp do
     param 'String', :a
     param 'String', :b

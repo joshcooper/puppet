@@ -123,7 +123,6 @@ module Puppet::Util::Windows::Process
     image_name = ""
 
     open_process(PROCESS_QUERY_INFORMATION, false, pid) do |phandle|
-
       FFI::MemoryPointer.new(:dword, 1) do |exe_name_length_ptr|
         # UTF is 2 bytes/char:
         max_chars = MAX_PATH_LENGTH + 1

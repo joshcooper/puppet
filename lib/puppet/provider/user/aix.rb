@@ -313,5 +313,4 @@ Puppet::Type.type(:user).provide :aix, :parent => Puppet::Provider::AixObject do
   #    be treated as the minimum membership list.  Valid values are
   #    `inclusive`, `minimum`.
   # UNSUPPORTED
-
 end

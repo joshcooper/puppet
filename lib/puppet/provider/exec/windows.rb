@@ -1,7 +1,6 @@
 require 'puppet/provider/exec'
 
 Puppet::Type.type(:exec).provide :windows, :parent => Puppet::Provider::Exec do
-
   confine    :operatingsystem => :windows
   defaultfor :operatingsystem => :windows
 

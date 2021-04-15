@@ -83,5 +83,4 @@ Puppet::Type.type(:package).provide :pkgin, :parent => Puppet::Provider::Package
   def update
     pkgin("-y", :install, resource[:name])
   end
-
 end

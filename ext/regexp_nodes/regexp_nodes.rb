@@ -211,7 +211,6 @@ class ExternalNode
   # would set parameters["service"] = "production" for prodweb001
   def match_parameters(fullpath)
     Dir.foreach(fullpath) do |parametername|
-
       filepath = "#{fullpath}/#{parametername}"
       next if File.basename(filepath) =~ /^\./   # skip over dotfiles
 

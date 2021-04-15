@@ -10,5 +10,4 @@ Puppet::Functions.create_function(:size) do
   def generic_size(arg)
     call_function('length', arg)
   end
-
 end

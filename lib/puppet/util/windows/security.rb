@@ -474,7 +474,6 @@ module Puppet::Util::Windows::Security
 
     0.upto(ace_count - 1) do |i|
       FFI::MemoryPointer.new(:pointer, 1) do |ace_ptr|
-
         next if GetAce(dacl_ptr, i, ace_ptr) == FFI::WIN32_FALSE
 
         # ACE structures vary depending on the type. We are only concerned with
@@ -585,7 +584,6 @@ module Puppet::Util::Windows::Security
           FFI::MemoryPointer.new(:pointer, 1) do |group_sid_ptr_ptr|
             FFI::MemoryPointer.new(:pointer, 1) do |dacl_ptr_ptr|
               FFI::MemoryPointer.new(:pointer, 1) do |sd_ptr_ptr|
-
                 rv = GetSecurityInfo(
                   handle,
                   :SE_FILE_OBJECT,
@@ -604,7 +602,6 @@ module Puppet::Util::Windows::Security
                 FFI::MemoryPointer.new(:word, 1) do |control|
                   FFI::MemoryPointer.new(:dword, 1) do |revision|
                     sd_ptr_ptr.read_win32_local_pointer do |sd_ptr|
-
                       if GetSecurityDescriptorControl(sd_ptr, control, revision) == FFI::WIN32_FALSE
                         raise Puppet::Util::Windows::Error.new(_("Failed to get security descriptor control"))
                       end

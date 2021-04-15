@@ -531,7 +531,6 @@ module Generators
       @values["childs"] = cl unless cl.empty?
 
       @values["sections"] = @context.sections.map do |section|
-
         secdata = {
           "sectitle" => section.title,
           "secsequence" => section.sequence,

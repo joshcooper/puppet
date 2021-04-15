@@ -1185,7 +1185,6 @@ class PIntegerType < PNumericType
         end
         radix
       end
-
     end
   end
 
@@ -2586,7 +2585,6 @@ class PArrayType < PCollectionType
   #
   def self.new_function(type)
     @new_function ||= Puppet::Functions.create_loaded_function(:new_array, type.loader) do
-
       dispatch :to_array do
         param           'Variant[Array,Hash,Binary,Iterable]', :from
         optional_param  'Boolean[false]', :wrap

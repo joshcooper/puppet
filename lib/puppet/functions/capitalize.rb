@@ -28,7 +28,6 @@
 # Would both result in ['Abc', 'Bcd']
 #
 Puppet::Functions.create_function(:capitalize) do
-
   dispatch :on_numeric do
     param 'Numeric', :arg
   end

@@ -1026,7 +1026,6 @@ Puppet::Type.newtype(:file) do
       thing.sync unless thing.safe_insync?(currentvalue)
     end
   end
-
 end
 
 # We put all of the properties in separate files, because there are so many

@@ -215,7 +215,6 @@ class Puppet::Configurer
     completed = nil
     begin
       Puppet.override(:http_pool => pool) do
-
         # Skip failover logic if the server_list setting is empty
         if Puppet.settings[:server_list].nil? || Puppet.settings[:server_list].empty?
           do_failover = false

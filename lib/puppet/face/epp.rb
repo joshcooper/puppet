@@ -332,7 +332,6 @@ Puppet::Face.define(:epp, '0.0.1') do
 
       compiler = create_compiler(options)
       compiler.with_context_overrides('For rendering epp') do
-
         # Print to a buffer since the face needs to return the resulting string
         # and the face API is "all or nothing"
         #
@@ -549,5 +548,4 @@ Puppet::Face.define(:epp, '0.0.1') do
       nil
     end
   end
-
 end

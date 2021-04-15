@@ -128,7 +128,6 @@
 # @since 4.0.0
 #
 Puppet::Functions.create_function(:reduce) do
-
   dispatch :reduce_without_memo do
     param 'Iterable', :enumerable
     block_param 'Callable[2,2]', :block

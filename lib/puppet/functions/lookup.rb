@@ -123,7 +123,6 @@
 #
 # @since 4.0.0
 Puppet::Functions.create_function(:lookup, Puppet::Functions::InternalFunction) do
-
   local_types do
     type 'NameType         = Variant[String, Array[String]]'
     type 'ValueType        = Type'
@@ -145,7 +144,6 @@ Puppet::Functions.create_function(:lookup, Puppet::Functions::InternalFunction) 
       default_values_hash => Optional[Hash[String,Any]],\
       merge               => Optional[MergeType]\
     }]"
-
   end
 
   dispatch :lookup_1 do

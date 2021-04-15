@@ -49,6 +49,5 @@ module Puppet
       # so instruct the resource to write its contents.
       contents_sync(resource.parameter(:source))
     end
-
   end
 end

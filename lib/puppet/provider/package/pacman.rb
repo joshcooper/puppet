@@ -262,5 +262,4 @@ Puppet::Type.type(:package).provide :pacman, :parent => Puppet::Provider::Packag
       pacman(*cmd)
     end
   end
-
 end

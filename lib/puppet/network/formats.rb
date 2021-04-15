@@ -2,7 +2,6 @@ require 'puppet/network/format_handler'
 require 'puppet/util/json'
 
 Puppet::Network::FormatHandler.create_serialized_formats(:msgpack, :weight => 20, :mime => "application/x-msgpack", :required_methods => [:render_method, :intern_method], :intern_method => :from_data_hash) do
-
   confine :feature => :msgpack
 
   def intern(klass, text)
