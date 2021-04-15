@@ -21,13 +21,6 @@ GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Layout/EmptyLinesAroundBeginBody:
-  Exclude:
-    - 'lib/puppet/util/diff.rb'
-    - 'lib/puppet/util/retry_action.rb'
-
 # Offense count: 83
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
