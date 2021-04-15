@@ -202,7 +202,7 @@ module Pal
       facts:         nil,
       variables:     {},
       &block
-    )
+  )
     assert_non_empty_string(env_name, _("temporary environment name"))
     # TRANSLATORS: do not translate variable name string in these assertions
     assert_optionally_empty_array(modulepath, 'modulepath')
@@ -216,7 +216,7 @@ module Pal
     in_environment_context(
       Puppet::Environments::Static.new(env), # The tmp env is the only known env
       env, facts, variables, &block
-      )
+    )
   end
 
   # Defines the context in which to perform puppet operations (evaluation, etc)
@@ -253,7 +253,7 @@ module Pal
       facts:         nil,
       variables:     {},
       &block
-    )
+  )
     # TRANSLATORS terms in the assertions below are names of terms in code
     assert_non_empty_string(env_name, 'env_name')
     assert_optionally_empty_array(modulepath, 'modulepath', true)

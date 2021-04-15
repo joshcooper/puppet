@@ -1126,7 +1126,7 @@ EOT
         :default    => nil,
         :desc       => "The address the agent should use to initiate requests.",
       },
-  )
+    )
 
   define_settings(:environment,
     :manifest => {
@@ -1829,7 +1829,7 @@ EOT
 
           For more info, see [the ENC documentation](https://puppet.com/docs/puppet/latest/nodes_external.html).",
     }
-    )
+  )
 
         define_settings(
         :ldap,
@@ -1898,7 +1898,7 @@ EOT
           have one already set.  Generally, it should be the 'ou=Hosts'
           branch under your main directory.",
     }
-  )
+      )
 
   define_settings(:master,
     :storeconfigs => {

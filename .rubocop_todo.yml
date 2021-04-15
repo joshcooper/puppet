@@ -21,23 +21,6 @@ GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-# Offense count: 19
-# Cop supports --auto-correct.
-Layout/ClosingParenthesisIndentation:
-  Exclude:
-    - 'lib/puppet/application.rb'
-    - 'lib/puppet/defaults.rb'
-    - 'lib/puppet/functions/dig.rb'
-    - 'lib/puppet/pal/pal_impl.rb'
-    - 'lib/puppet/parser/ast/resource.rb'
-    - 'lib/puppet/parser/functions/create_resources.rb'
-    - 'lib/puppet/parser/functions/hiera_array.rb'
-    - 'lib/puppet/pops/loader/module_loaders.rb'
-    - 'lib/puppet/pops/lookup.rb'
-    - 'lib/puppet/pops/parser/lexer_support.rb'
-    - 'lib/puppet/pops/types/tree_iterators.rb'
-    - 'lib/puppet/util/windows/process.rb'
-
 # Offense count: 33
 # Cop supports --auto-correct.
 Layout/CommentIndentation:

@@ -45,7 +45,7 @@ Puppet::Functions.create_function(:dig) do
             'SLICE_ERROR',
             {'walked_path' => walked_path, 'value_type' => t},
             'EXPECTED_COLLECTION'
-        )
+          )
         raise Puppet::ErrorWithData.new(error_data, msg)
       end
 
@@ -58,7 +58,7 @@ Puppet::Functions.create_function(:dig) do
             'SLICE_ERROR',
             {'walked_path' => walked_path, 'index_type' => t},
             'EXPECTED_INTEGER_INDEX'
-        )
+          )
         raise Puppet::ErrorWithData.new(error_data, msg)
       end
       d[k]

@@ -50,7 +50,7 @@ module ModuleLoaders
                                                        puppet_lib,   # may or may not have a 'lib' above 'puppet'
                                                        'puppet_system',
                                                         [:func_4x, :func_3x, :datatype]   # only load ruby functions and types from "puppet"
-                                                       )
+    )
   end
 
   def self.environment_loader_from(parent_loader, loaders, env_path)
@@ -72,7 +72,7 @@ module ModuleLoaders
                                                        module_name,
                                                        module_path,
                                                        module_name
-                                                       )
+    )
   end
 
   def self.pcore_resource_type_loader_from(parent_loader, loaders, environment_path)

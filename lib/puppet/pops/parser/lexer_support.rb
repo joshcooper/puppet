@@ -213,7 +213,7 @@ module LexerSupport
       (content.getbyte(1) || ' '),
       (content.getbyte(2) || ' '),
       (content.getbyte(3) || ' ')
-      )
+    )
   end
 
 end

@@ -101,6 +101,6 @@ ENDHEREDOC
           :add    => false
         )
       end.compact
-      )
+    )
   end.flatten.compact
 end

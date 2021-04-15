@@ -151,7 +151,7 @@ module Puppet::Util::Windows::Process
         wide_string(system_name),
         wide_string(name.to_s),
         luid_ptr
-        )
+      )
 
       if result == FFI::WIN32_FALSE
         raise Puppet::Util::Windows::Error.new(
@@ -508,7 +508,7 @@ module Puppet::Util::Windows::Process
       :TokenSecurityAttributes,
       :TokenIsRestricted,
       :MaxTokenInfoClass
-  )
+    )
 
   # https://msdn.microsoft.com/en-us/library/windows/desktop/aa379263(v=vs.85).aspx
   # typedef struct _LUID_AND_ATTRIBUTES {
