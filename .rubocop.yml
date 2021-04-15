@@ -51,3 +51,6 @@ Layout/EmptyLineAfterGuardClause:
 
 Layout/EndAlignment:
   Enabled: false
+
+Layout/ExtraSpacing:
+  Enabled: false
