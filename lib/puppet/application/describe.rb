@@ -1,7 +1,6 @@
 require 'puppet/application'
 
 class Formatter
-
   def initialize(width)
     @width = width
   end
@@ -47,11 +46,9 @@ class Formatter
       return text
     end
   end
-
 end
 
 class TypeDoc
-
   def initialize
     @format = Formatter.new(76)
     @types = {}
@@ -157,7 +154,6 @@ class TypeDoc
     list = type.providers.sort_by(&:to_s).join(", ")
     puts @format.wrap(list, :indent => 4)
   end
-
 end
 
 class Puppet::Application::Describe < Puppet::Application
@@ -247,5 +243,4 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
     handle_help(nil) unless options[:list] || options[:types].size > 0
     $stderr.puts "Warning: ignoring types when listing all types" if options[:list] && options[:types].size > 0
   end
-
 end

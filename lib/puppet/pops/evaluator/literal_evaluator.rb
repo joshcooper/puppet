@@ -15,7 +15,6 @@ module Evaluator
 # QualifiedReference  # i.e. File, FooBar
 #
 class LiteralEvaluator
-
   COMMA_SEPARATOR = ', '.freeze
 
   def initialize

@@ -7,7 +7,6 @@ module Types
 #
 # @api public
 class PSensitiveType < PTypeWithContainedType
-
   class Sensitive
     def initialize(value)
       @value = value

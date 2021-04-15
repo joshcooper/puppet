@@ -3,7 +3,6 @@
 require 'puppet/syntax_checkers'
 require 'base64'
 class Puppet::SyntaxCheckers::Base64 < Puppet::Plugins::SyntaxCheckers::SyntaxChecker
-
   # Checks the text for BASE64 syntax issues and reports them to the given acceptor.
   # This checker allows the most relaxed form of Base64, including newlines and missing padding.
   # It also accept URLsafe input.

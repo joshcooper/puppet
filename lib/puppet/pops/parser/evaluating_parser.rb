@@ -4,7 +4,6 @@ module Parser
 # Does not support "import" and parsing ruby files
 #
 class EvaluatingParser
-
   attr_reader :parser
 
   def initialize()

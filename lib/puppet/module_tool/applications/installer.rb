@@ -13,7 +13,6 @@ require 'puppet/module_tool/installed_modules'
 module Puppet::ModuleTool
   module Applications
     class Installer < Application
-
       include Puppet::ModuleTool::Errors
       include Puppet::Forge::Errors
 

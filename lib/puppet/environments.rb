@@ -129,7 +129,6 @@ module Puppet::Environments
   #
   # @api private
   class StaticPrivate < Static
-
     # Unlisted
     #
     # @!macro loader_list

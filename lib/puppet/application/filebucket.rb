@@ -1,7 +1,6 @@
 require 'puppet/application'
 
 class Puppet::Application::Filebucket < Puppet::Application
-
   option("--bucket BUCKET","-b")
   option("--debug","-d")
   option("--fromdate FROMDATE","-f")

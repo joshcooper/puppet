@@ -14,5 +14,4 @@ class Puppet::Network::HTTP::API::Master::V3::Authorization
       block.call.call(request, response)
     end
   end
-
 end

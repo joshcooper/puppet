@@ -6,7 +6,6 @@ module Parser
 # and makes use of the new evaluator.
 #
 class E4ParserAdapter
-
   def initialize
     @file = ''
     @string = ''

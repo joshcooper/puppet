@@ -101,11 +101,9 @@ module Puppet::Util::IniConfig
       end
       nil
     end
-
   end
 
   class PhysicalFile
-
     # @!attribute [r] filetype
     #   @api private
     #   @return [Puppet::Util::FileType::FileTypeFlat]
@@ -261,7 +259,6 @@ module Puppet::Util::IniConfig
   end
 
   class FileCollection
-
     attr_reader :files
 
     def initialize

@@ -302,7 +302,6 @@ module Puppet::Functions
   #
   # @api public
   class Function < Puppet::Pops::Functions::Function
-
     # @api private
     def self.builder
       DispatcherBuilder.new(dispatcher, Puppet::Pops::Types::PCallableType::DEFAULT, loader)
@@ -678,7 +677,6 @@ module Puppet::Functions
   end
 
   class Function3x < InternalFunction
-
     # Table of optimized parameter names - 0 to 5 parameters
     PARAM_NAMES = [
       [],

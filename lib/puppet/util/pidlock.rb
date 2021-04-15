@@ -2,7 +2,6 @@ require 'fileutils'
 require 'puppet/util/lockfile'
 
 class Puppet::Util::Pidlock
-
   def initialize(lockfile)
     @lockfile = Puppet::Util::Lockfile.new(lockfile)
   end
@@ -72,5 +71,4 @@ class Puppet::Util::Pidlock
     end
   end
   private :clear_if_stale
-
 end

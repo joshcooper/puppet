@@ -25,7 +25,6 @@ module Validation
   # @api public
   #
   class Factory
-
     # Produces a validator with the given acceptor as the recipient of produced diagnostics.
     # The acceptor is where detected issues are received (and typically collected).
     #
@@ -168,7 +167,6 @@ module Validation
   # sets keys in the given argument hash that may be used in the formatting of the issue message.
   #
   class DiagnosticProducer
-
     # A producer of severity for a given issue
     # @return [SeverityProducer]
     #
@@ -352,7 +350,6 @@ module Validation
   # answer questions about what was diagnosed.
   #
   class Acceptor
-
     # All diagnostic in the order they were issued
     attr_reader :diagnostics
 

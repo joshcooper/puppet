@@ -1,5 +1,4 @@
 class Puppet::Settings::ServerListSetting < Puppet::Settings::ArraySetting
-
   def type
     :server_list
   end

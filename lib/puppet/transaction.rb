@@ -443,7 +443,6 @@ class Puppet::Transaction
   # Possible future improvement: rewrite to not require access to private methods.
   public :skip?
   public :missing_tags?
-
 end
 
 require 'puppet/transaction/report'

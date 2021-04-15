@@ -2,7 +2,6 @@
 # @api private
 #
 class Puppet::Pops::Migration::MigrationChecker
-
   def initialize()
   end
 

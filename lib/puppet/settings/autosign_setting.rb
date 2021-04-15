@@ -7,7 +7,6 @@ require 'puppet/settings/base_setting'
 #
 # @api private
 class Puppet::Settings::AutosignSetting < Puppet::Settings::FileSetting
-
   def munge(value)
     if ['true', true].include? value
       true

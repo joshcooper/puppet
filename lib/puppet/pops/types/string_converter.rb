@@ -7,7 +7,6 @@ module Types
 # @api private
 #
 class StringConverter
-
   # @api private
   class FormatError < ArgumentError
     def initialize(type_string, actual, expected)
@@ -1132,7 +1131,6 @@ class StringConverter
     return Format.new("%s")
   end
   private :get_format
-
 end
 end
 end

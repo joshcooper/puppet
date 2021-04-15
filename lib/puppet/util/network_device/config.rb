@@ -3,7 +3,6 @@ require 'puppet/util/watched_file'
 require 'puppet/util/network_device'
 
 class Puppet::Util::NetworkDevice::Config
-
   def self.main
     @main ||= self.new
   end
@@ -101,5 +100,4 @@ class Puppet::Util::NetworkDevice::Config
       raise Puppet::Error, _("Invalid argument '%{var}' at %{error_location}") % { var: var, error_location: error_location_str }
     end
   end
-
 end

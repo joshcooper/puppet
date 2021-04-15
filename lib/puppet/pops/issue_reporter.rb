@@ -1,6 +1,5 @@
 module Puppet::Pops
 class IssueReporter
-
   # @param acceptor [Validation::Acceptor] the acceptor containing reported issues
   # @option options [String] :message (nil) A message text to use as prefix in
   #   a single Error message

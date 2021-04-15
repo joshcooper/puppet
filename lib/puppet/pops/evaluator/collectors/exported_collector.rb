@@ -1,5 +1,4 @@
 class Puppet::Pops::Evaluator::Collectors::ExportedCollector < Puppet::Pops::Evaluator::Collectors::AbstractCollector
-
   # Creates an ExportedCollector using the AbstractCollector's
   # constructor to set the scope and overrides
   #

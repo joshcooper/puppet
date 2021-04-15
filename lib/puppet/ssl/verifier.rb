@@ -4,7 +4,6 @@ require 'puppet/ssl'
 #
 # @api private
 class Puppet::SSL::Verifier
-
   FIVE_MINUTES_AS_SECONDS = 5 * 60
 
   attr_reader :ssl_context

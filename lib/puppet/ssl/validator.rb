@@ -5,7 +5,6 @@ require 'openssl'
 # @deprecated
 # @api public
 class Puppet::SSL::Validator
-
   # Factory method for creating an instance of a null/no validator.
   # This method does not have to be implemented by concrete implementations of this API.
   #

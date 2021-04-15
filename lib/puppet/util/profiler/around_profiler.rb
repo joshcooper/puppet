@@ -4,7 +4,6 @@
 #
 # @api private
 class Puppet::Util::Profiler::AroundProfiler
-
   def initialize
     @profilers = []
   end

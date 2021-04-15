@@ -1,7 +1,6 @@
 require 'puppet/application'
 
 class Puppet::Application::Cert < Puppet::Application
-
   def summary
     _("Manage certificates and requests (Disabled)")
   end

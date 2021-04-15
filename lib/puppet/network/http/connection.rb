@@ -22,7 +22,6 @@ module Puppet::Network::HTTP
   #   during a request.
   # @api public
   class Connection
-
     OPTION_DEFAULTS = {
       :use_ssl => true,
       :verify => nil, # Puppet::SSL::Validator is deprecated

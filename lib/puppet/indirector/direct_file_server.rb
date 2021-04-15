@@ -2,7 +2,6 @@ require 'puppet/file_serving/terminus_helper'
 require 'puppet/indirector/terminus'
 
 class Puppet::Indirector::DirectFileServer < Puppet::Indirector::Terminus
-
   include Puppet::FileServing::TerminusHelper
 
   def find(request)

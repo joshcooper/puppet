@@ -22,5 +22,4 @@ class Puppet::Util::NetworkDevice::Transport::Base
       yield output if block_given?
     end
   end
-
 end

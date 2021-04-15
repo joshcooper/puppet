@@ -99,7 +99,6 @@ module Types
 # @api public
 #
 class TypeCalculator
-
   # @api public
   def self.assignable?(t1, t2)
     singleton.assignable?(t1,t2)
@@ -803,7 +802,6 @@ class TypeCalculator
   def common_numeric?(t1, t2)
     PNumericType::DEFAULT.assignable?(t1) && PNumericType::DEFAULT.assignable?(t2)
   end
-
 end
 end
 end

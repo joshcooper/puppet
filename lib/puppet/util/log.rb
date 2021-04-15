@@ -410,7 +410,6 @@ class Puppet::Util::Log
     end
     msg
   end
-
 end
 
 # This is for backward compatibility from when we changed the constant to

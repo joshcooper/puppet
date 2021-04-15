@@ -31,5 +31,4 @@ class Puppet::Network::HTTP::API::Master::V3::Environments
       ttl
     end
   end
-
 end

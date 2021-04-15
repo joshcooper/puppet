@@ -6,7 +6,6 @@ require 'puppet/configurer'
 require 'puppet/ssl/oids'
 
 class Puppet::Application::Agent < Puppet::Application
-
   run_mode :agent
 
   def app_defaults

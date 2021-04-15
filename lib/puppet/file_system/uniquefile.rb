@@ -185,5 +185,4 @@ class Puppet::FileSystem::Uniquefile < DelegateClass(File)
       Dir.rmdir(*args)
     end
   end
-
 end

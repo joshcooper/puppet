@@ -1,7 +1,6 @@
 # Configuration settings for a single directory Environment.
 # @api private
 class Puppet::Settings::EnvironmentConf
-
   ENVIRONMENT_CONF_ONLY_SETTINGS = [:modulepath, :manifest, :config_version].freeze
   VALID_SETTINGS = (ENVIRONMENT_CONF_ONLY_SETTINGS + [:environment_timeout, :environment_data_provider, :static_catalogs, :rich_data]).freeze
 
@@ -219,5 +218,4 @@ class Puppet::Settings::EnvironmentConf
       @environment.config_version
     end
   end
-
 end

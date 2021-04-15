@@ -51,7 +51,6 @@ module Generators
 
   # This is a specialized HTMLGenerator tailored to Puppet manifests
   class PuppetGenerator < HTMLGenerator
-
     def PuppetGenerator.for(options)
       AllReferences::reset
       HtmlMethod::reset
@@ -344,7 +343,6 @@ module Generators
 
       ref
     end
-
   end
 
   # This module is used to generate a referenced full name list of ContextUser
@@ -643,7 +641,6 @@ module Generators
   end
 
   class HTMLPuppetModule < HtmlClass
-
     def initialize(context, html_file, prefix, options)
       super(context, html_file, prefix, options)
     end
@@ -694,7 +691,6 @@ module Generators
     def plugins
       @context.plugins
     end
-
   end
 
   class HTMLPuppetPlugin < ContextUser
@@ -812,7 +808,6 @@ module Generators
     def <=>(other)
       self.name <=> other.name
     end
-
   end
 
   class HTMLPuppetResource
@@ -894,7 +889,6 @@ module Generators
       res = @context.parent.find_symbol(symbol, method)
       res && res.viewer
     end
-
   end
 
   class PuppetGeneratorInOne < HTMLGeneratorInOne

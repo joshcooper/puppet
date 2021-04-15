@@ -9,7 +9,6 @@ module Loader
 # @api private
 #
 class BaseLoader < Loader
-
   # The parent loader
   attr_reader :parent
 

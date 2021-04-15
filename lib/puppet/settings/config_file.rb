@@ -6,7 +6,6 @@ require 'puppet/settings/ini_file'
 # Parses puppet configuration files
 #
 class Puppet::Settings::ConfigFile
-
   ##
   # @param value_converter [Proc] a function that will convert strings into ruby types
   def initialize(value_converter)

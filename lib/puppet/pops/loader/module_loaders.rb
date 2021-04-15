@@ -99,7 +99,6 @@ module ModuleLoaders
   end
 
   class AbstractPathBasedModuleLoader < BaseLoader
-
     # The name of the module, or nil, if this is a global "component", or "any module" if set to the `NAMESPACE_WILDCARD` (*)
     attr_reader :module_name
 
@@ -429,7 +428,6 @@ module ModuleLoaders
   # @api private
   #
   class FileBased < AbstractPathBasedModuleLoader
-
     attr_reader :smart_paths
     attr_reader :path_index
 

@@ -7,7 +7,6 @@ require 'uri'
 
 # A class that handles retrieving file metadata.
 class Puppet::FileServing::Metadata < Puppet::FileServing::Base
-
   include Puppet::Util::Checksums
 
   extend Puppet::Indirector
@@ -160,5 +159,4 @@ class Puppet::FileServing::Metadata < Puppet::FileServing::Base
   def self.from_data_hash(data)
     new(data.delete('path'), data)
   end
-
 end

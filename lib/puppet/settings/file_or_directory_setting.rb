@@ -1,5 +1,4 @@
 class Puppet::Settings::FileOrDirectorySetting < Puppet::Settings::FileSetting
-
   def initialize(args)
     super
   end

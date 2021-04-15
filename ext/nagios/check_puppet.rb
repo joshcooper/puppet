@@ -5,7 +5,6 @@ require 'sys/proctable'
 include Sys
 
 class CheckPuppet
-
   VERSION = '0.1'
   script_name = File.basename($0)
 

@@ -8,7 +8,6 @@ module Pal
   #
   # @api public
   class CatalogCompiler < Compiler
-
     # @api private
     def catalog
       internal_compiler.catalog
@@ -88,7 +87,6 @@ module Pal
     def evaluate_additions
       internal_compiler.evaluate_additions
     end
-
   end
 
 end

@@ -2,7 +2,6 @@ require 'resolv'
 
 module Puppet::Network
   class Resolver
-
     class CacheEntry
       attr_reader :records, :ttl, :resolution_time
 

@@ -2,7 +2,6 @@ require 'puppet/network/rights'
 
 module Puppet::Network
 class AuthConfigParser
-
   def self.new_from_file(file)
     self.new(Puppet::FileSystem.read(file, :encoding => 'utf-8'))
   end

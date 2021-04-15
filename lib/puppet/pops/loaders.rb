@@ -436,7 +436,6 @@ class Loaders
   #       what is available with a reasonable API.
   #
   class LoaderModuleData
-
     attr_accessor :public_loader
     attr_accessor :private_loader
     attr_accessor :resolutions
@@ -485,7 +484,6 @@ class Loaders
   # Resolves module loaders - resolution of model dependencies is done by Puppet::Module
   #
   class ModuleResolver
-
     def initialize(loaders)
       @loaders = loaders
       @index = {}

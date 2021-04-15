@@ -3,7 +3,6 @@ module Types
 
 # @api private
 class RubyGenerator < TypeFormatter
-
   RUBY_RESERVED_WORDS = {
     'alias' => '_alias',
     'begin' => '_begin',

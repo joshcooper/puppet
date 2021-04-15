@@ -10,7 +10,6 @@ module Puppet
     # For an unordered list see {Puppet::Property::List}.
     #
     class OrderedList < List
-
       def add_should_with_current(should, current)
         if current.is_a?(Array)
           #tricky trick

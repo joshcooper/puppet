@@ -8,7 +8,6 @@
 # @api private
 #
 class Puppet::Pops::Loader::DependencyLoader < Puppet::Pops::Loader::BaseLoader
-
   # An index of module_name to module loader used to speed up lookup of qualified names
   attr_reader :index
 

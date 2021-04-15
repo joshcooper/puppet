@@ -4,7 +4,6 @@ require 'puppet/util/network_device/transport'
 require 'puppet/util/network_device/transport/base'
 
 class Puppet::Util::NetworkDevice::Base
-
   attr_accessor :url, :transport
 
   def initialize(url, options = {})

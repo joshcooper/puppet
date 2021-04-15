@@ -9,7 +9,6 @@ KEY_VERSION_RANGE = 'version_range'.freeze
 KEY_REFERENCES = 'references'.freeze
 
 class PTypeSetType < PMetaType
-
   # A Loader that makes the types known to the TypeSet visible
   #
   # @api private

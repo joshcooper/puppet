@@ -4,7 +4,6 @@ require 'puppet/node'
 require 'puppet/parser/compiler'
 
 class Puppet::Application::Lookup < Puppet::Application
-
   RUN_HELP = _("Run 'puppet lookup --help' for more details").freeze
   DEEP_MERGE_OPTIONS = '--knock-out-prefix, --sort-merged-arrays, and --merge-hash-arrays'.freeze
 

@@ -94,5 +94,4 @@ DOC
       raw_val
     end
   end
-
 end

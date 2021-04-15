@@ -3,7 +3,6 @@ require 'puppet/configurer'
 require 'puppet/util/network_device'
 
 class Puppet::Application::Device < Puppet::Application
-
   run_mode :agent
 
   attr_accessor :args, :agent, :host

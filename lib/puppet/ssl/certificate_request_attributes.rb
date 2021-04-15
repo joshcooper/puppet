@@ -6,7 +6,6 @@ require 'puppet/util/yaml'
 #
 # @api private
 class Puppet::SSL::CertificateRequestAttributes
-
   attr_reader :path, :custom_attributes, :extension_requests
 
   def initialize(path)

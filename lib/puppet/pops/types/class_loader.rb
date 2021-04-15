@@ -126,7 +126,6 @@ class ClassLoader
     downcase
   end
   private_class_method :de_camel
-
 end
 end
 end

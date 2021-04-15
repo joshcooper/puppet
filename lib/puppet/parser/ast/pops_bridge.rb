@@ -6,14 +6,12 @@ require 'puppet/pops'
 # fundamental for the rest of the logic.
 #
 class Puppet::Parser::AST::PopsBridge
-
   # Bridges to one Pops Model Expression
   # The @value is the expression
   # This is used to represent the body of a class, definition, or node, and for each parameter's default value
   # expression.
   #
   class Expression < Puppet::Parser::AST::Leaf
-
     def initialize args
       super
       @@evaluator ||= Puppet::Pops::Parser::EvaluatingParser.new()

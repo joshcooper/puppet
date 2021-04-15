@@ -1,7 +1,6 @@
 require 'puppet/application'
 
 class Puppet::Application::Resource < Puppet::Application
-
   attr_accessor :host, :extra_params
 
   def preinit

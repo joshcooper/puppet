@@ -232,13 +232,11 @@ class ExternalNode
       end
     end
   end
-
 end
 
 # Logic for local hacks that don't fit neatly into the autoloading model can
 # happen as we initialize a subclass
 class MyExternalNode < ExternalNode
-
   def initialize(hostname, classdir = 'classes/', parameterdir = 'parameters/')
 
     super
@@ -256,7 +254,6 @@ class MyExternalNode < ExternalNode
 
     end
   end
-
 end
 
 # Here we begin actual execution by calling methods defined above

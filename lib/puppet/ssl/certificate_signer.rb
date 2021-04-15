@@ -4,7 +4,6 @@
 #
 # @api private
 class Puppet::SSL::CertificateSigner
-
   # @!attribute [r] digest
   #   @return [OpenSSL::Digest]
   attr_reader :digest

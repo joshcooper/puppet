@@ -124,7 +124,6 @@ class DeferredResolver
     args.map {|v| resolve(v) }
   end
   private :map_arguments
-
 end
 end
 end
