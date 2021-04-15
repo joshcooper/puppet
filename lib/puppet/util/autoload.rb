@@ -58,6 +58,8 @@ class Puppet::Util::Autoload
 
     # Load a single plugin by name.  We use 'load' here so we can reload a
     # given plugin.
+    #
+    # @api private
     def load_file(name, env)
       file = get_file(name.to_s, env)
       return false unless file

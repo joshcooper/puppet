@@ -189,6 +189,7 @@ module Puppet::DataTypes
     # @api private
     def initialize(type_builder)
       @type_builder = type_builder
+      @loader = Puppet::Util::Autoload.new(self, '')
     end
 
     def interface(type_string)
@@ -207,7 +208,7 @@ module Puppet::DataTypes
     end
 
     def load_file(file_name)
-      Puppet::Util::Autoload.load_file(file_name, Puppet.lookup(:current_environment))
+      @loader.load(file_name, Puppet.lookup(:current_environment))
     end
   end
 end
