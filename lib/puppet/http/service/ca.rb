@@ -8,8 +8,10 @@ class Puppet::HTTP::Service::Ca < Puppet::HTTP::Service
   end
 
   def get_certificate(name, ssl_context: nil)
+    encoded_name = Puppet::Util.uri_encode(name)
+
     response = @client.get(
-      with_base_url("/certificate/#{name}"),
+      with_base_url("/certificate/#{encoded_name}"),
       headers: HEADERS,
       ssl_context: ssl_context
     )
@@ -40,8 +42,10 @@ class Puppet::HTTP::Service::Ca < Puppet::HTTP::Service
   end
 
   def put_certificate_request(name, csr, ssl_context: nil)
+    encoded_name = Puppet::Util.uri_encode(name)
+
     response = @client.put(
-      with_base_url("/certificate_request/#{name}"),
+      with_base_url("/certificate_request/#{encoded_name}"),
       headers: HEADERS,
       content_type: 'text/plain',
       body: csr.to_pem,
