@@ -133,6 +133,24 @@ module Puppet
             end
           end
 
+          # require 'pp'
+
+          # $stderr.puts '----------------------------------------------------'
+          # $stderr.puts 'gem_directories'
+          # pp Puppet::Util::Autoload.gem_directories
+
+          # $stderr.puts '----------------------------------------------------'
+          # $stderr.puts 'module_directories'
+          # pp Puppet::Util::Autoload.module_directories(nil)
+
+          # $stderr.puts '----------------------------------------------------'
+          # $stderr.puts 'libdirs'
+          # pp Puppet::Util::Autoload.libdirs
+
+          # $stderr.puts '----------------------------------------------------'
+          # $stderr.puts 'LOAD_PATH'
+          # pp $LOAD_PATH
+
           app = Puppet::Application.find(@subcommand_name).new(@command_line)
           app.run
         end

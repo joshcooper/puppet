@@ -61,11 +61,16 @@ class Puppet::Util::Autoload
     # Load a single plugin by name.  We use 'load' here so we can reload a
     # given plugin.
     def load_file(name, env)
-      file = get_file(name.to_s, env)
-      return false unless file
+      path = get_file(name.to_s, env)
+      return false unless path
+
+      load_file_from_path(name, env, path)
+    end
+
+    def load_file_from_path(name, env, path)
       begin
-        mark_loaded(name, file)
-        Kernel.load file
+        mark_loaded(name, path)
+        Kernel.load(path)
         return true
       rescue SystemExit,NoMemoryError
         raise
@@ -76,11 +81,24 @@ class Puppet::Util::Autoload
       end
     end
 
+    # def loadall(path, env = nil)
+    #   $stderr.puts "Loading all from #{path}"
+    #   files_to_load(path, env).each do |file|
+    #     name = file.chomp(".rb")
+    #     load_file(name, env) unless loaded?(name)
+    #   end
+    # end
+
     def loadall(path, env = nil)
+      #      $stderr.puts "Loading all from #{path} starting"
+      #      Benchmark.realtime do
+      #      $stderr.puts "Loading all from #{path} done in #{seconds} seconds"
+
+
       # Load every instance of everything we can find.
-      files_to_load(path, env).each do |file|
-        name = file.chomp(".rb")
-        load_file(name, env) unless loaded?(name)
+      paths = paths_to_load(path, env)
+      paths.each_pair do |name, abspath|
+        load_file_from_path(name, env, abspath) unless loaded?(name)
       end
     end
 
@@ -92,12 +110,17 @@ class Puppet::Util::Autoload
     # returns nil if no file is found
     def get_file(name, env)
       name = name + '.rb' unless name =~ /\.rb$/
-      path = search_directories(env).find { |dir| Puppet::FileSystem.exist?(File.join(dir, name)) }
+      dirs = search_directories(env)
+      index = dirs.find_index { |dir| Puppet::FileSystem.exist?(File.join(dir, name)) }
+#      $stderr.puts "Searched #{index || 0} of #{dirs.count} directories to get file #{name}"
+      path = index ? dirs[index] : nil
       path and File.join(path, name)
     end
 
     def files_to_load(path, env = nil)
-      search_directories(env).map {|dir| files_in_dir(dir, path) }.flatten.uniq
+      files = search_directories(env).map {|dir| files_in_dir(dir, path) }.flatten.uniq
+#      $stderr.puts "Globbed #{files.count} files to load in #{path}"
+      files
     end
 
     def files_in_dir(dir, path)
@@ -105,6 +128,21 @@ class Puppet::Util::Autoload
       Dir.glob(File.join(dir, path, "*.rb")).collect do |file|
         Pathname.new(file).relative_path_from(dir).to_s
       end
+    end
+
+    def paths_to_load(path, env)
+      paths = {}
+
+      search_directories(env).each do |dir|
+        dir = Pathname.new(File.expand_path(dir))
+        Dir.glob(File.join(dir, path, "*.rb")) do |file|
+          relpath = Pathname.new(file).relative_path_from(dir).to_s
+          name = relpath.chomp(".rb")
+          paths[name] = file unless paths.include?(name)
+        end
+      end
+
+      paths
     end
 
     def module_directories(env)
@@ -163,7 +201,13 @@ class Puppet::Util::Autoload
     end
 
     def search_directories(env)
-      [gem_directories, module_directories(env), libdirs(), $LOAD_PATH].flatten
+      dirs = if Puppet.run_mode.agent?
+               [gem_directories, libdirs, $LOAD_PATH].flatten
+             else
+               [gem_directories, module_directories(env), libdirs, $LOAD_PATH].flatten
+             end
+#      $stderr.puts "Search space #{dirs.count} directories"
+      dirs
     end
 
     # Normalize a path. This converts ALT_SEPARATOR to SEPARATOR on Windows

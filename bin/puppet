@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+puts "Enter any key to continue"
+STDIN.getch
+
 begin
   require 'puppet/util/command_line'
   Puppet::Util::CommandLine.new.execute
