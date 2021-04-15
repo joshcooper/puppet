@@ -47,6 +47,5 @@ module Pal
       signatures.is_a?(Puppet::Pops::Types::PVariantType) ? signatures.types : [signatures]
     end
   end
-
 end
 end

@@ -5,7 +5,6 @@ require 'puppet/error'
 require 'puppet/application_support'
 
 module Puppet
-
 # This class handles all the aspects of a Puppet application/executable
 # * setting up options
 # * setting up logs

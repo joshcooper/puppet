@@ -357,5 +357,4 @@ module Puppet::Util::Checksums
     block.call(DigestLite.new(digest, lite))
     digest.hexdigest
   end
-
 end

@@ -2,7 +2,6 @@ require 'puppet/network/authstore'
 require 'puppet/error'
 
 module Puppet::Network
-
 # this exception is thrown when a request is not authenticated
 class AuthorizationError < Puppet::Error; end
 

@@ -42,5 +42,4 @@ module Puppet::Pops::Evaluator::ExternalSyntaxSupport
     end
     result
   end
-
 end

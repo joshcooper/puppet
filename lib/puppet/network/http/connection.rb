@@ -7,7 +7,6 @@ require 'date'
 require 'time'
 
 module Puppet::Network::HTTP
-
   # This will be raised if too many redirects happen for a given HTTP request
   class RedirectionLimitExceededException < Puppet::Error ; end
 

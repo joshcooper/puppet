@@ -1,7 +1,6 @@
 require 'puppet/module_tool'
 
 module Puppet::ModuleTool
-
   # = ContentsDescription
   #
   # This class populates +Metadata+'s Puppet type information.

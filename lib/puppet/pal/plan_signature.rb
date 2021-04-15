@@ -66,6 +66,5 @@ module Pal
       dispatcher.params_struct
     end
   end
-
 end
 end

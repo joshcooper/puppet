@@ -1,6 +1,5 @@
 module Puppet
 module Pal
-
   # A configured compiler as obtained in the callback from `Puppet::Pal.with_script_compiler`.
   # (Later, there may also be a catalog compiler available.)
   #
@@ -216,6 +215,5 @@ module Pal
       internal_compiler.topscope
     end
   end
-
 end
 end

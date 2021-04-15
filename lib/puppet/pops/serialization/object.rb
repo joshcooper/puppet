@@ -3,7 +3,6 @@ require_relative 'instance_writer'
 
 module Puppet::Pops
 module Serialization
-
 # Instance reader for objects that implement {Types::PuppetObject}
 # @api private
 class ObjectReader

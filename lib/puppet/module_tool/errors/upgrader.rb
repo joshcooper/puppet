@@ -1,5 +1,4 @@
 module Puppet::ModuleTool::Errors
-
   class UpgradeError < ModuleToolError
     def initialize(msg)
       @action = :upgrade

@@ -26,7 +26,6 @@ require 'puppet/parser/catalog_compiler'
 #
 module Puppet
 module Pal
-
   # Defines a context in which multiple operations in an env with a script compiler can be performed in a given block.
   # The calls that takes place to PAL inside of the given block are all with the same instance of the compiler.
   # The parameter `configured_by_env` makes it possible to either use the configuration in the environment, or specify

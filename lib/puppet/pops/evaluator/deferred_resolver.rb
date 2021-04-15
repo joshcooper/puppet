@@ -2,7 +2,6 @@ require 'puppet/parser/script_compiler'
 
 module Puppet::Pops
 module Evaluator
-
 # Utility class to help resolve instances of Puppet::Pops::Types::PDeferredType::Deferred
 #
 class DeferredResolver

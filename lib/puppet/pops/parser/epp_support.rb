@@ -5,7 +5,6 @@ module Parser
 #
 require 'strscan'
 module EppSupport
-
   TOKEN_RENDER_STRING = [:RENDER_STRING, nil, 0]
   TOKEN_RENDER_EXPR   = [:RENDER_EXPR, nil, 0]
 
@@ -258,7 +257,6 @@ module EppSupport
       end
     end
   end
-
 end
 end
 end

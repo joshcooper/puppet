@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Types
-
 # @api public
 class PInitType < PTypeWithContainedType
   def self.register_ptype(loader, ir)

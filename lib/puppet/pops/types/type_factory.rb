@@ -625,7 +625,6 @@ module TypeFactory
   def self.is_range_parameter?(t)
     t.is_a?(Integer) || t == 'default' || :default == t
   end
-
 end
 end
 end

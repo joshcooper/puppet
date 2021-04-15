@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Types
-
 KEY_ANNOTATIONS = 'annotations'.freeze
 
 # Behaviour common to all Pcore annotatable classes

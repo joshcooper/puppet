@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Types
-
 # Interface implemented by a type that has InvocableMembers
 module TypeWithMembers
   # @return [InvocableMember,nil] An invocable member if it exists, or `nil`

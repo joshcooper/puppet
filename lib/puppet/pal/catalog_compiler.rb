@@ -88,6 +88,5 @@ module Pal
       internal_compiler.evaluate_additions
     end
   end
-
 end
 end

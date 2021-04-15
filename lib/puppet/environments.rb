@@ -1,6 +1,5 @@
 # @api private
 module Puppet::Environments
-
   class EnvironmentNotFound < Puppet::Error
     def initialize(environment_name, original = nil)
       environmentpath = Puppet[:environmentpath]

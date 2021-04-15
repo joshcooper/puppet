@@ -1,5 +1,4 @@
 module Puppet::ModuleTool::Errors
-
   class InstallError < ModuleToolError; end
 
   class AlreadyInstalledError < InstallError

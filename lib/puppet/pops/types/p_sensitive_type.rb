@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Types
-
 # A Puppet Language type that wraps sensitive information. The sensitive type is parameterized by
 # the wrapped value type.
 #
@@ -66,6 +65,5 @@ class PSensitiveType < PTypeWithContainedType
 
   DEFAULT = PSensitiveType.new
 end
-
 end
 end

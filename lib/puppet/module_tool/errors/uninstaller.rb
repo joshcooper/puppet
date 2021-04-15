@@ -1,5 +1,4 @@
 module Puppet::ModuleTool::Errors
-
   class UninstallError < ModuleToolError; end
 
   class NoVersionMatchesError < UninstallError

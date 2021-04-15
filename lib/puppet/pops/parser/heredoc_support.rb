@@ -144,7 +144,6 @@ module HeredocSupport
     result.gsub!(/\r?\n\z/m, '') if remove_break
     [result, margin_per_line]
   end
-
 end
 end
 end

@@ -6,7 +6,6 @@ require 'openssl'
 #
 # @api private
 module Puppet::Util::SSL
-
   @@dn_parsers = nil
   @@no_name = nil
 

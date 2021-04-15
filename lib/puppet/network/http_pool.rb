@@ -10,7 +10,6 @@ module Puppet::Network; end
 # @api public
 #
 module Puppet::Network::HttpPool
-
   @http_client_class = Puppet::Network::HTTP::Connection
 
   def self.http_client_class

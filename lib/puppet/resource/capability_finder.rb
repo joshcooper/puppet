@@ -11,7 +11,6 @@ require 'puppet/util/json'
 
 # @api private
 module Puppet::Resource::CapabilityFinder
-
   # Looks up a capability resource from PuppetDB. Capability resources are
   # required to be unique per environment and code id. If multiple copies of a
   # capability resource are found, the one matching the current code id is

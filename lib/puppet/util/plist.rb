@@ -2,7 +2,6 @@ require 'cfpropertylist' if Puppet.features.cfpropertylist?
 require 'puppet/util/execution'
 
 module Puppet::Util::Plist
-
   class FormatError < RuntimeError; end
 
   # So I don't have to prepend every method name with 'self.' Most of the

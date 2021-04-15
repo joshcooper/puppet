@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Types
-
 # A Puppet Language Type that exposes the {{SemanticPuppet::Version}} and {{SemanticPuppet::VersionRange}}.
 # The version type is parameterized with version ranges.
 #

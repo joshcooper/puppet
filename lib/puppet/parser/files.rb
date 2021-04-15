@@ -1,5 +1,4 @@
 module Puppet::Parser::Files
-
   module_function
 
   # Return a list of manifests as absolute filenames matching the given

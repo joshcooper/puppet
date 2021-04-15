@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Evaluator
-
 # @api private
 module Runtime3ResourceSupport
   CLASS_STRING = 'class'.freeze
@@ -110,7 +109,6 @@ module Runtime3ResourceSupport
     krt.find_definition(type_name) || krt.application(type_name)
   end
   private_class_method :find_defined_resource_type
-
 end
 end
 end

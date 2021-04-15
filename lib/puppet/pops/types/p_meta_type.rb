@@ -2,7 +2,6 @@
 # @api private
 module Puppet::Pops
 module Types
-
 KEY_NAME = 'name'.freeze
 KEY_TYPE = 'type'.freeze
 KEY_VALUE = 'value'.freeze

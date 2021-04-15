@@ -1,7 +1,6 @@
 module Puppet
   module Util
     module Platform
-
       FIPS_STATUS_FILE = "/proc/sys/crypto/fips_enabled".freeze
 
       def windows?

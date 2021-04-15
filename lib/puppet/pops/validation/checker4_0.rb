@@ -2,7 +2,6 @@ require 'puppet/pops/evaluator/external_syntax_support'
 
 module Puppet::Pops
 module Validation
-
 # A Validator validates a model.
 #
 # Validation is performed on each model element in isolation. Each method should validate the model element's state

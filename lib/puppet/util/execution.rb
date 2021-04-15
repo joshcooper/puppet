@@ -15,7 +15,6 @@ end
 # in classes that needs to execute system commands.
 # @api public
 module Puppet::Util::Execution
-
   # This is the full output from a process. The object itself (a String) is the
   # stdout of the process.
   #

@@ -8,5 +8,4 @@ module Puppet::Util::Libuser
      newenv['LIBUSER_CONF'] = getconf
      newenv
    end
-
 end

@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Lookup
-
 # The ExplainNode contains information of a specific node in a tree traversed during
 # lookup. The tree can be traversed using the `parent` and `branches` attributes of
 # each node.

@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Parser
-
 class PNParser
   LIT_TRUE = 'true'.freeze
   LIT_FALSE = 'false'.freeze

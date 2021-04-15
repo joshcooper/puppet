@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Types
-
 # @api public
 class PRuntimeType < PAnyType
   TYPE_NAME_OR_PATTERN = PVariantType.new([PStringType::NON_EMPTY, PTupleType.new([PRegexpType::DEFAULT, PStringType::NON_EMPTY])])

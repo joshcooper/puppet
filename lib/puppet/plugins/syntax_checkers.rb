@@ -1,6 +1,5 @@
 module Puppet::Plugins
 module SyntaxCheckers
-
   # The lookup **key** for the multibind containing syntax checkers used to syntax check embedded string in non
   # puppet DSL syntax.
   # @api public

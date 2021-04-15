@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Model
-
 class PNTransformer
   def self.visitor
     @visitor ||= Visitor.new(nil, 'transform', 0, 0)
@@ -399,6 +398,5 @@ class PNTransformer
     PN::Map.new(entries).as_call(name)
   end
 end
-
 end
 end

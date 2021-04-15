@@ -24,5 +24,4 @@ module Puppet
       require 'puppet/pops/loader/puppet_plan_instantiator'
     end
   end
-
 end

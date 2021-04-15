@@ -12,7 +12,6 @@ Puppet.features.selinux? # check, but continue even if it's not
 require 'pathname'
 
 module Puppet::Util::SELinux
-
   def self.selinux_support?
     return false unless defined?(Selinux)
     if Selinux.is_selinux_enabled == 1

@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Validation
-
 # Validator that limits the set of allowed expressions to not include catalog related operations
 # @api private
 class TasksChecker < Checker4_0

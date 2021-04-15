@@ -3,7 +3,6 @@ require_relative 'type_with_members'
 
 module Puppet::Pops
 module Types
-
 KEY_ATTRIBUTES = 'attributes'.freeze
 KEY_CHECKS = 'checks'.freeze
 KEY_CONSTANTS = 'constants'.freeze

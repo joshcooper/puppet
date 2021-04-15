@@ -1,5 +1,4 @@
 module Puppet::ModuleTool::Errors
-
   class NoVersionsSatisfyError < ModuleToolError
     def initialize(options)
       @requested_name    = options[:requested_name]

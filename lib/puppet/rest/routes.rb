@@ -4,7 +4,6 @@ require 'puppet/network/http/compression'
 
 module Puppet::Rest
   module Routes
-
     extend Puppet::Network::HTTP::Compression.module
 
     ACCEPT_ENCODING = 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3'

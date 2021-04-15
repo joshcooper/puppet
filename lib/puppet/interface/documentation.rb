@@ -109,7 +109,6 @@ class Puppet::Interface
         end
       end
     end
-
   end
 
   # This module can be mixed in to provide a full set of documentation

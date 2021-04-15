@@ -1,7 +1,6 @@
 require 'puppet/util'
 
 module Puppet::Util::RubyGems
-
   # Base/factory class for rubygems source. These classes introspec into
   # rubygems to in order to list where the rubygems system will look for files
   # to load.

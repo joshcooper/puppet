@@ -1,6 +1,5 @@
 module Puppet::Pops::Types
 module Iterable
-
 class TreeIterator
   include Iterable
 

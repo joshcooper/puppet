@@ -1,5 +1,4 @@
 module Puppet::Parser::Functions
-
   newfunction(
   :split, :type => :rvalue,
   :arity => 2,

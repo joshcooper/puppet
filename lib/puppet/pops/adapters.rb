@@ -2,7 +2,6 @@
 #
 module Puppet::Pops
 module Adapters
-
   class ObjectIdCacheAdapter < Puppet::Pops::Adaptable::Adapter
     attr_accessor :cache
 

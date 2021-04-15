@@ -1,6 +1,5 @@
 module Puppet::Pops
 module Types
-
 KEY_NAME_AUTHORITY = 'name_authority'.freeze
 KEY_TYPES = 'types'.freeze
 KEY_ALIAS = 'alias'.freeze
