@@ -85,7 +85,6 @@ describe Puppet::Util::Autoload do
   describe "when loading a file" do
     before do
       @autoload.class.stubs(:search_directories).returns [make_absolute("/a")]
-      FileTest.stubs(:directory?).returns true
       @time_a = Time.utc(2010, 'jan', 1, 6, 30)
       File.stubs(:mtime).returns @time_a
     end
@@ -135,7 +134,6 @@ describe Puppet::Util::Autoload do
 
     it "should load the first file in the searchpath" do
       @autoload.stubs(:search_directories).returns [make_absolute("/a"), make_absolute("/b")]
-      FileTest.stubs(:directory?).returns true
       Puppet::FileSystem.stubs(:exist?).returns true
       Kernel.expects(:load).with(make_absolute("/a/tmp/myfile.rb"), optionally(anything))
 
@@ -156,8 +154,7 @@ describe Puppet::Util::Autoload do
   describe "when loading all files" do
     before do
       @autoload.class.stubs(:search_directories).returns [make_absolute("/a")]
-      FileTest.stubs(:directory?).returns true
-      Dir.stubs(:glob).returns [make_absolute("/a/foo/file.rb")]
+      Dir.stubs(:glob).with('/a/tmp/*.rb').returns [make_absolute("/a/foo/file.rb")]
       Puppet::FileSystem.stubs(:exist?).returns true
       @time_a = Time.utc(2010, 'jan', 1, 6, 30)
       File.stubs(:mtime).returns @time_a
@@ -174,7 +171,7 @@ describe Puppet::Util::Autoload do
     end
 
     it "should require the full path to the file" do
-      Kernel.expects(:load).with(make_absolute("/a/foo/file.rb"), optionally(anything))
+      Kernel.expects(:load).with(make_absolute("/a/foo/file.rb"))
 
       @autoload.loadall(env)
     end
@@ -194,7 +191,7 @@ describe Puppet::Util::Autoload do
     end
 
     it "#changed? should return true for a file that was not loaded" do
-      expect(@autoload.class.changed?(@file_a, env)).to be
+      expect(@autoload).to be_changed(@file_a, env)
     end
 
     it "changes should be seen by changed? on the instance using the short name" do
@@ -203,10 +200,10 @@ describe Puppet::Util::Autoload do
       Kernel.stubs(:load)
       @autoload.load("myfile", env)
       expect(@autoload).to be_loaded("myfile")
-      expect(@autoload.changed?("myfile", env)).not_to be
+      expect(@autoload).to_not be_changed("myfile", env)
 
       File.stubs(:mtime).returns(@second_time)
-      expect(@autoload.changed?("myfile", env)).to be
+      expect(@autoload).to be_changed("myfile", env)
 
       $LOADED_FEATURES.delete("tmp/myfile.rb")
     end
