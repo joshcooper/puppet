@@ -1,7 +1,6 @@
 require 'puppet/util/platform'
 
 module Puppet
-
   def self.default_diffargs
     if (Facter.value(:kernel) == "AIX" && Facter.value(:kernelmajversion) == "5300")
       ""
@@ -65,51 +64,53 @@ module Puppet
 
   AS_DURATION = %q{This setting can be a time interval in seconds (30 or 30s), minutes (30m), hours (6h), days (2d), or years (5y).}
 
-  define_settings(:main,
+  define_settings(
+    :main,
     :confdir  => {
-        :default  => nil,
-        :type     => :directory,
-        :desc     => "The main Puppet configuration directory.  The default for this setting
+      :default  => nil,
+      :type     => :directory,
+      :desc     => "The main Puppet configuration directory.  The default for this setting
           is calculated based on the user.  If the process is running as root or
           the user that Puppet is supposed to run as, it defaults to a system
           directory, but if it's running as any other user, it defaults to being
           in the user's home directory.",
     },
     :codedir  => {
-        :default  => nil,
-        :type     => :directory,
-        :desc     => "The main Puppet code directory.  The default for this setting
+      :default  => nil,
+      :type     => :directory,
+      :desc     => "The main Puppet code directory.  The default for this setting
           is calculated based on the user.  If the process is running as root or
           the user that Puppet is supposed to run as, it defaults to a system
           directory, but if it's running as any other user, it defaults to being
           in the user's home directory.",
     },
     :vardir   => {
-        :default  => nil,
-        :type     => :directory,
-        :owner    => "service",
-        :group    => "service",
-        :desc     => "Where Puppet stores dynamic and growing data.  The default for this
+      :default  => nil,
+      :type     => :directory,
+      :owner    => "service",
+      :group    => "service",
+      :desc     => "Where Puppet stores dynamic and growing data.  The default for this
           setting is calculated specially, like `confdir`_.",
     },
 
     ### NOTE: this setting is usually being set to a symbol value.  We don't officially have a
     ###     setting type for that yet, but we might want to consider creating one.
     :name     => {
-        :default  => nil,
-        :desc     => "The name of the application, if we are running as one.  The
+      :default  => nil,
+      :desc     => "The name of the application, if we are running as one.  The
           default is essentially $0 without the path or `.rb`.",
     }
   )
 
-  define_settings(:main,
+  define_settings(
+    :main,
     :logdir => {
-        :default  => nil,
-        :type     => :directory,
-        :mode     => "0750",
-        :owner    => "service",
-        :group    => "service",
-        :desc     => "The directory in which to store log files",
+      :default  => nil,
+      :type     => :directory,
+      :mode     => "0750",
+      :owner    => "service",
+      :group    => "service",
+      :desc     => "The directory in which to store log files",
     },
     :log_level => {
       :default    => 'notice',
@@ -150,7 +151,7 @@ module Puppet
         invalid = values - (values & valid)
         if not invalid.empty?
           raise ArgumentError, _("Cannot disable unrecognized warning types %{invalid}.") % { invalid: invalid.inspect } +
-              ' ' + _("Valid values are %{values}.") % { values: valid.inspect}
+                               ' ' + _("Valid values are %{values}.") % { values: valid.inspect}
         end
       end
     },
@@ -193,7 +194,8 @@ module Puppet
     }
   )
 
-  define_settings(:main,
+  define_settings(
+    :main,
     :priority => {
       :default => nil,
       :type    => :priority,
@@ -204,18 +206,18 @@ module Puppet
         user in order to increase scheduling priority.",
     },
     :trace => {
-        :default  => false,
-        :type     => :boolean,
-        :desc     => "Whether to print stack traces on some errors",
-        :hook     => proc do |value|
-          # Enable or disable Facter's trace option too
-          Facter.trace(value) if Facter.respond_to? :trace
-        end
+      :default  => false,
+      :type     => :boolean,
+      :desc     => "Whether to print stack traces on some errors",
+      :hook     => proc do |value|
+        # Enable or disable Facter's trace option too
+        Facter.trace(value) if Facter.respond_to? :trace
+      end
     },
     :profile => {
-        :default  => false,
-        :type     => :boolean,
-        :desc     => "Whether to enable experimental performance profiling",
+      :default  => false,
+      :type     => :boolean,
+      :desc     => "Whether to enable experimental performance profiling",
     },
     :future_features => {
       :default => false,
@@ -244,16 +246,16 @@ module Puppet
       :hook       => proc { |value| Log.autoflush = value }
     },
     :syslogfacility => {
-        :default  => "daemon",
-        :desc     => "What syslog facility to use when logging to syslog.
+      :default  => "daemon",
+      :desc     => "What syslog facility to use when logging to syslog.
           Syslog has a fixed list of valid facilities, and you must
           choose one of those; you cannot just make one up."
     },
     :statedir => {
-        :default  => "$vardir/state",
-        :type     => :directory,
-        :mode     => "01755",
-        :desc     => "The directory where Puppet state is stored.  Generally,
+      :default  => "$vardir/state",
+      :type     => :directory,
+      :mode     => "01755",
+      :desc     => "The directory where Puppet state is stored.  Generally,
           this directory can be removed without causing harm (although it
           might result in spurious service restarts)."
     },
@@ -266,9 +268,9 @@ module Puppet
       :desc     => "Where Puppet PID files are kept."
     },
     :genconfig => {
-        :default  => false,
-        :type     => :boolean,
-        :desc     => "When true, causes Puppet applications to print an example config file
+      :default  => false,
+      :type     => :boolean,
+      :desc     => "When true, causes Puppet applications to print an example config file
           to stdout and exit. The example will include descriptions of each
           setting, and the current (or default) value of each setting,
           incorporating any settings overridden on the CLI (with the exception
@@ -276,16 +278,16 @@ module Puppet
           on the command line as `--genconfig`.",
     },
     :genmanifest => {
-        :default  => false,
-        :type     => :boolean,
-        :desc     => "Whether to just print a manifest to stdout and exit.  Only makes
+      :default  => false,
+      :type     => :boolean,
+      :desc     => "Whether to just print a manifest to stdout and exit.  Only makes
           sense when specified on the command line as `--genmanifest`.  Takes into account arguments specified
           on the CLI.",
     },
     :configprint => {
-        :default    => "",
-        :deprecated => :completely,
-        :desc       => "Prints the value of a specific configuration setting.  If the name of a
+      :default    => "",
+      :deprecated => :completely,
+      :desc       => "Prints the value of a specific configuration setting.  If the name of a
           setting is provided for this, then the value is printed and puppet
           exits.  Comma-separate multiple values.  For a list of all values,
           specify 'all'. This setting is deprecated, the 'puppet config' command replaces this functionality.",
@@ -298,55 +300,55 @@ module Puppet
         Defaults to false on Windows, as its console does not support ansi colors.",
     },
     :mkusers => {
-        :default  => false,
-        :type     => :boolean,
-        :desc     => "Whether to create the necessary user and group that puppet agent will run as.",
+      :default  => false,
+      :type     => :boolean,
+      :desc     => "Whether to create the necessary user and group that puppet agent will run as.",
     },
     :manage_internal_file_permissions => {
-        :default  => ! Puppet::Util::Platform.windows?,
-        :type     => :boolean,
-        :desc     => "Whether Puppet should manage the owner, group, and mode of files it uses internally.
+      :default  => ! Puppet::Util::Platform.windows?,
+      :type     => :boolean,
+      :desc     => "Whether Puppet should manage the owner, group, and mode of files it uses internally.
         
           **Note**: For Windows agents, the default is `false` for versions 4.10.13 and greater, versions 5.5.6 and greater, and versions 6.0 and greater.",
     },
     :onetime => {
-        :default  => false,
-        :type     => :boolean,
-        :desc     => "Perform one configuration run and exit, rather than spawning a long-running
+      :default  => false,
+      :type     => :boolean,
+      :desc     => "Perform one configuration run and exit, rather than spawning a long-running
           daemon. This is useful for interactively running puppet agent, or
           running puppet agent from cron.",
-        :short    => 'o',
+      :short    => 'o',
     },
     :path => {
-        :default          => "none",
-        :desc             => "The shell search path.  Defaults to whatever is inherited
+      :default          => "none",
+      :desc             => "The shell search path.  Defaults to whatever is inherited
           from the parent process.
 
           This setting can only be set in the `[main]` section of puppet.conf; it cannot
           be set in `[master]`, `[agent]`, or an environment config section.",
-        :call_hook => :on_define_and_write,
-        :hook             => proc do |value|
-          Puppet::Util.set_env('PATH', '') if Puppet::Util.get_env('PATH').nil?
-          Puppet::Util.set_env('PATH', value) unless value == 'none'
-          paths = Puppet::Util.get_env('PATH').split(File::PATH_SEPARATOR)
-          Puppet::Util::Platform.default_paths.each do |path|
-            Puppet::Util.set_env('PATH', Puppet::Util.get_env('PATH') + File::PATH_SEPARATOR + path) unless paths.include?(path)
-          end
-          value
+      :call_hook => :on_define_and_write,
+      :hook             => proc do |value|
+        Puppet::Util.set_env('PATH', '') if Puppet::Util.get_env('PATH').nil?
+        Puppet::Util.set_env('PATH', value) unless value == 'none'
+        paths = Puppet::Util.get_env('PATH').split(File::PATH_SEPARATOR)
+        Puppet::Util::Platform.default_paths.each do |path|
+          Puppet::Util.set_env('PATH', Puppet::Util.get_env('PATH') + File::PATH_SEPARATOR + path) unless paths.include?(path)
         end
+        value
+      end
     },
     :libdir => {
-        :type           => :directory,
-        :default        => "$vardir/lib",
-        :desc           => "An extra search path for Puppet.  This is only useful
+      :type           => :directory,
+      :default        => "$vardir/lib",
+      :desc           => "An extra search path for Puppet.  This is only useful
           for those files that Puppet will load on demand, and is only
           guaranteed to work for those cases.  In fact, the autoload
           mechanism is responsible for making sure this directory
           is in Ruby's search path\n"
     },
     :environment => {
-        :default  => "production",
-        :desc     => "The environment in which Puppet is running. For clients,
+      :default  => "production",
+      :desc     => "The environment in which Puppet is running. For clients,
           such as `puppet agent`, this determines the environment itself, which
           Puppet uses to find modules and much more. For servers, such as `puppet master`,
           this provides the default environment for nodes that Puppet knows nothing about.
@@ -365,7 +367,7 @@ module Puppet
           Given that the context and effects vary depending on the
           [config section](https://puppet.com/docs/puppet/latest/config_file_main.html#config-sections)
           in which the `environment` setting is defined, do not set it globally.",
-        :short    => "E"
+      :short    => "E"
     },
     :environmentpath => {
       :default => "$codedir/environments",
@@ -379,9 +381,9 @@ module Puppet
       :type    => :path,
     },
     :always_retry_plugins => {
-        :type     => :boolean,
-        :default  => true,
-        :desc     => <<-'EOT'
+      :type     => :boolean,
+      :default  => true,
+      :desc     => <<-'EOT'
         Affects how we cache attempts to load Puppet resource types and features.  If
         true, then calls to `Puppet.type.<type>?` `Puppet.feature.<feature>?`
         will always attempt to load the type or feature (which can be an
@@ -400,8 +402,8 @@ module Puppet
         EOT
     },
     :diff_args => {
-        :default  => lambda { default_diffargs },
-        :desc     => "Which arguments to pass to the diff command when printing differences between
+      :default  => lambda { default_diffargs },
+      :desc     => "Which arguments to pass to the diff command when printing differences between
           files. The command to use can be chosen with the `diff` setting.",
     },
     :diff => {
@@ -411,9 +413,9 @@ module Puppet
           third-party diff tools.",
     },
     :show_diff => {
-        :type     => :boolean,
-        :default  => false,
-        :desc     => "Whether to log and report a contextual diff when files are being replaced.
+      :type     => :boolean,
+      :default  => false,
+      :desc     => "Whether to log and report a contextual diff when files are being replaced.
           This causes partial file contents to pass through Puppet's normal
           logging and reporting system, so this setting should be used with
           caution if you are sending Puppet's reports to an insecure
@@ -421,21 +423,21 @@ module Puppet
           library.",
     },
     :daemonize => {
-        :type     => :boolean,
-        :default  => (Puppet::Util::Platform.windows? ? false : true),
-        :desc     => "Whether to send the process into the background.  This defaults
+      :type     => :boolean,
+      :default  => (Puppet::Util::Platform.windows? ? false : true),
+      :desc     => "Whether to send the process into the background.  This defaults
           to true on POSIX systems, and to false on Windows (where Puppet
           currently cannot daemonize).",
-        :short    => "D",
-        :hook     => proc do |value|
-          if value and Puppet::Util::Platform.windows?
-            raise "Cannot daemonize on Windows"
-          end
+      :short    => "D",
+      :hook     => proc do |value|
+        if value and Puppet::Util::Platform.windows?
+          raise "Cannot daemonize on Windows"
         end
+      end
     },
     :maximum_uid => {
-        :default  => 4294967290,
-        :desc     => "The maximum allowed UID.  Some platforms use negative UIDs
+      :default  => 4294967290,
+      :desc     => "The maximum allowed UID.  Some platforms use negative UIDs
           but then ship with tools that do not know how to handle signed ints,
           so the UIDs show up as huge numbers that can then not be fed back into
           the system.  This is a hackish way to fail in a slightly more useful
@@ -482,7 +484,7 @@ module Puppet
       :type    => :terminus,
       :default => "hiera",
       :desc    =>
-        "This setting has been deprecated. Use of any value other than 'hiera' should instead be configured
+      "This setting has been deprecated. Use of any value other than 'hiera' should instead be configured
          in a version 5 hiera.yaml. Until this setting is removed, it controls which data binding terminus
          to use for global automatic data binding (across all environments). By default this value is 'hiera'.
          A value of 'none' turns off the global binding.",
@@ -689,9 +691,9 @@ API to expire the cache as needed
       performed work during the normal run.",
     },
     :freeze_main => {
-        :default  => false,
-        :type     => :boolean,
-        :desc     => "Freezes the 'main' class, disallowing any code to be added to it.  This
+      :default  => false,
+      :type     => :boolean,
+      :desc     => "Freezes the 'main' class, disallowing any code to be added to it.  This
           essentially means that you can't have any code outside of a node,
           class, or definition other than in the site manifest.",
     },
@@ -705,26 +707,27 @@ API to expire the cache as needed
     }
   )
 
-  Puppet.define_settings(:module_tool,
+  define_settings(
+    :module_tool,
     :module_repository  => {
       :default  => 'https://forgeapi.puppet.com',
       :desc     => "The module repository",
     },
     :module_working_dir => {
-        :default  => (Puppet::Util::Platform.windows? ? Dir.tmpdir() : '$vardir/puppet-module'),
-        :desc     => "The directory into which module tool data is stored",
+      :default  => (Puppet::Util::Platform.windows? ? Dir.tmpdir() : '$vardir/puppet-module'),
+      :desc     => "The directory into which module tool data is stored",
     },
     :forge_authorization => {
-        :default  => nil,
-        :desc     => "The authorization key to connect to the Puppet Forge. Leave blank for unauthorized or license based connections",
+      :default  => nil,
+      :desc     => "The authorization key to connect to the Puppet Forge. Leave blank for unauthorized or license based connections",
     },
     :module_groups => {
-        :default  => nil,
-        :desc     => "Extra module groups to request from the Puppet Forge. This is an internal setting, and users should never change it.",
+      :default  => nil,
+      :desc     => "Extra module groups to request from the Puppet Forge. This is an internal setting, and users should never change it.",
     }
   )
 
-    Puppet.define_settings(
+  define_settings(
     :main,
 
     # We have to downcase the fqdn, because the current ssl stuff (as opposed to in master) doesn't have good facilities for
@@ -942,9 +945,9 @@ EOT
         This is distinct from the certificate authority's CRL."
     },
     :certificate_revocation => {
-        :default  => 'chain',
-        :type     => :certificate_revocation,
-        :desc     => <<-'EOT'
+      :default  => 'chain',
+      :type     => :certificate_revocation,
+      :desc     => <<-'EOT'
           Whether certificate revocation checking should be enabled, and what level of
           checking should be performed.
 
@@ -966,10 +969,10 @@ EOT
         EOT
     },
     :digest_algorithm => {
-        :default  => lambda { default_digest_algorithm },
-        :type     => :enum,
-        :values   => valid_digest_algorithms,
-        :desc     => "Which digest algorithm to use for file resources and the filebucket.
+      :default  => lambda { default_digest_algorithm },
+      :type     => :enum,
+      :values   => valid_digest_algorithms,
+      :desc     => "Which digest algorithm to use for file resources and the filebucket.
                       Valid values are #{valid_digest_algorithms.join(', ')}. Default is
                       #{default_digest_algorithm}.",
     },
@@ -978,8 +981,8 @@ EOT
       :type    => :array,
       :desc    => "Checksum types supported by this agent for use in file resources of a
                    static catalog. Values must be comma-separated. Valid types are
-                   #{valid_file_checksum_types.join(', ')}. Default is
-                   #{default_file_checksum_types.join(', ')}.",
+      #{valid_file_checksum_types.join(', ')}. Default is
+      #{default_file_checksum_types.join(', ')}.",
       :hook    => proc do |value|
         values = munge(value)
 
@@ -1002,7 +1005,7 @@ EOT
     }
   )
 
-    define_settings(
+  define_settings(
     :ca,
     :ca_name => {
       :default => "Puppet CA: $certname",
@@ -1086,8 +1089,8 @@ EOT
     :ca_ttl => {
       :default    => "5y",
       :type       => :duration,
-      :desc       => "The default TTL for new certificates.
-      #{AS_DURATION}",
+      :desc       => "The default TTL for new certificates."
+        #{AS_DURATION}"
     },
     :keylength => {
       :default    => 4096,
@@ -1103,32 +1106,34 @@ EOT
 
   # Define the config default.
 
-    define_settings(:application,
-      :config_file_name => {
-          :type     => :string,
-          :default  => Puppet::Settings.default_config_file_name,
-          :desc     => "The name of the puppet config file.",
-      },
-      :config => {
-          :type => :file,
-          :default  => "$confdir/${config_file_name}",
-          :desc     => "The configuration file for the current puppet application.",
-      },
-      :pidfile => {
-          :type => :file,
-          :default  => "$rundir/${run_mode}.pid",
-          :desc     => "The file containing the PID of a running process.
+  define_settings(
+    :application,
+    :config_file_name => {
+      :type     => :string,
+      :default  => Puppet::Settings.default_config_file_name,
+      :desc     => "The name of the puppet config file.",
+    },
+    :config => {
+      :type => :file,
+      :default  => "$confdir/${config_file_name}",
+      :desc     => "The configuration file for the current puppet application.",
+    },
+    :pidfile => {
+      :type => :file,
+      :default  => "$rundir/${run_mode}.pid",
+      :desc     => "The file containing the PID of a running process.
             This file is intended to be used by service management frameworks
             and monitoring systems to determine if a puppet process is still in
             the process table.",
-      },
-      :sourceaddress => {
-        :default    => nil,
-        :desc       => "The address the agent should use to initiate requests.",
-      },
-    )
+    },
+    :sourceaddress => {
+      :default    => nil,
+      :desc       => "The address the agent should use to initiate requests.",
+    },
+  )
 
-  define_settings(:environment,
+  define_settings(
+    :environment,
     :manifest => {
       :default    => nil,
       :type       => :file_or_directory,
@@ -1171,7 +1176,8 @@ EOT
     }
   )
 
-  define_settings(:master,
+  define_settings(
+    :master,
     :user => {
       :default    => "puppet",
       :desc       => "The user Puppet Server will run as. Used to ensure
@@ -1364,22 +1370,24 @@ EOT
     }
   )
 
-  define_settings(:device,
+  define_settings(
+    :device,
     :devicedir =>  {
-        :default  => "$vardir/devices",
-        :type     => :directory,
-        :mode     => "0750",
-        :owner    => "service",
-        :group    => "service",
-        :desc     => "The root directory of devices' $vardir.",
+      :default  => "$vardir/devices",
+      :type     => :directory,
+      :mode     => "0750",
+      :owner    => "service",
+      :group    => "service",
+      :desc     => "The root directory of devices' $vardir.",
     },
     :deviceconfig => {
-        :default  => "$confdir/device.conf",
-        :desc     => "Path to the device config file for puppet device.",
+      :default  => "$confdir/device.conf",
+      :desc     => "Path to the device config file for puppet device.",
     }
   )
 
-  define_settings(:agent,
+  define_settings(
+    :agent,
     :node_name_value => {
       :default => "$certname",
       :desc => "The explicit value used for the node name for all requests the agent
@@ -1581,9 +1589,9 @@ EOT
         The file contains the pid of the process that holds the lock on the catalog run.",
     },
     :agent_disabled_lockfile => {
-        :default    => "$statedir/agent_disabled.lock",
-        :type       => :file,
-        :desc       => "A lock file to indicate that puppet agent runs have been administratively
+      :default    => "$statedir/agent_disabled.lock",
+      :type       => :file,
+      :desc       => "A lock file to indicate that puppet agent runs have been administratively
           disabled.  File contains a JSON object with state information.",
     },
     :usecacheonfailure => {
@@ -1754,14 +1762,14 @@ EOT
       be used here.",
     },
     :pluginsignore => {
-        :default  => ".svn CVS .git .hg",
-        :desc     => "What files to ignore when pulling down plugins.",
+      :default  => ".svn CVS .git .hg",
+      :desc     => "What files to ignore when pulling down plugins.",
     }
   )
 
   # Central fact information.
 
-    define_settings(
+  define_settings(
     :main,
     :factpath => {
       :type     => :path,
@@ -1800,17 +1808,17 @@ EOT
         what is being done.",
     },
     :summarize => {
-        :default  => false,
-        :type     => :boolean,
-        :desc     => "Whether to print a transaction summary.",
+      :default  => false,
+      :type     => :boolean,
+      :desc     => "Whether to print a transaction summary.",
     }
   )
 
-    define_settings(
+  define_settings(
     :main,
     :external_nodes => {
-        :default  => "none",
-        :desc     => "The external node classifier (ENC) script to use for node data.
+      :default  => "none",
+      :desc     => "The external node classifier (ENC) script to use for node data.
           Puppet combines this data with the main manifest to produce node catalogs.
 
           To enable this setting, set the `node_terminus` setting to `exec`.
@@ -1831,8 +1839,8 @@ EOT
     }
   )
 
-        define_settings(
-        :ldap,
+  define_settings(
+    :ldap,
     :ldapssl => {
       :default  => false,
       :type   => :boolean,
@@ -1892,15 +1900,16 @@ EOT
       :desc     => "The password to use to connect to LDAP.",
     },
     :ldapbase => {
-        :default  => "",
-        :desc     => "The search base for LDAP searches.  It's impossible to provide
+      :default  => "",
+      :desc     => "The search base for LDAP searches.  It's impossible to provide
           a meaningful default here, although the LDAP libraries might
           have one already set.  Generally, it should be the 'ou=Hosts'
           branch under your main directory.",
     }
-      )
+  )
 
-  define_settings(:master,
+  define_settings(
+    :master,
     :storeconfigs => {
       :default  => false,
       :type     => :boolean,
@@ -1933,63 +1942,66 @@ EOT
     }
   )
 
-  define_settings(:parser,
-   :max_errors => {
-     :default => 10,
-     :desc => <<-'EOT'
+  define_settings(
+    :parser,
+    :max_errors => {
+      :default => 10,
+      :desc => <<-'EOT'
        Sets the max number of logged/displayed parser validation errors in case
        multiple errors have been detected. A value of 0 is the same as a value of 1; a
        minimum of one error is always raised.  The count is per manifest.
      EOT
-   },
-   :max_warnings => {
-     :default => 10,
-     :desc => <<-'EOT'
+    },
+    :max_warnings => {
+      :default => 10,
+      :desc => <<-'EOT'
        Sets the max number of logged/displayed parser validation warnings in
        case multiple warnings have been detected. A value of 0 blocks logging of
        warnings.  The count is per manifest.
      EOT
-     },
-  :max_deprecations => {
-    :default => 10,
-    :desc => <<-'EOT'
+    },
+    :max_deprecations => {
+      :default => 10,
+      :desc => <<-'EOT'
       Sets the max number of logged/displayed parser validation deprecation
       warnings in case multiple deprecation warnings have been detected. A value of 0
       blocks the logging of deprecation warnings.  The count is per manifest.
     EOT
     },
-  :strict_variables => {
-    :default => false,
-    :type => :boolean,
-    :desc => <<-'EOT'
+    :strict_variables => {
+      :default => false,
+      :type => :boolean,
+      :desc => <<-'EOT'
       Causes an evaluation error when referencing unknown variables. (This does not affect
       referencing variables that are explicitly set to undef).
     EOT
     },
-   :func3x_check => {
-     :default => true,
-     :type => :boolean,
-     :desc => <<-'EOT'
+    :func3x_check => {
+      :default => true,
+      :type => :boolean,
+      :desc => <<-'EOT'
        Causes validation of loaded legacy Ruby functions (3x API) to raise errors about illegal constructs that
        could cause harm or that simply does not work. This flag is on by default. This flag is made available
        so that the validation can be turned off in case the method of validation is faulty - if encountered, please
        file a bug report.
      EOT
-     },
-  :tasks => {
-    :default => false,
-    :type => :boolean,
-    :desc => <<-'EOT'
+    },
+    :tasks => {
+      :default => false,
+      :type => :boolean,
+      :desc => <<-'EOT'
       Turns on experimental support for tasks and plans in the puppet language. This is for internal API use only.
       Do not change this setting.
     EOT
     }
   )
-  define_settings(:puppetdoc,
+
+  define_settings(
+    :puppetdoc,
     :document_all => {
-        :default  => false,
-        :type     => :boolean,
-        :desc     => "Whether to document all resources when using `puppet doc` to
+      :default  => false,
+      :type     => :boolean,
+      :desc     => "Whether to document all resources when using `puppet doc` to
           generate manifest documentation.",
     }
   )
@@ -2011,5 +2023,4 @@ EOT
       EOT
     }
   )
-
 end
