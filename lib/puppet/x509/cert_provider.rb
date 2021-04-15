@@ -43,6 +43,7 @@ class Puppet::X509::CertProvider
   # @raise [Puppet::Error] if the certs cannot be loaded
   # @api private
   def load_cacerts(required: false)
+    require 'byebug'; byebug
     pem = load_pem(@capath)
     if !pem && required
       raise Puppet::Error, _("The CA certificates are missing from '%{path}'") % { path: @capath }

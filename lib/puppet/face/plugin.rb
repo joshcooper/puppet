@@ -39,6 +39,8 @@ Puppet::Face.define(:plugin, '0.0.1') do
     EOT
 
     when_invoked do |options|
+      Puppet::Application::Plugin.run_mode(:agent)
+
       remote_environment_for_plugins = Puppet::Node::Environment.remote(Puppet[:environment])
 
       pool = Puppet::Network::HTTP::Pool.new(Puppet[:http_keepalive_timeout])

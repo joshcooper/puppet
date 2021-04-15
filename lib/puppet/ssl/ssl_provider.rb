@@ -82,6 +82,7 @@ class Puppet::SSL::SSLProvider
   #   `private_key`.
   # @api private
   def create_context(cacerts:, crls:, private_key:, client_cert:, revocation: Puppet[:certificate_revocation])
+    require 'byebug'; byebug
     raise ArgumentError, _("CA certs are missing") unless cacerts
     raise ArgumentError, _("CRLs are missing") unless crls
     raise ArgumentError, _("Private key is missing") unless private_key
