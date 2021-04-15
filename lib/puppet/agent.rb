@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/application'
 require 'puppet/error'
 require 'puppet/util/at_fork'

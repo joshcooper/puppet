@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rdoc/generators/html_generator'
 require 'puppet/util/rdoc/code_objects'
 require 'digest/md5'

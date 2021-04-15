@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/terminus'
 
 # Manage a memory-cached list of instances.

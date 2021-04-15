@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/transaction/report'
 require 'puppet/indirector/code'
 require 'puppet/reports'

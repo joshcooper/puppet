@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/external/pson/common'
 require 'puppet/external/pson/pure/parser'
 require 'puppet/external/pson/pure/generator'

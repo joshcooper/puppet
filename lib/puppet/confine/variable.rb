@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/confine'
 
 # Require a specific value for a variable, either a Puppet setting

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util'
 require 'puppet/util/user_attr'
 require 'date'

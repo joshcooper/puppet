@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/ssl/base'
 
 # Manage certificates themselves.  This class has no

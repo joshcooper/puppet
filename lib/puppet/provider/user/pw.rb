@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/nameservice/pw'
 require 'open3'
 

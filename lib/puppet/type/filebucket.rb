@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet
   require 'puppet/file_bucket/dipper'
 

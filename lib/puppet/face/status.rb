@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/face'
 
 Puppet::Indirector::Face.define(:status, '0.0.1') do

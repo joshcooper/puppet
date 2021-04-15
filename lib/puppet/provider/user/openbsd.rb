@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/error'
 
 Puppet::Type.type(:user).provide :openbsd, :parent => :useradd do

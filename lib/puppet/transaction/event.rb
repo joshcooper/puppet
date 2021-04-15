@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/transaction'
 require 'puppet/util/tagging'
 require 'puppet/util/logging'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/external/dot'
 require 'puppet/relationship'
 require 'set'

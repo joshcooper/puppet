@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # encoding: UTF-8
 require 'puppet/forge'
 require 'puppet/module_tool/install_directory'

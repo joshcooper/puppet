@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet::ModuleTool::Shared
 
   include Puppet::ModuleTool::Errors

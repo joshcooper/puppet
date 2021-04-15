@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::InfoService::PlanInformationService
   require 'puppet/module'
 

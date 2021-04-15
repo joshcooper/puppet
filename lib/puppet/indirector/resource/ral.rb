@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/resource/validator'
 
 class Puppet::Resource::Ral < Puppet::Indirector::Code

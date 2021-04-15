@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/code'
 require 'puppet/file_bucket/file'
 require 'puppet/util/checksums'

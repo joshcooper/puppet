@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @deprecated Use {Puppet::HTTP::Client} instead.
 module Puppet::Rest
   # This is a wrapper for the HTTP::Message class of the HTTPClient

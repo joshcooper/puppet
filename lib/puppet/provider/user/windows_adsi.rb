@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/windows'
 
 Puppet::Type.type(:user).provide :windows_adsi do

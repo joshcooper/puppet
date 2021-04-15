@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/json_lockfile'
 
 # This module is responsible for encapsulating the logic for

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/face'
 require 'puppet/generate/type'
 

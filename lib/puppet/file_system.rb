@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet::FileSystem
   require 'puppet/util'
   require 'puppet/file_system/path_pattern'

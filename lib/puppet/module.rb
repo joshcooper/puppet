@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/logging'
 require 'puppet/module/task'
 require 'puppet/module/plan'

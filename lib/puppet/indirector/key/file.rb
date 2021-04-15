@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/ssl_file'
 require 'puppet/ssl/key'
 

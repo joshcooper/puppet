@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/parser'
 require 'puppet/util/warnings'
 require 'puppet/util/errors'

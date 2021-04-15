@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Requires the specified classes.
 # Evaluate one or more classes, adding the required class as a dependency.
 #

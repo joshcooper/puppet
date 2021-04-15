@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/vendor'
 Puppet::Vendor.load_vendored
 

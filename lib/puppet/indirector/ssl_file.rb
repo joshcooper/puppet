@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/ssl'
 
 class Puppet::Indirector::SslFile < Puppet::Indirector::Terminus

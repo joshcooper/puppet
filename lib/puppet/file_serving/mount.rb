@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/network/authstore'
 require 'puppet/util/logging'
 require 'puppet/file_serving'

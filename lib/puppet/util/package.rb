@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet::Util::Package
   def versioncmp(version_a, version_b)
     vre = /[-.]|\d+|[^-.\d]+/

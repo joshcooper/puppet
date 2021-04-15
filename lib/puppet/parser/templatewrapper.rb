@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/parser/files'
 require 'erb'
 require 'puppet/file_system'

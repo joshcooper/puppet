@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The Enumeration class provides default Enumerable::Enumerator creation for Puppet Programming Language
 # runtime objects that supports the concept of enumeration.
 #

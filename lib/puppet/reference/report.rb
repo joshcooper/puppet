@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/reports'
 
 report = Puppet::Util::Reference.newreference :report, :doc => "All available transaction reports" do

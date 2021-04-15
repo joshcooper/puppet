@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/parser/compiler'
 
 class Puppet::Parser::EnvironmentCompiler < Puppet::Parser::Compiler

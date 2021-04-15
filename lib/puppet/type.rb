@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # -*- coding: utf-8 -*-
 require 'puppet'
 require 'puppet/util/log'

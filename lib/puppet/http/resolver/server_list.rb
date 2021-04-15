@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::HTTP::Resolver::ServerList < Puppet::HTTP::Resolver
   def initialize(client, server_list_setting:, default_port:, services: )
     @client = client

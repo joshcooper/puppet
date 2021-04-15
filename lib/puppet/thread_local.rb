@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'concurrent'
 
 # We want to use the pure Ruby implementation even on JRuby. If we use the Java

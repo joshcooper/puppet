@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/settings/base_setting'
 
 class Puppet::Settings::CertificateRevocationSetting < Puppet::Settings::BaseSetting

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/parser/ast/top_level_construct'
 require 'puppet/pops'
 

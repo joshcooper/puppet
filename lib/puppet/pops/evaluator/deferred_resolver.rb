@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/parser/script_compiler'
 
 module Puppet::Pops

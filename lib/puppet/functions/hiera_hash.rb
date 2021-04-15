@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'hiera/puppet_function'
 
 # Finds all matches of a key throughout the hierarchy and returns them in a merged hash.

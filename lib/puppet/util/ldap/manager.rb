@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/ldap'
 require 'puppet/util/ldap/connection'
 require 'puppet/util/ldap/generator'

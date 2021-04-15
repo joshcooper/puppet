@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'time'
 require 'puppet/rest/route'
 require 'puppet/network/http_pool'

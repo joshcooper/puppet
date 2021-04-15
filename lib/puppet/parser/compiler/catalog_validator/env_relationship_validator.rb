@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Parser::Compiler
   # Validator that asserts that all capability resources that are referenced by 'consume' or 'require' has
   # been exported by some other resource in the environment

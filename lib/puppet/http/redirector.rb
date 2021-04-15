@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::HTTP::Redirector
   def initialize(redirect_limit)
     @redirect_limit = redirect_limit

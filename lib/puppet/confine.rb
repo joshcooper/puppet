@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The class that handles testing whether our providers
 # actually work or not.
 require 'puppet/util'

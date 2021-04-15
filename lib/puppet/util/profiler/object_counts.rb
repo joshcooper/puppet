@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/profiler/logging'
 
 class Puppet::Util::Profiler::ObjectCounts < Puppet::Util::Profiler::Logging

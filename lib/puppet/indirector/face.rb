@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/face'
 
 class Puppet::Indirector::Face < Puppet::Face

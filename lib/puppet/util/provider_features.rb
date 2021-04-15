@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Provides feature definitions.
 require 'puppet/util/docs'
 require 'puppet/util'

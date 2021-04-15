@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/application'
 require 'puppet/daemon'
 require 'puppet/util/pidlock'

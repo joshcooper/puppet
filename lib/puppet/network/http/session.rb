@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # An HTTP session that references a persistent HTTP connection and
 # an expiration time for the connection.
 #

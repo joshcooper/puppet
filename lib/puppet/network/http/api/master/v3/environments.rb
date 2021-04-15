@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/json'
 
 class Puppet::Network::HTTP::API::Master::V3::Environments

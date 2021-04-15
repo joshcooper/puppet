@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/face'
 require 'puppet/node/facts'
 

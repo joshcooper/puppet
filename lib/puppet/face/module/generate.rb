@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Face.define(:module, '1.0.0') do
   action(:generate) do
     summary _("Generate boilerplate for a new module.")

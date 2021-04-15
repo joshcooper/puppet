@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Just to make the constants work out.
 require 'puppet'
 require 'puppet/ssl/openssl_loader'

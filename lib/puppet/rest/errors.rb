@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @deprecated Use {Puppet::HTTP::Client} instead.
 module Puppet::Rest
   class ResponseError < Puppet::Error

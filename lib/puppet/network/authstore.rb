@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # standard module for determining whether a given hostname or IP has access to
 # the requested resource
 

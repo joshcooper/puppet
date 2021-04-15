@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Base pool for HTTP connections.
 #
 # @api private

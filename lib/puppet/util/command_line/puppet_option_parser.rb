@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/command_line/trollop'
 
 module Puppet

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'find'
 require 'puppet/file_serving'
 require 'puppet/file_serving/metadata'

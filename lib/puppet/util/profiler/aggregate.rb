@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/profiler'
 require 'puppet/util/profiler/wall_clock'
 

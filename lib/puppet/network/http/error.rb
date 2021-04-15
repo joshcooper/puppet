@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/json'
 
 module Puppet::Network::HTTP::Error

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @note WARNING: This new function API is still under development and may change at
 #   any time
 #

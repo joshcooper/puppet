@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Allows a `Puppet::SSL::Validator` to be used in situations where a
 # `Verifier` is required, while preserving the legacy validator behavior of:
 #

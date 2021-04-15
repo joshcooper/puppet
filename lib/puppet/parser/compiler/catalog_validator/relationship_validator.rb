@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Parser::Compiler
   # Validator that asserts that only 'require', 'consume', and 'export' is used when declaring relationships
   # to capability resources.

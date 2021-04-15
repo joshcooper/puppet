@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::SSL::Digest
   attr_reader :digest
 

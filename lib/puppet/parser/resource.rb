@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/resource'
 
 # The primary difference between this class and its

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/file_serving'
 
 # This module is used to pick the appropriate terminus

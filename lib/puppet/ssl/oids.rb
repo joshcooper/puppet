@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/ssl'
 
 # This module defines OIDs for use within Puppet.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Network::HTTP::API::IndirectionType
 
   INDIRECTION_TYPE_MAP = {

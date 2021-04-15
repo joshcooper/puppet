@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector'
 require 'puppet/indirector/errors'
 require 'puppet/indirector/indirection'

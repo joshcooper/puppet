@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Called within a class definition, establishes a containment
 # relationship with another class
 

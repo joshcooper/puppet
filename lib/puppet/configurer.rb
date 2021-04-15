@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The client for interacting with the puppetmaster config server.
 require 'sync'
 require 'timeout'

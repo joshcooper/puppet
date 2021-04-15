@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'time'
 require 'puppet/network/format_support'
 require 'puppet/util/psych_support'

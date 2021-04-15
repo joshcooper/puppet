@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet'
 require 'getoptlong'
 require 'puppet/util/watched_file'

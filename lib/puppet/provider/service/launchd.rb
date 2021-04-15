@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/plist'
 Puppet::Type.type(:service).provide :launchd, :parent => :base do
   desc <<-'EOT'

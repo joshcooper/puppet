@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/file_serving/metadata'
 
 # Simplified metadata representation, suitable for the information

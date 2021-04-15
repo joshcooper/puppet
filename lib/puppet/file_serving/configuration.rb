@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet'
 require 'puppet/file_serving'
 require 'puppet/file_serving/mount'

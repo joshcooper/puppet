@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/reports'
 
 Puppet::Reports.register_report(:log) do

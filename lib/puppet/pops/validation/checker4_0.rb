@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/pops/evaluator/external_syntax_support'
 
 module Puppet::Pops

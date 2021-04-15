@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Utility module for type assertion
 #
 module Puppet::Pops::Types

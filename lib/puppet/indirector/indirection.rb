@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/docs'
 require 'puppet/util/profiler'
 require 'puppet/indirector/envelope'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/confine_collection'
 
 # The Confiner module contains methods for managing a Provider's confinement (suitability under given

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A pool that does not cache HTTP connections.
 #
 # @api private

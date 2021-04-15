@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/package/gem'
 
 Puppet::Type.type(:package).provide :puppet_gem, :parent => :gem do

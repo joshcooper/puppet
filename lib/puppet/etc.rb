@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/character_encoding'
 # Wrapper around Ruby Etc module allowing us to manage encoding in a single
 # place.

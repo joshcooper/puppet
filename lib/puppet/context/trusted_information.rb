@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/trusted_external'
 
 # @api private

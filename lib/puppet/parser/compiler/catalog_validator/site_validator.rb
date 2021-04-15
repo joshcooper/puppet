@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Parser::Compiler
   # Validator that asserts that only application components can appear inside a site.
   class CatalogValidator::SiteValidator < CatalogValidator

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/network/client_request'
 require 'puppet/network/authconfig'
 require 'puppet/network/auth_config_parser'

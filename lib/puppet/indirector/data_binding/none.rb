@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/none'
 
 class Puppet::DataBinding::None < Puppet::Indirector::None

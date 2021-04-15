@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/file_serving/content'
 require 'puppet/indirector/file_content'
 require 'puppet/indirector/direct_file_server'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/network/authorization'
 require 'puppet/network/http/api/indirection_type'
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/confine'
 
 # Common module for the Boolean confines. It currently

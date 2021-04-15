@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Some helper methods for throwing and populating errors.
 #
 # @api public

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/file_serving/configuration'
 require 'puppet/util/watched_file'
 

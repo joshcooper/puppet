@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/package'
 
 # Packaging on OpenBSD.  Doesn't work anywhere else that I know of.

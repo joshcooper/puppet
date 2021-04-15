@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Literal values for
 #
 #   * String

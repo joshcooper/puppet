@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/tagging'
 require 'puppet/util/classgen'
 require 'puppet/util/psych_support'

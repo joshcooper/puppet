@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/parser/functions'
 require 'puppet/parser/files'
 require 'puppet/resource/type_collection'

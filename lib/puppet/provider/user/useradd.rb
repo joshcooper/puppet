@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/nameservice/objectadd'
 require 'date'
 require 'puppet/util/libuser'

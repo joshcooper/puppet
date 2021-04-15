@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Abstract implementation of the Puppet::FileSystem
 #
 class Puppet::FileSystem::FileImpl

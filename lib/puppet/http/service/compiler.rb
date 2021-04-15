@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::HTTP::Service::Compiler < Puppet::HTTP::Service
   API = '/puppet/v3'.freeze
 

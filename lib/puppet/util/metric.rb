@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # included so we can test object types
 require 'puppet'
 require 'puppet/network/format_support'

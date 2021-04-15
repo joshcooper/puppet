@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util'
 module Puppet::Util::RDoc
   module_function

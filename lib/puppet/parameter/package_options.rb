@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/parameter'
 
 # This specialized {Puppet::Parameter} handles munging of package options.

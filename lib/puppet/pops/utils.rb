@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Provides utility methods
 module Puppet::Pops
 module Utils

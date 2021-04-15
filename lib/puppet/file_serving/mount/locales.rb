@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/file_serving/mount'
 
 # Find files in the modules' locales directories.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/windows'
 require 'puppet/ssl/openssl_loader'
 require 'ffi'

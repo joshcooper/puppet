@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PSON
   # PSON version
   VERSION         = '1.1.9'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Indirector::StoreConfigs < Puppet::Indirector::Terminus
   def initialize
     super

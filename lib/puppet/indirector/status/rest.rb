@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/status'
 require 'puppet/indirector/rest'
 

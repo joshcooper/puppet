@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Configuration settings for a single directory Environment.
 # @api private
 class Puppet::Settings::EnvironmentConf

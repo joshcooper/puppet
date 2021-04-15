@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/node'
 require 'puppet/indirector/yaml'
 

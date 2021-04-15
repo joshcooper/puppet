@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/nameservice/directoryservice'
 
 Puppet::Type.type(:group).provide :directoryservice, :parent => Puppet::Provider::NameService::DirectoryService do

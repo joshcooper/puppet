@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # A helper module to look a capability up from PuppetDB
 #

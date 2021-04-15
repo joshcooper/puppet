@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Settings::SymbolicEnumSetting < Puppet::Settings::BaseSetting
   attr_accessor :values
 

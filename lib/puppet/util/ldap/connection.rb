@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/ldap'
 
 class Puppet::Util::Ldap::Connection

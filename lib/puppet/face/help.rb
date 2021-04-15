@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/face'
 require 'puppet/application/face_base'
 require 'puppet/util/constant_inflector'

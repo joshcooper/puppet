@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/checksums'
 require 'puppet/type/file/data_sync'
 

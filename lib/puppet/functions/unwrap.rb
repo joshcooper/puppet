@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Unwraps a Sensitive value and returns the wrapped object.
 #
 # @example Usage of unwrap

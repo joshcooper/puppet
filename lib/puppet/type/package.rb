@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # coding: utf-8
 # Define the different packaging systems.  Each package system is implemented
 # in a module, which then gets used to individually extend each package object.

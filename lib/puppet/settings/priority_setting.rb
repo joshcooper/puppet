@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/settings/base_setting'
 
 # A setting that represents a scheduling priority, and evaluates to an

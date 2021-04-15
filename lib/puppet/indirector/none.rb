@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/terminus'
 
 # A none terminus type, meant to always return nil

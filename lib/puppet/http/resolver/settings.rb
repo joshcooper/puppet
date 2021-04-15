@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::HTTP::Resolver::Settings < Puppet::HTTP::Resolver
   def resolve(session, name, ssl_context: nil)
     service = Puppet::HTTP::Service.create_service(@client, name)

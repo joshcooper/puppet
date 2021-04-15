@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A syntax checker for JSON.
 # @api public
 require 'puppet/syntax_checkers'

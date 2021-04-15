@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'hiera'
 require 'hiera/scope'
 require 'puppet'

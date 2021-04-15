@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Parser::Functions::newfunction(
   :binary_file,
   :type => :rvalue,

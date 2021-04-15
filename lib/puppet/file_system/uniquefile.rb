@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/file_system'
 require 'delegate'
 require 'tmpdir'

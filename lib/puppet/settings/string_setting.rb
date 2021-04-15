@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Settings::StringSetting < Puppet::Settings::BaseSetting
   def type
     :string

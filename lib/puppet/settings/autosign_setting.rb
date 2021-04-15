@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/settings/base_setting'
 
 # A specialization of the file setting to allow boolean values.

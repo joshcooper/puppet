@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/nameservice/objectadd'
 
 class Puppet::Provider::NameService

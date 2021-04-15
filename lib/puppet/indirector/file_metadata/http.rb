@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/file_serving/http_metadata'
 require 'puppet/indirector/generic_http'
 require 'puppet/indirector/file_metadata'

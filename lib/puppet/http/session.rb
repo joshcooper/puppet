@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::HTTP::Session
   def initialize(client, resolvers)
     @client = client

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/application'
 require 'puppet/configurer'
 require 'puppet/util/network_device'

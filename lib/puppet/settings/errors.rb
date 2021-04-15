@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Exceptions for the settings module
 require 'puppet/error'
 

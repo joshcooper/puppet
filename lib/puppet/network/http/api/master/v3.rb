@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Network::HTTP::API::Master::V3
   require 'puppet/network/http/api/master/v3/authorization'
   require 'puppet/network/http/api/master/v3/environments'

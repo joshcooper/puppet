@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/version'
 
 if Gem::Version.new(RUBY_VERSION.dup) < Gem::Version.new("2.3.0")

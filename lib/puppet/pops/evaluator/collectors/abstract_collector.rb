@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Pops::Evaluator::Collectors::AbstractCollector
   attr_reader :scope
 

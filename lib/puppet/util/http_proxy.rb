@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'uri'
 require 'puppet/ssl/openssl_loader'
 require 'puppet/http'

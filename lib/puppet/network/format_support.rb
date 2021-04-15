@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/network/format_handler'
 
 # Provides network serialization support when included

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/windows'
 require 'win32/process'
 require 'ffi'

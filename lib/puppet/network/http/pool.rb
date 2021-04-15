@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A pool for persistent <tt>Net::HTTP</tt> connections. Connections are
 # stored in the pool indexed by their {Puppet::Network::HTTP::Site Site}.
 # Connections are borrowed from the pool, yielded to the caller, and

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/file_serving/content'
 require 'puppet/file_serving/metadata'
 require 'puppet/file_serving/terminus_helper'

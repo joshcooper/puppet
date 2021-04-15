@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet'
 require 'puppet/util/classgen'
 require 'puppet/node/environment'

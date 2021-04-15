@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/x509'
 
 # Class for loading and saving cert related objects.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Settings::PathSetting < Puppet::Settings::StringSetting
   def munge(value)
     if value.is_a?(String)

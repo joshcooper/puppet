@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The TypeDefinitionInstantiator instantiates a type alias or a type definition
 #
 module Puppet::Pops

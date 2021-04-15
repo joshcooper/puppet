@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/x509'
 
 # Methods for managing PEM encoded files. While PEM encoded strings are

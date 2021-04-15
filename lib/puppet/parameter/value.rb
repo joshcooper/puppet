@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/parameter/value_collection'
 
 # Describes an acceptable value for a parameter or property.

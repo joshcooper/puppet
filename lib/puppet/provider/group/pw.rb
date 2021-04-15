@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/nameservice/pw'
 
 Puppet::Type.type(:group).provide :pw, :parent => Puppet::Provider::NameService::PW do

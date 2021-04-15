@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/store_configs'
 require 'puppet/node'
 

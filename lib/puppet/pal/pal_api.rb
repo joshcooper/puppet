@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet
   require 'puppet/parser/script_compiler'
   require 'puppet/parser/catalog_compiler'

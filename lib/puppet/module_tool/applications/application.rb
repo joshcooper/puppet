@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'puppet/util/json'
 require 'puppet/util/colors'

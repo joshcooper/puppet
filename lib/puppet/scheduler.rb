@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet::Scheduler
   require 'puppet/scheduler/job'
   require 'puppet/scheduler/splay_job'

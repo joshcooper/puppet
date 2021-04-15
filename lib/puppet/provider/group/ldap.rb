@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/ldap'
 
 Puppet::Type.type(:group).provide :ldap, :parent => Puppet::Provider::Ldap do

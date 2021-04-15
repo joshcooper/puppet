@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/autoload'
 require 'uri'
 require 'puppet/util/network_device/transport'

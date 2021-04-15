@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'etc'
 require 'facter'
 require 'puppet/property/keyvalue'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'hiera_puppet'
 
 module Puppet::Parser::Functions

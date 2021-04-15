@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/external/pson/version'
 
 # PSON is a vendored version of pure_json v1.1.9 plus puppet patches. It

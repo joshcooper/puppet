@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet::Pops
 module Functions
 # Defines a connection between a implementation method and the signature that

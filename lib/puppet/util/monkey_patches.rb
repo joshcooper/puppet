@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/platform'
 
 module Puppet::Util::MonkeyPatches

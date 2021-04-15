@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The EppParser is a specialized Puppet Parser that starts parsing in Epp Text mode
 class Puppet::Pops::Parser::EppParser < Puppet::Pops::Parser::Parser
 

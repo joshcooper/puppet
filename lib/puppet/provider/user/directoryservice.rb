@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet'
 require 'puppet/util/plist' if Puppet.features.cfpropertylist?
 require 'base64'

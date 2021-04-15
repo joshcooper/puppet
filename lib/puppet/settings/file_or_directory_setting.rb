@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Settings::FileOrDirectorySetting < Puppet::Settings::FileSetting
 
   def initialize(args)

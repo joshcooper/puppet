@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::HTTP::Service::Ca < Puppet::HTTP::Service
   HEADERS = { 'Accept' => 'text/plain' }.freeze
   API = '/puppet-ca/v1'.freeze

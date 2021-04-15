@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/settings/errors'
 
 # The base setting type

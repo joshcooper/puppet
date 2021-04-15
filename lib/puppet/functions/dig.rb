@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Returns a value for a sequence of given keys/indexes into a structure, such as
 # an array or hash.
 #

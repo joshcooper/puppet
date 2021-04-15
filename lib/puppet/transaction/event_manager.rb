@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/transaction'
 
 # This class stores, routes, and responds to events generated while evaluating

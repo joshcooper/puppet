@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/ssl/openssl_loader'
 require 'net/http'
 require 'puppet/util/http_proxy'

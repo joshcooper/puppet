@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/package/windows/package'
 
 class Puppet::Provider::Package::Windows

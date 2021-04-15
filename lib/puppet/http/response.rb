@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::HTTP::Response
   def initialize(nethttp)
     @nethttp = nethttp

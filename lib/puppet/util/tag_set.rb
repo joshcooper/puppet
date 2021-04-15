@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'set'
 require 'puppet/network/format_support'
 

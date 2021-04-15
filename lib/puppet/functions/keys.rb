@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Returns the keys of a hash as an Array
 #
 # @example Using `keys`

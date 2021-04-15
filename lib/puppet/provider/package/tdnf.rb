@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:package).provide :tdnf, :parent => :dnf do
   desc "Support via `tdnf`.
 

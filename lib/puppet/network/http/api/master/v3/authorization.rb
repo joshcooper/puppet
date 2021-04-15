@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/network/authorization'
 
 class Puppet::Network::HTTP::API::Master::V3::Authorization

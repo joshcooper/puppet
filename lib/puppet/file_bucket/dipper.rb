@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pathname'
 require 'puppet/file_bucket'
 require 'puppet/file_bucket/file'

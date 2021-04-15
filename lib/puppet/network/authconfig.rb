@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/network/rights'
 require 'puppet/network/http'
 

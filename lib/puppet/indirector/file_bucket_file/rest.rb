@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/indirector/rest'
 require 'puppet/file_bucket/file'
 

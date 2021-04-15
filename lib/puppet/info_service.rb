@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module Puppet::InfoService
   require 'puppet/info_service/class_information_service'

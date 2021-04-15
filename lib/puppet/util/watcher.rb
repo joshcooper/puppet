@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet::Util::Watcher
   require 'puppet/util/watcher/timer'
   require 'puppet/util/watcher/change_watcher'

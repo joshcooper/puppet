@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Gentoo OpenRC
 Puppet::Type.type(:service).provide :openrc, :parent => :base do
   desc <<-EOT

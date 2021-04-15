@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Spec
   attr_reader :regex
 

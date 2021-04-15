@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ostruct'
 require 'puppet/util/watched_file'
 require 'puppet/util/network_device'

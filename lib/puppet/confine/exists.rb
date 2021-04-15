@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/confine'
 
 class Puppet::Confine::Exists < Puppet::Confine

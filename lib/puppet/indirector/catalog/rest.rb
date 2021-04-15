@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/resource/catalog'
 require 'puppet/indirector/rest'
 

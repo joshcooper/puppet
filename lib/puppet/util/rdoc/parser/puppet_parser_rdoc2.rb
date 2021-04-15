@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/rdoc/parser/puppet_parser_core.rb'
 
 module RDoc
