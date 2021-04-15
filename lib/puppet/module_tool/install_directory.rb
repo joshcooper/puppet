@@ -25,7 +25,7 @@ module Puppet
         end
       end
 
-    private
+      private
 
       ERROR_MAPPINGS = {
         Errno::EACCES => PermissionDeniedCreateInstallDirectoryError,

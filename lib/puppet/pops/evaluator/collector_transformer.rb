@@ -49,7 +49,7 @@ class CollectorTransformer
     newcoll
   end
 
-protected
+  protected
 
   def query(o, scope)
     @@query_visitor.visit_this_1(self, o, scope)

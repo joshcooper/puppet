@@ -21,21 +21,6 @@ GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: outdent, indent
-Layout/AccessModifierIndentation:
-  Exclude:
-    - 'lib/puppet/module_tool/install_directory.rb'
-    - 'lib/puppet/pops/evaluator/collector_transformer.rb'
-    - 'lib/puppet/provider/service/init.rb'
-    - 'lib/puppet/provider/service/upstart.rb'
-    - 'lib/puppet/settings/config_file.rb'
-    - 'lib/puppet/settings/file_setting.rb'
-    - 'lib/puppet/util/command_line/trollop.rb'
-    - 'lib/puppet/util/run_mode.rb'
-
 # Offense count: 319
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, IndentationWidth.

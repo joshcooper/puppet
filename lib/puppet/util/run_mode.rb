@@ -100,7 +100,7 @@ module Puppet
         which_dir(File.join(windows_common_base("puppet/var/log")), "~/.puppetlabs/var/log")
       end
 
-    private
+      private
 
       def windows_common_base(*extra)
         [Dir::COMMON_APPDATA, "PuppetLabs"] + extra
