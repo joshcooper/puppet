@@ -55,6 +55,10 @@ module Puppet
     nodefault
 
     newvalue(:absent) do
+      # DEAD CODE. The sync call deletes removes existing
+      # file, etc, and shortcircuits the Property#sync, so
+      # we're never called. And if we were, the unlink below
+      # will raise ENOENT
       Puppet::FileSystem.unlink(@resource[:path])
     end
 
@@ -76,6 +80,7 @@ module Puppet
     newvalue(:present, :event => :file_created) do
       # Make a file if they want something, but this will match almost
       # anything.
+      # Calls the block for :file
       set_file
     end
 
@@ -108,9 +113,13 @@ module Puppet
     newvalue(/./) do
       # This code never gets executed.  We need the regex to support
       # specifying it, but the work is done in the 'symlink' code block.
+      require 'byebug'; byebug if resource[:path] =~ %r{^/tmp}
+      puts resource.to_hash
     end
 
     munge do |value|
+      require 'byebug'; byebug if resource[:path] =~ %r{^/tmp}
+
       value = super(value)
       value,resource[:target] = :link,value unless value.is_a? Symbol
       resource[:links] = :manage if value == :link and resource[:links] != :follow
@@ -139,6 +148,7 @@ module Puppet
     end
 
     # Check that we can actually create anything
+    # THIS IS DEAD CODE
     def check
       basedir = File.dirname(@resource[:path])
 
@@ -178,6 +188,7 @@ module Puppet
     end
 
     def sync
+      require 'byebug'; byebug
       @resource.remove_existing(self.should)
       if self.should == :absent
         return :file_removed

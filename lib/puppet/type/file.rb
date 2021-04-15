@@ -487,10 +487,13 @@ Puppet::Type.newtype(:file) do
   end
 
   def initialize(hash)
-    # Used for caching clients: WTF?
+    # Used for caching clients
+    # DEAD CODE
     @clients = {}
 
     super
+
+    require 'byebug'; byebug if hash[:path] =~ %r{^/tmp}
 
     # If they've specified a source, we get our 'should' values
     # from it.
@@ -501,6 +504,8 @@ Puppet::Type.newtype(:file) do
         self[:ensure] = :file
       end
     end
+
+    require 'byebug'; byebug if hash[:path] =~ %r{^/tmp}
 
     @stat = :needs_stat
   end
@@ -766,6 +771,8 @@ Puppet::Type.newtype(:file) do
   #     end
   #   end
 
+    require 'byebug'; byebug if self[:path] =~ %r{^/tmp}
+
     # `checksum_value` implies explicit management of all metadata, so skip metadata
     # retrieval. Otherwise, if source is set, retrieve metadata for source.
   #   if (source = parameter(:source)) && property(:checksum_value).nil?
@@ -777,6 +784,8 @@ Puppet::Type.newtype(:file) do
   # Set the checksum, from another property.  There are multiple
   # properties that modify the contents of a file, and they need the
   # ability to make sure that the checksum value is in sync.
+  #
+  # DEAD CODE
   def setchecksum(sum = nil)
     if @parameters.include? :checksum
       if sum
@@ -851,6 +860,7 @@ Puppet::Type.newtype(:file) do
   # to delegate writing to; must implement a #write method that takes the file
   # as an argument.
   def write(property = nil)
+    # ALREADY BEEN DELETED
     remove_existing(:file)
 
     mode = self.should(:mode) # might be nil
@@ -1011,16 +1021,17 @@ Puppet::Type.newtype(:file) do
 
   # There are some cases where all of the work does not get done on
   # file creation/modification, so we have to do some extra checking.
-  # def property_fix
-  #   properties.each do |thing|
-  #     next unless [:mode, :owner, :group, :seluser, :selrole, :seltype, :selrange].include?(thing.name)
+  def property_fix
+    properties.each do |thing|
+      # MAKE STATIC SET
+      next unless [:mode, :owner, :group, :seluser, :selrole, :seltype, :selrange].include?(thing.name)
 
-  #     # Make sure we get a new stat object
-  #     @stat = :needs_stat
-  #     currentvalue = thing.retrieve
-  #     thing.sync unless thing.safe_insync?(currentvalue)
-  #   end
-  # end
+      # Make sure we get a new stat object
+      @stat = :needs_stat
+      currentvalue = thing.retrieve
+      thing.sync unless thing.safe_insync?(currentvalue)
+    end
+  end
 
   newparam(:checksum)
   newparam(:content)

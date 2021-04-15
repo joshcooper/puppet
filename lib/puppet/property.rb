@@ -467,6 +467,7 @@ class Puppet::Property < Puppet::Parameter
   # @return [Object] what the provider returns as the current value of the property
   #
   def retrieve
+    Puppet.notice("Retrieving #{self.class.name}")
     provider.send(self.class.name)
   end
 

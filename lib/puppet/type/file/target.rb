@@ -38,6 +38,10 @@ module Puppet
 
       # Clean up any existing objects.  The argument is just for logging,
       # it doesn't determine what's removed.
+      # NOTE: This is supposed to be @resource[:path] I think,
+      # removing the target doesn't make sense. Also we already
+      # removed path during the sync, so this call should be
+      # deleted.
       @resource.remove_existing(target)
 
       raise Puppet::Error, "Could not remove existing file" if Puppet::FileSystem.exist?(@resource[:path])
