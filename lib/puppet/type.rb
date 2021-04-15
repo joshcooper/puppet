@@ -2332,7 +2332,6 @@ EOS
   def log(msg)
 
     Puppet::Util::Log.create(
-
       :level => @parameters[:loglevel].value,
       :message => msg,
 

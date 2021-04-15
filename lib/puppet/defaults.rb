@@ -729,7 +729,6 @@ API to expire the cache as needed
 
   define_settings(
     :main,
-
     # We have to downcase the fqdn, because the current ssl stuff (as opposed to in master) doesn't have good facilities for
     # manipulating naming.
     :certname => {

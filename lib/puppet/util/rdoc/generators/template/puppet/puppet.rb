@@ -848,11 +848,9 @@ BODY = HEADER + %{
 !INCLUDE!  <!-- banner header -->
 
   <div id="bodyContent">
-
 } +  METHOD_LIST + %{
 
   </div>
-
 } + FOOTER
 
 BODYINC = HEADER + %{
@@ -864,7 +862,6 @@ BODYINC = HEADER + %{
 !INCLUDE!
 
   </div>
-
 } + FOOTER
 
 #####################################################################

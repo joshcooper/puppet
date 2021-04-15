@@ -21,22 +21,6 @@ GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-# Offense count: 17
-# Cop supports --auto-correct.
-Layout/EmptyLinesAroundArguments:
-  Exclude:
-    - 'ext/nagios/check_puppet.rb'
-    - 'lib/puppet/defaults.rb'
-    - 'lib/puppet/external/pson/common.rb'
-    - 'lib/puppet/parser/functions/sprintf.rb'
-    - 'lib/puppet/settings.rb'
-    - 'lib/puppet/type.rb'
-    - 'lib/puppet/type/schedule.rb'
-    - 'lib/puppet/util/diff.rb'
-    - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
-    - 'lib/puppet/util/rdoc/generators/template/puppet/puppet.rb'
-    - 'lib/puppet/util/windows/com.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Layout/EmptyLinesAroundBeginBody:

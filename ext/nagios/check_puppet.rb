@@ -25,17 +25,14 @@ class CheckPuppet
 
         o.on(
           "-s", "--statefile=statefile", String, "The state file",
-
     "Default: #{OPTIONS[:statefile]}") { |op| OPTIONS[:statefile] = op }
 
       o.on(
         "-p", "--process=processname", String, "The process to check",
-
     "Default: #{OPTIONS[:process]}")   { |op| OPTIONS[:process] = op }
 
       o.on(
         "-i", "--interval=value", Integer,
-
     "Default: #{OPTIONS[:interval]} minutes")  { |op| OPTIONS[:interval] = op }
 
     o.separator ""
