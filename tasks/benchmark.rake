@@ -37,28 +37,37 @@ namespace :benchmark do
 
       desc "Run the #{name} scenario."
       task :run, [*run_args] =>  :generate do |_, args|
-        report = []
+        rep = []
         details = []
-        Benchmark.benchmark(Benchmark::CAPTION, 10, Benchmark::FORMAT, "> total:", "> avg:") do |b|
-          times = []
-          ENV['ITERATIONS'].to_i.times do |i|
-            start_time = Time.now.to_i
-            times << b.report("Run #{i + 1}") do
-              details << @benchmark.run(args)
+        times = []
+
+        require "busted"
+        require "pp"
+#        require 'memory_profiler'
+        #        MemoryProfiler.report() do
+        report = Busted.run(trace: true) do
+          Benchmark.benchmark(Benchmark::CAPTION, 10, Benchmark::FORMAT, "> total:", "> avg:") do |b|
+            ENV['ITERATIONS'].to_i.times do |i|
+              start_time = Time.now.to_i
+              times << b.report("Run #{i + 1}") do
+                details << @benchmark.run(args)
+              end
+              rep << [to_millis(start_time), to_millis(times.last.real), 200, true, name]
             end
-            report << [to_millis(start_time), to_millis(times.last.real), 200, true, name]
+
+            sum = times.inject(Benchmark::Tms.new, &:+)
+
+            [sum, sum / times.length]
           end
-
-          sum = times.inject(Benchmark::Tms.new, &:+)
-
-          [sum, sum / times.length]
         end
+        pp report
+#        end.pretty_print
 
         write_csv("#{name}.samples",
                   %w{timestamp elapsed responsecode success name},
-                  report)
+                  rep)
 
-        # report details, if any were produced
+        # rep details, if any were produced
         if details[0].is_a?(Array) && details[0][0].is_a?(Benchmark::Tms)
           # assume all entries are Tms if the first is
           # turn each into a hash of label => tms (since labels are lost when doing arithmetic on Tms)
@@ -89,7 +98,6 @@ namespace :benchmark do
         end
 
         require 'ruby-prof'
-
         result = RubyProf.profile do
           @benchmark.run(args)
         end

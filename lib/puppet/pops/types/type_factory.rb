@@ -121,6 +121,7 @@ module TypeFactory
     if optional_type.nil?
       POptionalType::DEFAULT
     else
+#      require 'byebug'; byebug if $loaded_pops
       POptionalType.new(type_of(optional_type.is_a?(String) ? string(optional_type) : type_of(optional_type)))
     end
   end

@@ -1,8 +1,17 @@
 #!/usr/bin/env ruby
 
 begin
+  require 'busted'
+  require 'pp'
   require 'puppet/util/command_line'
-  Puppet::Util::CommandLine.new.execute
+  report = Busted.run(trace: true) do
+    begin
+      Puppet::Util::CommandLine.new.execute
+    rescue SystemExit
+    end
+  end
+  PP.pp(report, STDERR)
+  exit(0)
 rescue LoadError => e
   $stderr.puts e.message
   exit(1)

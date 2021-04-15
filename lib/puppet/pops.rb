@@ -117,4 +117,6 @@ module Puppet
   require 'puppet/datatypes'
 
   Puppet::Pops::Model.register_pcore_types
+
+  $loaded_pops = true
 end
