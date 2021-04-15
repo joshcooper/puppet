@@ -110,9 +110,9 @@ module Puppet
 
       # Finds the inputs for the generator.
       # @param format [Symbol] The format to use.
-      # @param environment [Puppet::Node::Environment] The environment to search for inputs. Defaults to the current environment.
       # @return [Array<Input>] Returns the array of inputs.
-      def self.find_inputs(format = :pcore, environment = Puppet.lookup(:current_environment))
+      def self.find_inputs(format = :pcore)
+        environment = Puppet.lookup(:current_environment)
         Puppet.debug "Searching environment '#{environment.name}' for custom types."
         inputs = []
         environment.modules.each do |mod|

@@ -31,29 +31,31 @@ describe Puppet::Util::Autoload do
       })
 
       environment = Puppet::Node::Environment.create(:foo, [dira, dirb])
-
-      expect(@autoload.class.module_directories(environment)).to eq(["#{dira}/two/lib", "#{dirb}/two/lib"])
+      Puppet.override(current_environment: environment) do
+        expect(@autoload.class.module_directories).to eq(["#{dira}/two/lib", "#{dirb}/two/lib"])
+      end
     end
 
     it "ignores missing module directories" do
       environment = Puppet::Node::Environment.create(:foo, [File.expand_path('does/not/exist')])
-
-      expect(@autoload.class.module_directories(environment)).to be_empty
+      Puppet.override(current_environment: environment) do
+        expect(@autoload.class.module_directories).to be_empty
+      end
     end
 
     it "ignores the configured environment when it doesn't exist" do
       Puppet[:environment] = 'nonexistent'
 
-      Puppet.override({ :environments => Puppet::Environments::Static.new() }) do
-        expect(@autoload.class.module_directories(nil)).to be_empty
+      Puppet.override(environments: Puppet::Environments::Static.new) do
+        expect(@autoload.class.module_directories).to be_empty
       end
     end
 
     it "uses the configured environment when no environment is given" do
       Puppet[:environment] = 'nonexistent'
 
-      Puppet.override({ :environments => Puppet::Environments::Static.new() }) do
-        expect(@autoload.class.module_directories(nil)).to be_empty
+      Puppet.override(environments: Puppet::Environments::Static.new) do
+        expect(@autoload.class.module_directories).to be_empty
       end
     end
 
@@ -61,7 +63,7 @@ describe Puppet::Util::Autoload do
       Puppet[:libdir] = '/libdir1'
       @autoload.class.expects(:gem_directories).returns %w{/one /two}
       @autoload.class.expects(:module_directories).returns %w{/three /four}
-      expect(@autoload.class.search_directories(nil)).to eq(%w{/one /two /three /four} + [Puppet[:libdir]] + $LOAD_PATH)
+      expect(@autoload.class.search_directories).to eq(%w{/one /two /three /four} + [Puppet[:libdir]] + $LOAD_PATH)
     end
 
     it "does not split the Puppet[:libdir]" do

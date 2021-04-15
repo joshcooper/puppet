@@ -199,7 +199,8 @@ module Puppet::Parser::Functions
     name = name.intern
 
     unless func = get_function(name, environment)
-      autoloader.load(name, environment)
+      # REMIND: loading a function in a different environment?
+      autoloader.load(name)
       func = get_function(name, environment)
     end
 
@@ -210,7 +211,8 @@ module Puppet::Parser::Functions
     end
   end
 
-  def self.functiondocs(environment = Puppet.lookup(:current_environment))
+  def self.functiondocs
+    # REMIND: (environment)
     autoloader.loadall
 
     ret = ""

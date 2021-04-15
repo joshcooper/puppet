@@ -49,8 +49,7 @@ class Puppet::Util::Autoload
       name = cleanpath(name).chomp('.rb')
       return true unless loaded.include?(name)
       file, old_mtime = loaded[name]
-      environment = Puppet.lookup(:current_environment)
-      return true unless file == get_file(name, environment)
+      return true unless file == get_file(name)
       begin
         old_mtime.to_i != File.mtime(file).to_i
       rescue Errno::ENOENT
@@ -60,10 +59,8 @@ class Puppet::Util::Autoload
 
     # Load a single plugin by name.  We use 'load' here so we can reload a
     # given plugin.
-    def load_file(name, env)
-      $stderr.puts("LOADING FILE #{name}")
-      file = get_file(name.to_s, env)
-      $stderr.puts("LOADED FILE #{file} using #{env.class == Puppet::Node::Environment::Remote ? 'remote' : 'local'} environment '#{env ? env.name : "<unknown>"}' with modulepath #{env ? env.modulepath : '[]'}")
+    def load_file(name)
+      file = get_file(name.to_s)
       return false unless file
       begin
         mark_loaded(name, file)
@@ -78,38 +75,28 @@ class Puppet::Util::Autoload
       end
     end
 
-    def loadall(path, env = nil)
-      $stderr.puts("LOADALL #{path} from #{env.class == Puppet::Node::Environment::Remote ? 'remote' : 'local'} environment #{env ? env.name : '<unknown>'} with modulepath #{env ? env.modulepath : '[]'}")
-
-      # Load every instance of everything we can find.
-      count = 0
-      files_to_load(path, env).each do |file|
+    def loadall(path)
+      files_to_load(path).each do |file|
         name = file.chomp(".rb")
-        unless loaded?(name)
-          load_file(name, env)
-          count += 1
-        end
+        load_file(name) unless loaded?(name)
       end
-      $stderr.puts("LOADALL loaded #{count} files")
     end
 
     def reload_changed
-      loaded.keys.each { |file| load_file(file, nil) if changed?(file) }
+      loaded.keys.each { |file| load_file(file) if changed?(file) }
     end
 
     # Get the correct file to load for a given path
     # returns nil if no file is found
-    def get_file(name, env)
+    def get_file(name)
       name = name + '.rb' unless name =~ /\.rb$/
-      path = search_directories(env).find { |dir| Puppet::FileSystem.exist?(File.join(dir, name)) }
+      path = search_directories.find { |dir| Puppet::FileSystem.exist?(File.join(dir, name)) }
       path and File.join(path, name)
     end
+    private :get_file
 
-    def files_to_load(path, env = nil)
-      $stderr.puts("FILES_TO_LOAD #{path} from #{env.class == Puppet::Node::Environment::Remote ? 'remote' : 'local'} environment #{env ? env.name : '<unknown>'} with modulepath #{env ? env.modulepath : '[]'}")
-      files = search_directories(env).map {|dir| files_in_dir(dir, path) }.flatten.uniq
-      $stderr.puts("LOADED #{files.count} files")
-      files
+    def files_to_load(path)
+      search_directories.map {|dir| files_in_dir(dir, path) }.flatten.uniq
     end
 
     def files_in_dir(dir, path)
@@ -119,7 +106,7 @@ class Puppet::Util::Autoload
       end
     end
 
-    def module_directories(env)
+    def module_directories
       # This is a little bit of a hack.  Basically, the autoloader is being
       # called indirectly during application bootstrapping when we do things
       # such as check "features".  However, during bootstrapping, we haven't
@@ -140,21 +127,16 @@ class Puppet::Util::Autoload
       # "app_defaults_initialized?" method on the main puppet Settings object.
       # --cprice 2012-03-16
       if Puppet.settings.app_defaults_initialized?
-        env ||= Puppet.lookup(:environments).get(Puppet[:environment])
-
+        env = Puppet.lookup(:current_environment)
         if env
           # if the app defaults have been initialized then it should be safe to access the module path setting.
           Puppet::Util::ModuleDirectoriesAdapter.adapt(env) do |a|
-            if a.directories
-              $stderr.puts "CACHED modules from #{env.class == Puppet::Node::Environment::Remote ? 'remote' : 'local'} environment #{env ? env : '<unknown>'} as #{a.directories}"
-            else
-              $stderr.puts "SCANNING modules from #{env.class == Puppet::Node::Environment::Remote ? 'remote' : 'local'} environment #{env ? env : '<unknown>'} with modulepath #{env ? env.modulepath : ''}"
+            unless a.directories
               a.directories = env.modulepath.collect do |dir|
                 Dir.entries(dir).reject { |f| f =~ /^\./ }.collect { |f| File.join(dir, f, "lib") }
               end.flatten.find_all do |d|
                 FileTest.directory?(d)
               end
-              $stderr.puts "SCANNED #{a.directories.count} directories"
             end
             a.directories
           end.directories
@@ -181,8 +163,8 @@ class Puppet::Util::Autoload
       gem_source.directories
     end
 
-    def search_directories(env)
-      [gem_directories, module_directories(env), libdirs(), $LOAD_PATH].flatten
+    def search_directories
+      [gem_directories, module_directories, libdirs, $LOAD_PATH].flatten
     end
 
     # Normalize a path. This converts ALT_SEPARATOR to SEPARATOR on Windows
@@ -209,8 +191,8 @@ class Puppet::Util::Autoload
     set_options(options)
   end
 
-  def load(name, env = nil)
-    self.class.load_file(expand(name), env)
+  def load(name)
+    self.class.load_file(expand(name))
   end
 
   # Load all instances from a path of Autoload.search_directories matching the
@@ -223,8 +205,8 @@ class Puppet::Util::Autoload
   #
   # This uses require, rather than load, so that already-loaded files don't get
   # reloaded unnecessarily.
-  def loadall(env = nil)
-    self.class.loadall(@path, env)
+  def loadall
+    self.class.loadall(@path)
   end
 
   def loaded?(name)

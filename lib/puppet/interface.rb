@@ -170,6 +170,7 @@ class Puppet::Interface
   # @return [void]
   # @api private
   def load_actions
+    # REMIND (Puppet.lookup(:current_environment))
     loader.loadall
   end
 

@@ -6,6 +6,7 @@ module Puppet::Interface::FaceCollection
   def self.faces
     unless @loaded
       @loaded = true
+      # REMIND: environment is implied
       names = @loader.files_to_load.map {|fn| ::File.basename(fn, '.rb')}.uniq
       names.each {|name| self[name, :current]}
     end

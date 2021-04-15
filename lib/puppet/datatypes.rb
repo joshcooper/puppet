@@ -207,7 +207,8 @@ module Puppet::DataTypes
     end
 
     def load_file(file_name)
-      Puppet::Util::Autoload.load_file(file_name, nil)
+      # REMIND environment
+      Puppet::Util::Autoload.load_file(file_name)
     end
   end
 end

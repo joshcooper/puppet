@@ -209,6 +209,7 @@ class Application
     # @return [Array<String>] the names of available applications
     # @api public
     def available_application_names
+      # REMIND: environment is implied
       @loader.files_to_load.map do |fn|
         ::File.basename(fn, '.rb')
       end.uniq
@@ -226,6 +227,7 @@ class Application
     # @api public
     def find(application_name)
       begin
+        # REMIND: environment is implied
         require @loader.expand(application_name.to_s.downcase)
       rescue LoadError => e
         Puppet.log_and_raise(e, _("Unable to find application '%{application_name}'. %{error}") % { application_name: application_name, error: e })

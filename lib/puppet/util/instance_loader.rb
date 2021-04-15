@@ -37,6 +37,7 @@ module Puppet::Util::InstanceLoader
     docs = ""
 
     # Load all instances.
+    # REMIND environment
     instance_loader(type).loadall
 
     # Use this method so they all get loaded
@@ -65,6 +66,7 @@ module Puppet::Util::InstanceLoader
     name = name.intern
     return nil unless instances = instance_hash(type)
     unless instances.include? name
+      # REMIND environment
       if instance_loader(type).load(name)
         unless instances.include? name
           Puppet.warning(_("Loaded %{type} file for %{name} but %{type} was not defined") % { type: type, name: name })

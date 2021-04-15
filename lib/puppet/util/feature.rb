@@ -49,6 +49,7 @@ class Puppet::Util::Feature
   end
 
   def load
+    # REMIND: missing environment
     @loader.loadall
   end
 
@@ -56,6 +57,7 @@ class Puppet::Util::Feature
     return super unless method.to_s =~ /\?$/
 
     feature = method.to_s.sub(/\?$/, '')
+    # REMIND: missing environment
     @loader.load(feature)
 
     respond_to?(method) && self.send(method)

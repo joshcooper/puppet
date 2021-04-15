@@ -112,6 +112,7 @@ class Puppet::Indirector::Terminus
     # Return all terminus classes for a given indirection.
     def terminus_classes(indirection_name)
       setup_instance_loading indirection_name
+      # REMIND environment? I think this is the instance method that doesn't take an environment
       instance_loader(indirection_name).files_to_load.map do |file|
         File.basename(file).chomp(".rb").intern
       end

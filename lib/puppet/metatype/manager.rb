@@ -126,7 +126,7 @@ module Manager
     klass.providerloader = Puppet::Util::Autoload.new(klass, "puppet/provider/#{klass.name.to_s}")
 
     # We have to load everything so that we can figure out the default provider.
-    klass.providerloader.loadall Puppet.lookup(:current_environment)
+    klass.providerloader.loadall
     klass.providify unless klass.providers.empty?
 
     loc = block_given? ? block.source_location : nil
@@ -171,7 +171,7 @@ module Manager
       return @types[name] if @types.include? name
     end
     # Try loading the type.
-    if typeloader.load(name, Puppet.lookup(:current_environment))
+    if typeloader.load(name)
       #TRANSLATORS 'puppet/type/%{name}' should not be translated
       Puppet.warning(_("Loaded puppet/type/%{name} but no class was created") % { name: name }) unless @types.include? name
     elsif !Puppet[:always_retry_plugins]

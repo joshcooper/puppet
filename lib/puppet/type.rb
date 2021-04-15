@@ -1799,6 +1799,8 @@ end
     name = name.intern
 
     # If we don't have it yet, try loading it.
+    #
+    # REMIND: environment
     @providerloader.load(name) unless provider_hash.has_key?(name)
     provider_hash[name]
   end
@@ -1966,6 +1968,7 @@ end
   # @return [Array<Puppet::Provider>] Returns an array of all suitable providers.
   #
   def self.suitableprovider
+    # REMIND environment
     providerloader.loadall if provider_hash.empty?
     provider_hash.find_all { |name, provider|
       provider.suitable?
