@@ -147,25 +147,25 @@ describe Puppet::HTTP::Service::Ca do
       it 'passes through alphanumeric' do
         name = "node0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-        expects_encoded_url(name, "https://www.example.com/certificate/#{name}")
+        expects_encoded_url(name, "https://www.example.com/puppet-ca/v1/certificate/#{name}")
       end
 
       it 'passes through unreserved punctuation' do
         name = "node-._~"
 
-        expects_encoded_url(name, "https://www.example.com/certificate/#{name}")
+        expects_encoded_url(name, "https://www.example.com/puppet-ca/v1/certificate/#{name}")
       end
 
       it 'passes through sub-delimiters' do
         name = "node!$&'()*+,;="
 
-        expects_encoded_url(name, "https://www.example.com/certificate/#{name}")
+        expects_encoded_url(name, "https://www.example.com/puppet-ca/v1/certificate/#{name}")
       end
 
       it 'passes through other pchars' do
         name = "node:@"
 
-        expects_encoded_url(name, "https://www.example.com/certificate/#{name}")
+        expects_encoded_url(name, "https://www.example.com/puppet-ca/v1/certificate/#{name}")
       end
 
       it 'encodes general delimiters and spaces' do
@@ -174,14 +174,14 @@ describe Puppet::HTTP::Service::Ca do
         name = "node :/?#[]@"
         encoded = %w[%20 %3A %2F %3F %23 %5B %5D %40].join
 
-        expects_encoded_url(name, "https://www.example.com/certificate/node#{encoded}")
+        expects_encoded_url(name, "https://www.example.com/puppet-ca/v1/certificate/node#{encoded}")
       end
 
       it 'encodes non-pchar characters' do
         name = 'node"%<>^`{|}'
         encoded = %w[%22 %25 %3C %3E %5E %60 %7B %7C %7D].join
 
-        expects_encoded_url(name, "https://www.example.com/certificate/node#{encoded}")
+        expects_encoded_url(name, "https://www.example.com/puppet-ca/v1/certificate/node#{encoded}")
       end
 
       it 'encodes control characters 0x00-0x1F' do
@@ -190,7 +190,7 @@ describe Puppet::HTTP::Service::Ca do
         name = "node\x00\x01\x02\x03\x04\x05\x06\a\b\t\n\v\f\r\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\e\x1C\x1D\x1E\x1F"
         encoded = "node%00%01%02%03%04%05%06%07%08%09%0A%0B%0C%0D%0E%0F%10%11%12%13%14%15%16%17%18%19%1A%1B%1C%1D%1E%1F"
 
-        expects_encoded_url(name, "https://www.example.com/certificate/node#{encoded}")
+        expects_encoded_url(name, "https://www.example.com/puppet-ca/v1/certificate/node#{encoded}")
       end
     end
   end
