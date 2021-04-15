@@ -217,6 +217,7 @@ module Puppet::ModuleTool
       end
 
       private
+
       def module_repository
         @repo ||= Puppet::Forge.new(Puppet[:module_repository])
       end

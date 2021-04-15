@@ -398,6 +398,7 @@ These options should be specified as an array where each element is either a str
   end
 
   private
+
   # @param line [String] one line of rpm package query information
   # @return [Hash] of NEVRA_FIELDS strings parsed from package info
   # or an empty hash if we failed to parse

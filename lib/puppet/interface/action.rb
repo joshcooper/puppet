@@ -388,6 +388,7 @@ WRAPPER
   # Support code for action decoration; see puppet/interface.rb for the gory
   # details of why this is hidden away behind private. --daniel 2011-04-15
   private
+
   # @return [void]
   # @api private
   def __add_method(name, proc)

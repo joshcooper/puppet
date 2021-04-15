@@ -49,6 +49,7 @@ module HieraPuppet
   end
 
   private
+
   module_function
 
   def hiera

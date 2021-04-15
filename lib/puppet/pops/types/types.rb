@@ -619,6 +619,7 @@ class PUndefType < PAnyType
   DEFAULT = PUndefType.new
 
   protected
+
   # @api private
   def _assignable?(o, guard)
     o.is_a?(PUndefType)
@@ -680,6 +681,7 @@ class PDefaultType < PAnyType
   DEFAULT = PDefaultType.new
 
   protected
+
   # @api private
   def _assignable?(o, guard)
     o.is_a?(PDefaultType)
@@ -3140,6 +3142,7 @@ class PCatalogEntryType < PAnyType
   end
 
   protected
+
   # @api private
   def _assignable?(o, guard)
     o.is_a?(PCatalogEntryType)
