@@ -17,3 +17,5 @@ AllCops:
     - 'lib/puppet/vendor/**/*'
     - 'lib/puppet/pops/parser/eparser.rb'
 
+Metrics:
+  Enabled: false
