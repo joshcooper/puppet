@@ -237,6 +237,7 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
       if type == "file"
         raise _("Listing all file instances is not supported.  Please specify a file or directory, e.g. puppet resource file /etc")
       end
+      require 'byebug'; byebug
       Puppet::Resource.indirection.search( key, {} )
     end
   end

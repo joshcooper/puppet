@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'spec_helper'
 
 require 'puppet/application/resource'
@@ -143,6 +144,31 @@ describe Puppet::Application::Resource do
         expect { @resource_app.main }.not_to raise_error
       end
     end
+
+    it "generates resources as YAML" do
+      cmdline = Puppet::Util::CommandLine.new('resource', ['user', '--to_yaml'])
+      app = Puppet::Application::Resource.new(cmdline)
+      resource = Puppet::Type.type(:user).new(
+        name: "\u2603".force_encoding(Encoding::UTF_8),
+        'ensure' => 'present',
+        'comment' => 'o\'brian',
+        'groups' => ['wheel', 'staff'],
+      )
+
+      require 'byebug'; byebug
+      resource = resource.to_resource
+      expect(Puppet::Resource.indirection).to receive(:search).and_return([resource])
+
+#      expect {
+        app.run
+#     #  }.to output(<<-YAML).to_stdout
+      # user:
+      #   "☃":
+      #     ensure: absent
+      # YAML
+    end
+
+    it "generates resources as JSON"
   end
 
   describe "when handling file type" do
