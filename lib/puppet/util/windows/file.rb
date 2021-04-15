@@ -338,11 +338,14 @@ module Puppet::Util::Windows::File
       # includes terminating NULL
       buffer_size = GetLongPathNameW(path_ptr, FFI::Pointer::NULL, 0)
       FFI::MemoryPointer.new(:wchar, buffer_size) do |converted_ptr|
+        # "the return value is the length, in TCHARs, of the string copied to
+        # lpszLongPath, not including the terminating null character."
         if GetLongPathNameW(path_ptr, converted_ptr, buffer_size) == FFI::WIN32_FALSE
           raise Puppet::Util::Windows::Error.new(_("Failed to call GetLongPathName"))
         end
 
-        converted = converted_ptr.read_wide_string(buffer_size - 1)
+        buffer_size -= 1 if buffer_size > 0
+        converted = converted_ptr.read_wide_string(buffer_size)
       end
     end
 
@@ -356,11 +359,15 @@ module Puppet::Util::Windows::File
       # includes terminating NULL
       buffer_size = GetShortPathNameW(path_ptr, FFI::Pointer::NULL, 0)
       FFI::MemoryPointer.new(:wchar, buffer_size) do |converted_ptr|
+        # "the return value is the length, in TCHARs, of the string that is
+        # copied to lpszShortPath, not including the terminating null
+        # character.""
         if GetShortPathNameW(path_ptr, converted_ptr, buffer_size) == FFI::WIN32_FALSE
           raise Puppet::Util::Windows::Error.new("Failed to call GetShortPathName")
         end
 
-        converted = converted_ptr.read_wide_string(buffer_size - 1)
+        buffer_size -= 1 if buffer_size > 0
+        converted = converted_ptr.read_wide_string(buffer_size)
       end
     end
 
@@ -417,7 +424,14 @@ module Puppet::Util::Windows::File
   def self.resolve_symlink(handle)
     path = nil
     get_reparse_point_data(handle) do |reparse_data|
+      # "Offset, in bytes, of the print name string in the PathBuffer array.
+      # Note that this offset must be divided by sizeof(WCHAR) to get the array
+      # index."
       offset = reparse_data[:PrintNameOffset]
+
+      # "Length, in bytes, of the print name string. If this string is
+      # NULL-terminated, PrintNameLength does not include space for the
+      # UNICODE_NULL terminator."
       length = reparse_data[:PrintNameLength]
 
       ptr = reparse_data.pointer + reparse_data.offset_of(:PathBuffer) + offset

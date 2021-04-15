@@ -58,6 +58,7 @@ module Puppet::Util::Windows::ADSI
             if GetComputerNameW(buffer, buffer_size) == FFI::WIN32_FALSE
               raise Puppet::Util::Windows::Error.new(_("Failed to get computer name"))
             end
+            # " On success, receives the number of characters written to the buffer, not including the null-terminating character."
             @computer_name = buffer.read_wide_string(buffer_size.read_dword)
           end
         end
@@ -499,6 +500,10 @@ module Puppet::Util::Windows::ADSI
             raise Puppet::Util::Windows::Error.new(_("Failed to get user name"))
           end
           # buffer_size includes trailing NULL
+          # "If the function succeeds, the return value is a nonzero value, and
+          # the variable pointed to by lpnSize contains the number of TCHARs
+          # copied to the buffer specified by lpBuffer, including the
+          # terminating null character."
           user_name = buffer.read_wide_string(buffer_size.read_dword - 1)
         end
       end

@@ -48,6 +48,7 @@ class Puppet::Util::Windows::Error < Puppet::Error
           raise Puppet::Error.new(_("FormatMessageW failed to allocate buffer for code %{code}") % { code: code })
         end
 
+        # "the return value is the number of TCHARs stored in the output buffer, excluding the terminating null character.""
         error_string = wide_string_ptr.read_wide_string(length)
       end
     end

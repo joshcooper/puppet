@@ -110,15 +110,19 @@ module Puppet::Util::Windows
 
     private
 
+    # max_key_length must include the terminating null character
     def reg_enum_key(key, index, max_key_length = Win32::Registry::Constants::MAX_KEY_LENGTH)
       subkey, filetime = nil, nil
 
       FFI::MemoryPointer.new(:dword) do |subkey_length_ptr|
         FFI::MemoryPointer.new(FFI::WIN32::FILETIME.size) do |filetime_ptr|
+          # Windows max key length is 255 characters => 510 bytes. Ruby's MAX_KEY_LENGTH
+          # is 514 so it has room for 2 wchar terminators
           FFI::MemoryPointer.new(:wchar, max_key_length) do |subkey_ptr|
             subkey_length_ptr.write_dword(max_key_length)
 
             # RegEnumKeyEx cannot be called twice to properly size the buffer
+            # "This size should include the terminating null character."
             result = RegEnumKeyExW(key.hkey, index,
               subkey_ptr, subkey_length_ptr,
               FFI::Pointer::NULL, FFI::Pointer::NULL,
@@ -132,6 +136,9 @@ module Puppet::Util::Windows
             end
 
             filetime = FFI::WIN32::FILETIME.new(filetime_ptr)
+
+            # "the variable pointed to by lpcName contains the number of characters stored in
+            # the buffer, not including the terminating null character."
             subkey_length = subkey_length_ptr.read_dword
             subkey = subkey_ptr.read_wide_string(subkey_length)
           end
@@ -141,10 +148,16 @@ module Puppet::Util::Windows
       [subkey, filetime]
     end
 
-    def reg_enum_value(key, index, max_value_length = Win32::Registry::Constants::MAX_VALUE_LENGTH)
+    # max_value_length must include the terminating wide terminator, or 2 in the case of REG_MULTI_SZ
+    def reg_enum_value(key, index, max_value_length = Win32::Registry::Constants::MAX_VALUE_LENGTH + 1)
       subkey, type, data = nil, nil, nil
 
       FFI::MemoryPointer.new(:dword) do |subkey_length_ptr|
+        # Windows max value length is 16383 wide characters => 32766 bytes.
+        # Ruby's MAX_VALUE_LENGTH is 32768 so it has room for 1 wchar terminator
+        # REG_MULTI_SZ requires 2 wide terminators
+
+        # "This buffer must be large enough to include the terminating null character.
         FFI::MemoryPointer.new(:wchar, max_value_length) do |subkey_ptr|
           # RegEnumValueW cannot be called twice to properly size the buffer
           subkey_length_ptr.write_dword(max_value_length)
@@ -162,8 +175,22 @@ module Puppet::Util::Windows
             raise Puppet::Util::Windows::Error.new(msg, result)
           end
 
+          # "When the function returns, the variable receives the number of
+          # bytes stored in the buffer... If the data has the REG_SZ,
+          # REG_MULTI_SZ or REG_EXPAND_SZ type, this size includes any
+          # terminating null character or characters."
           subkey_length = subkey_length_ptr.read_dword
-          subkey = subkey_ptr.read_wide_string(subkey_length)
+          # REMIND this isn't right. Based on above, we need to know the type
+          # and either subtract 0, 1, or 2. And what if the value isn't a
+          # string?
+          # REMIND: If the data has the REG_SZ, REG_MULTI_SZ or REG_EXPAND_SZ
+          # type, the string may not have been stored with the proper
+          # null-terminating characters. Therefore, even if the function returns
+          # ERROR_SUCCESS, the application should ensure that the string is
+          # properly terminated before using it; otherwise, it may overwrite a
+          # buffer. (Note that REG_MULTI_SZ strings should have two
+          # null-terminating characters.)
+          subkey = subkey_ptr.read_wide_string(subkey_length - 1)
 
           type, data = read(key, subkey_ptr)
         end

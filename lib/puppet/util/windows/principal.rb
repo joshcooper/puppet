@@ -118,6 +118,9 @@ module Puppet::Util::Windows::SID
               FFI::MemoryPointer.new(:uint32, 1) do |name_use_enum_ptr|
 
                 sid_ptr.write_array_of_uchar(sid_bytes)
+
+                # name_length_ptr and domain_length_ptr receive "the required buffer size,
+                # INCLUDING the terminating null character"
                 success = LookupAccountSidW(system_name_ptr, sid_ptr, FFI::Pointer::NULL, name_length_ptr,
                   FFI::Pointer::NULL, domain_length_ptr, name_use_enum_ptr)
                 last_error = FFI.errno
@@ -133,11 +136,15 @@ module Puppet::Util::Windows::SID
                      raise Puppet::Util::Windows::Error.new(_('Failed to call LookupAccountSidW with bytes: %{sid_bytes}') % { sid_bytes: sid_bytes} )
                     end
 
+                    # Exclude the terminator in the max character length, but don't underflow
+                    name_wchar_len -= 1 if name_length_ptr.read_dword > 0
+                    domain_wchar_len -= 1 if domain_length_ptr.read_dword > 0
+
                     return new(
-                      name_ptr.read_wide_string(name_length_ptr.read_dword),
+                      name_ptr.read_wide_string(name_wchar_len),
                       sid_bytes,
                       Puppet::Util::Windows::SID.sid_ptr_to_string(sid_ptr),
-                      domain_ptr.read_wide_string(domain_length_ptr.read_dword),
+                      domain_ptr.read_wide_string(domain_wchar_len),
                       SID_NAME_USE[name_use_enum_ptr.read_uint32])
                   end
                 end
