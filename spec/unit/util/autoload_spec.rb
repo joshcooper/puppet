@@ -9,6 +9,7 @@ describe Puppet::Util::Autoload do
 
   let(:env) { Puppet::Node::Environment.create(:foo, []) }
   let(:autoload) { Puppet::Util::Autoload.new(env.name.to_s, "tmp") }
+  let(:mtime) { Time.utc(2010, 'jan', 1, 6, 30) }
 
   before do
     @loaded = {}
@@ -84,8 +85,8 @@ describe Puppet::Util::Autoload do
   describe "when loading a file" do
     before do
       autoload.class.stubs(:search_directories).returns [make_absolute("/a")]
-      @time_a = Time.utc(2010, 'jan', 1, 6, 30)
-      File.stubs(:mtime).returns @time_a
+
+      File.stubs(:mtime).returns(mtime)
     end
 
     after(:each) do
@@ -155,8 +156,7 @@ describe Puppet::Util::Autoload do
       autoload.class.stubs(:search_directories).returns [make_absolute("/a")]
       Dir.stubs(:glob).with('/a/tmp/*.rb').returns [make_absolute("/a/foo/file.rb")]
       Puppet::FileSystem.stubs(:exist?).returns true
-      @time_a = Time.utc(2010, 'jan', 1, 6, 30)
-      File.stubs(:mtime).returns @time_a
+      File.stubs(:mtime).returns(mtime)
 
       autoload.class.stubs(:loaded?).returns(false)
     end
@@ -177,12 +177,10 @@ describe Puppet::Util::Autoload do
   end
 
   describe "when reloading files" do
-    before :each do
-      @file_a = make_absolute("/a/file.rb")
-      @file_b = make_absolute("/b/file.rb")
-      @first_time = Time.utc(2010, 'jan', 1, 6, 30)
-      @second_time = @first_time + 60
-    end
+    let(:file_a) { make_absolute("/a/file.rb") }
+    let(:file_b) { make_absolute("/b/file.rb") }
+    let(:first_time) { mtime }
+    let(:second_time) { mtime + 30 }
 
     after :each do
       $LOADED_FEATURES.delete("a/file.rb")
@@ -190,18 +188,18 @@ describe Puppet::Util::Autoload do
     end
 
     it "#changed? should return true for a file that was not loaded" do
-      expect(autoload).to be_changed(@file_a, env)
+      expect(autoload).to be_changed(file_a, env)
     end
 
     it "changes should be seen by changed? on the instance using the short name" do
-      File.stubs(:mtime).returns(@first_time)
+      File.stubs(:mtime).returns(first_time)
       Puppet::FileSystem.stubs(:exist?).returns true
       Kernel.stubs(:load)
       autoload.load("myfile", env)
       expect(autoload).to be_loaded("myfile")
       expect(autoload).to_not be_changed("myfile", env)
 
-      File.stubs(:mtime).returns(@second_time)
+      File.stubs(:mtime).returns(second_time)
       expect(autoload).to be_changed("myfile", env)
 
       $LOADED_FEATURES.delete("tmp/myfile.rb")
@@ -210,20 +208,20 @@ describe Puppet::Util::Autoload do
     describe "in one directory" do
       before :each do
         autoload.class.stubs(:search_directories).returns [make_absolute("/a")]
-        File.expects(:mtime).with(@file_a).returns(@first_time)
-        autoload.class.mark_loaded("file", @file_a)
+        File.expects(:mtime).with(file_a).returns(mtime)
+        autoload.class.mark_loaded("file", file_a)
       end
 
       it "should reload if mtime changes" do
-        File.stubs(:mtime).with(@file_a).returns(@first_time + 60)
-        Puppet::FileSystem.stubs(:exist?).with(@file_a).returns true
-        Kernel.expects(:load).with(@file_a, optionally(anything))
+        File.stubs(:mtime).with(file_a).returns(mtime + 60)
+        Puppet::FileSystem.stubs(:exist?).with(file_a).returns true
+        Kernel.expects(:load).with(file_a, optionally(anything))
         autoload.class.reload_changed(env)
       end
 
       it "should do nothing if the file is deleted" do
-        File.stubs(:mtime).with(@file_a).raises(Errno::ENOENT)
-        Puppet::FileSystem.stubs(:exist?).with(@file_a).returns false
+        File.stubs(:mtime).with(file_a).raises(Errno::ENOENT)
+        Puppet::FileSystem.stubs(:exist?).with(file_a).returns false
         Kernel.expects(:load).never
         autoload.class.reload_changed(env)
       end
@@ -235,27 +233,27 @@ describe Puppet::Util::Autoload do
       end
 
       it "should load b/file when a/file is deleted" do
-        File.expects(:mtime).with(@file_a).returns(@first_time)
-        autoload.class.mark_loaded("file", @file_a)
-        File.stubs(:mtime).with(@file_a).raises(Errno::ENOENT)
-        Puppet::FileSystem.stubs(:exist?).with(@file_a).returns false
-        Puppet::FileSystem.stubs(:exist?).with(@file_b).returns true
-        File.stubs(:mtime).with(@file_b).returns @first_time
-        Kernel.expects(:load).with(@file_b, optionally(anything))
+        File.expects(:mtime).with(file_a).returns(first_time)
+        autoload.class.mark_loaded("file", file_a)
+        File.stubs(:mtime).with(file_a).raises(Errno::ENOENT)
+        Puppet::FileSystem.stubs(:exist?).with(file_a).returns false
+        Puppet::FileSystem.stubs(:exist?).with(file_b).returns true
+        File.stubs(:mtime).with(file_b).returns first_time
+        Kernel.expects(:load).with(file_b, optionally(anything))
         autoload.class.reload_changed(env)
-        expect(autoload.class.send(:loaded)["file"]).to eq([@file_b, @first_time])
+        expect(autoload.class.send(:loaded)["file"]).to eq([file_b, first_time])
       end
 
       it "should load a/file when b/file is loaded and a/file is created" do
-        File.stubs(:mtime).with(@file_b).returns @first_time
-        Puppet::FileSystem.stubs(:exist?).with(@file_b).returns true
-        autoload.class.mark_loaded("file", @file_b)
+        File.stubs(:mtime).with(file_b).returns first_time
+        Puppet::FileSystem.stubs(:exist?).with(file_b).returns true
+        autoload.class.mark_loaded("file", file_b)
 
-        File.stubs(:mtime).with(@file_a).returns @first_time
-        Puppet::FileSystem.stubs(:exist?).with(@file_a).returns true
-        Kernel.expects(:load).with(@file_a, optionally(anything))
+        File.stubs(:mtime).with(file_a).returns first_time
+        Puppet::FileSystem.stubs(:exist?).with(file_a).returns true
+        Kernel.expects(:load).with(file_a, optionally(anything))
         autoload.class.reload_changed(env)
-        expect(autoload.class.send(:loaded)["file"]).to eq([@file_a, @first_time])
+        expect(autoload.class.send(:loaded)["file"]).to eq([file_a, first_time])
       end
     end
   end
