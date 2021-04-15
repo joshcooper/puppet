@@ -18,15 +18,12 @@ class Puppet::Util::Autoload
   class << self
     attr_accessor :loaded
 
+    # @api private
     def gem_source
       @gem_source ||= Puppet::Util::RubyGems::Source.new
     end
 
-    # Has a given path been loaded?  This is used for testing whether a
-    # changed file should be loaded or just ignored.  This is only
-    # used in network/client/master, when downloading plugins, to
-    # see if a given plugin is currently loaded and thus should be
-    # reloaded.
+    # @api private
     def loaded?(path)
       path = cleanpath(path).chomp('.rb')
       loaded.include?(path)
@@ -43,6 +40,12 @@ class Puppet::Util::Autoload
       loaded[name] = [file, File.mtime(file)]
     end
 
+    # Return false if we've already loaded *name*, it still resolves
+    # to the same absolute path, and the mtime of the file is unchanged
+    # since it was loaded. Return true otherwise, such as if the file
+    # was modified or deleted, or it resolves to a different file
+    # because the search path changed, e.g. due to a newly pluginsynced
+    # file.
     # @api private
     def changed?(name, env)
       name = cleanpath(name).chomp('.rb')
@@ -76,6 +79,7 @@ class Puppet::Util::Autoload
       end
     end
 
+    # @api private
     def loadall(path, env)
       # Load every instance of everything we can find.
       files_to_load(path, env).each do |file|
@@ -84,6 +88,10 @@ class Puppet::Util::Autoload
       end
     end
 
+    # Reload all of the files that we've previously loaded.
+    #
+    # @param env [Puppet::Node::Environment] The environment whose modulepath to search
+    # @api public
     def reload_changed(env)
       loaded.keys.each do |file|
         if changed?(file, env)
@@ -101,6 +109,7 @@ class Puppet::Util::Autoload
       path and File.join(path, name)
     end
 
+    # @api private
     def files_to_load(path, env)
       search_directories(env).map {|dir| files_in_dir(dir, path) }.flatten.uniq
     end
@@ -187,6 +196,8 @@ class Puppet::Util::Autoload
 
     # Normalize a path. This converts ALT_SEPARATOR to SEPARATOR on Windows
     # and eliminates unnecessary parts of a path.
+    #
+    # @api public
     def cleanpath(path)
       # There are two cases here because cleanpath does not handle absolute
       # paths correctly on windows (c:\ and c:/ are treated as distinct) but
@@ -207,38 +218,55 @@ class Puppet::Util::Autoload
     @object = obj
   end
 
+  # Require a file based on the Autoload#path namespace.
+  #
   # @api public
   def require(name)
     Kernel.require expand(name)
   end
 
+  # Load a file based on the Autoload#path namespace.
+  # @api public
   def load(name, env)
     self.class.load_file(expand(name), env)
   end
 
-  # Load all instances from a path of Autoload.search_directories matching the
-  # relative path this Autoloader was initialized with.  For example, if we
-  # have created a Puppet::Util::Autoload for Puppet::Type::User with a path of
-  # 'puppet/provider/user', the search_directories path will be searched for
-  # all ruby files matching puppet/provider/user/*.rb and they will then be
-  # loaded from the first directory in the search path providing them.  So
-  # earlier entries in the search path may shadow later entries.
+  # Load all instances of a plugin in this autoloader's namespace. For example,
+  # if we have created a Puppet::Util::Autoload for Puppet::Type::User with a
+  # path of 'puppet/provider/user', the search_directories path will be searched
+  # for all ruby files matching puppet/provider/user/*.rb and they will then be
+  # loaded from the first directory in the search path providing them. So
+  # earlier entries in the search path may shadow later entries. This uses load,
+  # rather than require, so that already loaded files can be reloaded if they've
+  # changed.
   #
-  # This uses require, rather than load, so that already-loaded files don't get
-  # reloaded unnecessarily.
+  # @api public
   def loadall(env)
     self.class.loadall(@path, env)
   end
 
+  # Returns true if *name* has been loaded by *any* autoloader, though
+  # so long as each autoloader has a unique namespace, then it returns
+  # true if it was loaded by *this* autoloader.
+  #
+  # @api public
   def loaded?(name)
     self.class.loaded?(expand(name))
   end
 
-  # @api private
   def changed?(name, env)
     self.class.changed?(expand(name), env)
   end
 
+  # Returns an array of relative paths that this autoload could load based on
+  # its *path* namespace and the specified environment. For example, if *path*
+  # is "puppet/application", then this returns an array of the form
+  # "puppet/application/agent", etc. The array does not contain duplicates. The
+  # autoloader will return the first entry it finds.
+  #
+  # @param env [Puppet::Node::Environment] The environment whose modulepath to search
+  # @return Array[String] An array of relative paths.
+  # @api public
   def files_to_load(env)
     self.class.files_to_load(@path, env)
   end
