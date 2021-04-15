@@ -34,3 +34,5 @@ Layout/AlignHash:
 Layout/AlignParameters:
   Enabled: false
 
+Layout/CaseIndentation:
+  Enabled: false
