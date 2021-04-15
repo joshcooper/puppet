@@ -66,6 +66,11 @@ class Puppet::Util::Autoload
     def load_file(name, env)
       file = get_file(name.to_s, env)
       return false unless file
+      load_path(name, file)
+    end
+
+    # @api private
+    def load_path(name, file)
       begin
         mark_loaded(name, file)
         Kernel.load file
@@ -82,9 +87,9 @@ class Puppet::Util::Autoload
     # @api private
     def loadall(path, env)
       # Load every instance of everything we can find.
-      files_to_load(path, env).each do |file|
+      paths_to_load(path, env).each do |file|
         name = file.chomp(".rb")
-        load_file(name, env) unless loaded?(name)
+        load_path(name, file) unless loaded?(name)
       end
     end
 
@@ -110,16 +115,26 @@ class Puppet::Util::Autoload
     end
 
     # @api private
+    def paths_to_load(path, env)
+      search_directories(env).map do |dir|
+        files_in_dir(dir, path)
+      end.flatten.uniq
+    end
+
+    # @api private
     def files_to_load(path, env)
-      search_directories(env).map {|dir| files_in_dir(dir, path) }.flatten.uniq
+      search_directories(env).map do |dir|
+        dir = Pathname.new(dir)
+        files_in_dir(dir, path).collect do |file|
+          Pathname.new(file).relative_path_from(dir).to_s
+        end
+      end.flatten.uniq
     end
 
     # @api private
     def files_in_dir(dir, path)
-      dir = Pathname.new(File.expand_path(dir))
-      Dir.glob(File.join(dir, path, "*.rb")).collect do |file|
-        Pathname.new(file).relative_path_from(dir).to_s
-      end
+      dir = File.expand_path(dir)
+      Dir.glob(File.join(dir, path, "*.rb"))
     end
 
     # @api private
