@@ -18,6 +18,7 @@ class Puppet::Application::Resource < Puppet::Application
     Puppet::Type.loadall
     Puppet::Type.eachtype do |t|
       next if t.name == :component
+      next if t.name == :whit
       types << t.name.to_s
     end
     puts types.sort
