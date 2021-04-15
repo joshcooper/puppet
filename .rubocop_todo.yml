@@ -21,28 +21,6 @@ GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-# Offense count: 33
-# Cop supports --auto-correct.
-Layout/CommentIndentation:
-  Enabled: false
-
-# Offense count: 51
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: leading, trailing
-Layout/DotPosition:
-  Enabled: false
-
-# Offense count: 25
-# Cop supports --auto-correct.
-Layout/ElseAlignment:
-  Enabled: false
-
-# Offense count: 860
-# Cop supports --auto-correct.
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
-
 # Offense count: 7
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterMagicComment:

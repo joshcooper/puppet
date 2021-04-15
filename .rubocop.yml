@@ -36,3 +36,16 @@ Layout/AlignParameters:
 
 Layout/CaseIndentation:
   Enabled: false
+
+Layout/CommentIndentation:
+  Enabled: false
+
+Layout/DotPosition:
+  Enabled: false
+
+Layout/ElseAlignment:
+  Enabled: false
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
