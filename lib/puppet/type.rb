@@ -1723,7 +1723,7 @@ web { server:
   consume => Sql[my_db]
 }
 EOS
-end
+  end
 
   ###############################
   # All of the provider plumbing for the resource types.

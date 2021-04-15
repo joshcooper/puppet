@@ -431,7 +431,7 @@ module Puppet
           if value and Puppet::Util::Platform.windows?
             raise "Cannot daemonize on Windows"
           end
-      end
+        end
     },
     :maximum_uid => {
         :default  => 4294967290,

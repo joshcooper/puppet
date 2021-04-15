@@ -25,7 +25,7 @@ Puppet::Type.type(:group).provide :ldap, :parent => Puppet::Provider::Ldap do
   manager.generates(:gidNumber).with do
     largest = 500
     if existing = provider.manager.search
-        existing.each do |hash|
+      existing.each do |hash|
         next unless value = hash[:gid]
         num = value[0].to_i
         largest = num if num > largest

@@ -605,7 +605,7 @@ Puppet::Type.newtype(:file) do
     files.reject { |file|
       path = (yield file).split(::File::Separator)
       other_paths.any? { |p| path[0,p.length] == p }
-      }
+    }
   end
 
   # A simple method for determining whether we should be recursing.
