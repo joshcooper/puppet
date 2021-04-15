@@ -199,14 +199,7 @@ class Puppet::Util::Autoload
     #
     # @api public
     def cleanpath(path)
-      # There are two cases here because cleanpath does not handle absolute
-      # paths correctly on windows (c:\ and c:/ are treated as distinct) but
-      # we don't want to convert relative paths to absolute
-      if Puppet::Util.absolute_path?(path)
-        File.expand_path(path)
-      else
-        Pathname.new(path).cleanpath.to_s
-      end
+      Pathname.new(path).cleanpath.to_s
     end
   end
 
