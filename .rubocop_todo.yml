@@ -166,11 +166,6 @@ Lint/ToJSON:
     - 'lib/puppet/network/http/error.rb'
     - 'lib/puppet/pops/serialization/json.rb'
 
-# Offense count: 2
-Lint/UnreachableCode:
-  Exclude:
-    - 'lib/puppet/provider/package/portupgrade.rb'
-
 # Offense count: 1
 # Configuration parameters: IgnoredPatterns.
 # IgnoredPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
