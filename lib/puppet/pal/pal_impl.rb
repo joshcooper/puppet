@@ -163,12 +163,12 @@ module Pal
   #
   def self.with_catalog_compiler(
     configured_by_env: false,
-      manifest_file:     nil,
-      code_string:       nil,
-      facts:             {},
-      variables:         {},
-      target_variables:  {},
-      &block
+    manifest_file:     nil,
+    code_string:       nil,
+    facts:             {},
+    variables:         {},
+    target_variables:  {},
+    &block
   )
     # TRANSLATORS: do not translate variable name strings in these assertions
     assert_mutually_exclusive(manifest_file, code_string, 'manifest_file', 'code_string')
@@ -229,11 +229,11 @@ module Pal
   # @yieldparam [Puppet::Pal] context, a context that responds to Puppet::Pal methods
   #
   def self.in_tmp_environment(env_name,
-      modulepath:    [],
-      settings_hash: {},
-      facts:         nil,
-      variables:     {},
-      &block
+                              modulepath:    [],
+                              settings_hash: {},
+                              facts:         nil,
+                              variables:     {},
+                              &block
     )
     assert_non_empty_string(env_name, _("temporary environment name"))
     # TRANSLATORS: do not translate variable name string in these assertions
@@ -277,15 +277,15 @@ module Pal
   #
   # @api public
   def self.in_environment(env_name,
-      modulepath:    nil,
-      pre_modulepath: [],
-      post_modulepath: [],
-      settings_hash: {},
-      env_dir:       nil,
-      envpath:       nil,
-      facts:         nil,
-      variables:     {},
-      &block
+                          modulepath:    nil,
+                          pre_modulepath: [],
+                          post_modulepath: [],
+                          settings_hash: {},
+                          env_dir:       nil,
+                          envpath:       nil,
+                          facts:         nil,
+                          variables:     {},
+                          &block
     )
     # TRANSLATORS terms in the assertions below are names of terms in code
     assert_non_empty_string(env_name, 'env_name')

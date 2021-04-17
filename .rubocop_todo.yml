@@ -27,15 +27,6 @@ Layout/LeadingEmptyLines:
     - 'lib/puppet/type/file/ensure.rb'
     - 'lib/puppet/util/network_device/transport/base.rb'
 
-# Offense count: 21
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: with_first_parameter, with_fixed_indentation
-Layout/ParameterAlignment:
-  Exclude:
-    - 'lib/puppet/pal/pal_impl.rb'
-    - 'lib/puppet/util/windows/file.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Layout/SpaceAroundMethodCallOperator:
