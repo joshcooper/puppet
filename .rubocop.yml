@@ -102,10 +102,31 @@ Naming/AccessorMethodName:
 Style/Alias:
   Enabled: false
 
+Layout/ArgumentAlignment:
+  Enabled: false
+
 Layout/ArrayAlignment:
   Enabled: false
 
+Layout/BeginEndAlignment:
+  Enabled: false
+
+Layout/ClosingHeredocIndentation:
+  Enabled: false
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+Layout/FirstArgumentIndentation:
+  Enabled: false
+
 Layout/HashAlignment:
+  Enabled: false
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+
+Layout/SpaceInsideReferenceBrackets:
   Enabled: false
 
 Metrics/BlockNesting:

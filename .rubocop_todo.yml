@@ -10,36 +10,6 @@
 I18n/RailsI18n/DecorateString:
   Enabled: false
 
-# Offense count: 358
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: with_first_argument, with_fixed_indentation
-Layout/ArgumentAlignment:
-  Enabled: false
-
-# Offense count: 6
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyleAlignWith, Severity.
-# SupportedStylesAlignWith: start_of_line, begin
-Layout/BeginEndAlignment:
-  Exclude:
-    - 'lib/puppet/provider/package/apt.rb'
-    - 'lib/puppet/provider/package/aptrpm.rb'
-    - 'lib/puppet/provider/package/dnf.rb'
-    - 'lib/puppet/provider/package/rpm.rb'
-    - 'lib/puppet/provider/package/tdnf.rb'
-    - 'lib/puppet/provider/package/yum.rb'
-
-# Offense count: 31
-# This cop supports safe autocorrection (--autocorrect).
-Layout/ClosingHeredocIndentation:
-  Enabled: false
-
-# Offense count: 881
-# This cop supports safe autocorrection (--autocorrect).
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
-
 # Offense count: 14
 # This cop supports safe autocorrection (--autocorrect).
 Layout/EmptyLinesAroundArguments:
@@ -60,13 +30,6 @@ Layout/EmptyLinesAroundArguments:
 # Configuration parameters: AllowAliasSyntax, AllowedMethods.
 # AllowedMethods: alias_method, public, protected, private
 Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: false
-
-# Offense count: 31
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: consistent, consistent_relative_to_receiver, special_for_inner_method_call, special_for_inner_method_call_in_parentheses
-Layout/FirstArgumentIndentation:
   Enabled: false
 
 # Offense count: 12
@@ -101,35 +64,6 @@ Layout/SpaceAroundMethodCallOperator:
   Exclude:
     - 'lib/puppet/network/formats.rb'
 
-# Offense count: 172
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBrackets.
-# SupportedStyles: space, no_space, compact
-# SupportedStylesForEmptyBrackets: space, no_space
-Layout/SpaceInsideArrayLiteralBrackets:
-  Enabled: false
-
-# Offense count: 39
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBrackets.
-# SupportedStyles: space, no_space
-# SupportedStylesForEmptyBrackets: space, no_space
-Layout/SpaceInsideReferenceBrackets:
-  Exclude:
-    - 'lib/puppet/application.rb'
-    - 'lib/puppet/functions/unique.rb'
-    - 'lib/puppet/parser/scope.rb'
-    - 'lib/puppet/pops/evaluator/access_operator.rb'
-    - 'lib/puppet/pops/evaluator/deferred_resolver.rb'
-    - 'lib/puppet/pops/lookup/hiera_config.rb'
-    - 'lib/puppet/pops/parser/locator.rb'
-    - 'lib/puppet/pops/types/string_converter.rb'
-    - 'lib/puppet/resource/type_collection.rb'
-    - 'lib/puppet/util/windows/adsi.rb'
-    - 'lib/puppet/util/windows/process.rb'
-
-# Offense count: 170
-# This cop supports unsafe autocorrection (--autocorrect-all).
 Lint/BooleanSymbol:
   Enabled: false
 
