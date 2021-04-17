@@ -47,12 +47,6 @@ Lint/NestedMethodDefinition:
     - 'lib/puppet/pops/types/types.rb'
     - 'lib/puppet/type.rb'
 
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantRequireStatement:
-  Exclude:
-    - 'lib/puppet/application/face_base.rb'
-    - 'lib/puppet/type/file.rb'
-
 Lint/RescueException:
   Exclude:
     - 'ext/windows/service/daemon.rb'
