@@ -10,21 +10,6 @@
 I18n/RailsI18n/DecorateString:
   Enabled: false
 
-# Offense count: 14
-# This cop supports safe autocorrection (--autocorrect).
-Layout/EmptyLinesAroundArguments:
-  Exclude:
-    - 'lib/puppet/defaults.rb'
-    - 'lib/puppet/external/pson/common.rb'
-    - 'lib/puppet/parser/functions/sprintf.rb'
-    - 'lib/puppet/settings.rb'
-    - 'lib/puppet/type.rb'
-    - 'lib/puppet/type/schedule.rb'
-    - 'lib/puppet/util/diff.rb'
-    - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
-    - 'lib/puppet/util/rdoc/generators/template/puppet/puppet.rb'
-    - 'lib/puppet/util/windows/com.rb'
-
 # Offense count: 49
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowAliasSyntax, AllowedMethods.

@@ -399,7 +399,6 @@ module Puppet
       Puppet.debug "Creating default schedules"
 
             result << self.new(
-
         :name => "puppet",
         :period => :hourly,
 

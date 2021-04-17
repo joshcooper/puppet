@@ -214,7 +214,6 @@ module PSON
   def pretty_generate(obj, opts = nil)
 
     state = PSON.state.new(
-
       :indent     => '  ',
       :space      => ' ',
       :object_nl  => "\n",
