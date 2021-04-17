@@ -10,21 +10,6 @@
 I18n/RailsI18n/DecorateString:
   Enabled: false
 
-# Offense count: 16
-# Cop supports --auto-correct.
-Layout/EmptyLinesAroundArguments:
-  Exclude:
-    - 'ext/nagios/check_puppet.rb'
-    - 'lib/puppet/defaults.rb'
-    - 'lib/puppet/parser/functions/sprintf.rb'
-    - 'lib/puppet/settings.rb'
-    - 'lib/puppet/type.rb'
-    - 'lib/puppet/type/schedule.rb'
-    - 'lib/puppet/util/diff.rb'
-    - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
-    - 'lib/puppet/util/rdoc/generators/template/puppet/puppet.rb'
-    - 'lib/puppet/util/windows/com.rb'
-
 # Offense count: 12
 # Cop supports --auto-correct.
 Layout/LeadingEmptyLines:
