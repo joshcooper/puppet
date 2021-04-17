@@ -137,12 +137,6 @@ Lint/RedundantCopDisableDirective:
     - 'lib/puppet/pops/loader/static_loader.rb'
     - 'lib/puppet/util/posix.rb'
 
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantRequireStatement:
-  Exclude:
-    - 'lib/puppet/application/face_base.rb'
-    - 'lib/puppet/type/file.rb'
-
 Lint/RescueException:
   Exclude:
     - 'ext/windows/service/daemon.rb'
