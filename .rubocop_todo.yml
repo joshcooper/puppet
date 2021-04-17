@@ -27,12 +27,6 @@ Layout/LeadingEmptyLines:
     - 'lib/puppet/type/file/ensure.rb'
     - 'lib/puppet/util/network_device/transport/base.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Layout/SpaceAroundMethodCallOperator:
-  Exclude:
-    - 'lib/puppet/network/formats.rb'
-
 # Offense count: 171
 # Cop supports --auto-correct.
 Lint/BooleanSymbol:
