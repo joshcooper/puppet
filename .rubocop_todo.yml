@@ -80,10 +80,6 @@ Lint/SuppressedException:
     - 'lib/puppet/util/execution.rb'
     - 'util/rspec_grouper'
 
-Lint/UnreachableCode:
-  Exclude:
-    - 'lib/puppet/provider/package/portupgrade.rb'
-
 # Configuration parameters: AllowedPatterns, IgnoredPatterns.
 # AllowedPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
 Lint/UnreachableLoop:
