@@ -1447,7 +1447,7 @@ class Type
       aliases.each do |other|
         obj = @resource.catalog.resource(@resource.class.name, other)
         if obj
-          unless obj.object_id == @resource.object_id
+          unless obj.equal?(resource)
             self.fail("#{@resource.title} can not create alias #{other}: object already exists")
           end
           next

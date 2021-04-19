@@ -40,14 +40,6 @@ Lint/ConstantDefinitionInBlock:
 Lint/DuplicateMethods:
   Enabled: false
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Lint/IdentityComparison:
-  Exclude:
-    - 'lib/puppet/parser/resource.rb'
-    - 'lib/puppet/ssl/verifier.rb'
-    - 'lib/puppet/type.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Lint/InterpolationCheck:
