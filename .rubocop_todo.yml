@@ -40,11 +40,6 @@ Lint/ConstantDefinitionInBlock:
 Lint/DuplicateMethods:
   Enabled: false
 
-# Offense count: 1
-Lint/FloatComparison:
-  Exclude:
-    - 'lib/puppet/pops/types/types.rb'
-
 # Offense count: 4
 Lint/HashCompareByIdentity:
   Exclude:
