@@ -1,4 +1,3 @@
-
 require_relative '../../puppet'
 require_relative '../../puppet/type'
 require_relative '../../puppet/transaction'

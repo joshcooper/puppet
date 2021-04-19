@@ -1,4 +1,3 @@
-
 class Puppet::Pops::Parser::CodeMerger
 
   # Concatenates the logic in the array of parse results into one parse result.

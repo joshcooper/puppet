@@ -1,4 +1,3 @@
-
 module Puppet
   Puppet::Type.type(:file).ensurable do
     require 'etc'

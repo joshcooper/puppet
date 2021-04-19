@@ -1,4 +1,3 @@
-
 module Puppet::Pops
 module Parser
 

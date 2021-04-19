@@ -1,4 +1,3 @@
-
 module Puppet::Parser::AbstractCompiler
 
   # Returns the catalog for a compilation. Must return a Puppet::Resource::Catalog or fail with an 
