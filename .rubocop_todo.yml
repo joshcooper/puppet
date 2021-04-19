@@ -40,12 +40,6 @@ Lint/ConstantDefinitionInBlock:
 Lint/DuplicateMethods:
   Enabled: false
 
-# Offense count: 4
-Lint/HashCompareByIdentity:
-  Exclude:
-    - 'lib/puppet/pops/serialization/serializer.rb'
-    - 'lib/puppet/pops/types/recursion_guard.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 Lint/IdentityComparison:
