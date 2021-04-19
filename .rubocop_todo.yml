@@ -40,12 +40,6 @@ Lint/ConstantDefinitionInBlock:
 Lint/DuplicateMethods:
   Enabled: false
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Lint/InterpolationCheck:
-  Exclude:
-    - 'lib/puppet/util/package/version/pip.rb'
-
 # Offense count: 71
 Lint/MissingSuper:
   Enabled: false
