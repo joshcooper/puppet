@@ -28,12 +28,6 @@ Lint/BooleanSymbol:
 Lint/ConstantDefinitionInBlock:
   Enabled: false
 
-# This cop supports safe autocorrection (--autocorrect).
-Lint/DeprecatedOpenSSLConstant:
-  Exclude:
-    - 'lib/puppet/util/checksums.rb'
-    - 'lib/puppet/x509/cert_provider.rb'
-
 Lint/DuplicateMethods:
   Enabled: false
 
