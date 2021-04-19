@@ -19,13 +19,6 @@ Lint/BooleanSymbol:
 Lint/ConstantDefinitionInBlock:
   Enabled: false
 
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-Lint/DeprecatedOpenSSLConstant:
-  Exclude:
-    - 'lib/puppet/util/checksums.rb'
-    - 'lib/puppet/x509/cert_provider.rb'
-
 # Offense count: 24
 Lint/DuplicateMethods:
   Enabled: false
