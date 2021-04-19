@@ -582,6 +582,12 @@ Layout/TrailingEmptyLines:
 Layout/TrailingWhitespace:
   Enabled: false
 
+# Seems better to call `object_id` explicitly
+Lint/HashCompareByIdentity:
+  Exclude:
+    - 'lib/puppet/pops/serialization/serializer.rb'
+    - 'lib/puppet/pops/types/recursion_guard.rb'
+
 Metrics/AbcSize:
   Enabled: false
 

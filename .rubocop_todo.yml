@@ -54,11 +54,6 @@ Lint/EnsureReturn:
   Exclude:
     - 'lib/puppet/configurer.rb'
 
-Lint/HashCompareByIdentity:
-  Exclude:
-    - 'lib/puppet/pops/serialization/serializer.rb'
-    - 'lib/puppet/pops/types/recursion_guard.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 Lint/IdentityComparison:
   Exclude:
