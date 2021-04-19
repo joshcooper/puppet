@@ -1,4 +1,3 @@
-
 module Puppet::Pops::Types
   # Raised when an assertion of actual type against an expected type fails.
   #

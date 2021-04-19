@@ -1,4 +1,3 @@
-
 # LoaderPaths
 # ===
 # The central loader knowledge about paths, what they represent and how to instantiate from them.

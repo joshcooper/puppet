@@ -1,4 +1,3 @@
-
 module Puppet::Pops::Types
   # Raised when a conversion of a value to another type failed.
   #

@@ -1,4 +1,3 @@
-
 require 'puppet/util/network_device'
 require 'puppet/util/network_device/transport'
 

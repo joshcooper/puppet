@@ -1,4 +1,3 @@
-
 require 'puppet'
 require 'puppet/type'
 require 'puppet/transaction'

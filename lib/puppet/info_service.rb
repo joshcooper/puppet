@@ -1,4 +1,3 @@
-
 module Puppet::InfoService
   require 'puppet/info_service/class_information_service'
   require 'puppet/info_service/task_information_service'
