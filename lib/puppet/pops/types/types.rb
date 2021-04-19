@@ -1879,7 +1879,7 @@ class PBooleanType < PScalarDataType
         from = from.downcase if from.is_a?(String)
         case from
         when Float
-          from != 0.0
+          from != 0.0 # rubocop:disable Lint/FloatComparison
         when Integer
           from != 0
         when false, 'false', 'no', 'n'
