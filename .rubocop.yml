@@ -629,6 +629,14 @@ Lint/HashCompareByIdentity:
     - 'lib/puppet/pops/serialization/serializer.rb'
     - 'lib/puppet/pops/types/recursion_guard.rb'
 
+# Seems better to compare A#object_id == B#object_id explicitly rather than
+# calling A.equals?(B) which is easily confused with A.eql?(B)
+Lint/IdentityComparison:
+  Exclude:
+    - 'lib/puppet/parser/resource.rb'
+    - 'lib/puppet/ssl/verifier.rb'
+    - 'lib/puppet/type.rb'
+
 Metrics/AbcSize:
   Enabled: false
 
