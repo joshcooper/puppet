@@ -20,6 +20,11 @@ AllCops:
 Lint/EnsureReturn:
   Enabled: false
 
+Lint/HashCompareByIdentity:
+  Exclude:
+    - 'lib/puppet/pops/serialization/serializer.rb'
+    - 'lib/puppet/pops/types/recursion_guard.rb'
+
 # MAYBE useful - errors when rescue {} happens.
 Lint/SuppressedException:
   Enabled: false
