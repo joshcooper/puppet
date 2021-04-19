@@ -54,13 +54,6 @@ Lint/EnsureReturn:
   Exclude:
     - 'lib/puppet/configurer.rb'
 
-# This cop supports safe autocorrection (--autocorrect).
-Lint/IdentityComparison:
-  Exclude:
-    - 'lib/puppet/parser/resource.rb'
-    - 'lib/puppet/ssl/verifier.rb'
-    - 'lib/puppet/type.rb'
-
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: standard_error, runtime_error
