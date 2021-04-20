@@ -24,7 +24,6 @@ class Puppet::SSL::CertificateSigner
       raise Puppet::Error,
         "No FIPS 140-2 compliant digest algorithm in OpenSSL::Digest"
     end
-    @digest
   end
 
   # Sign a certificate signing request (CSR) with a private key.

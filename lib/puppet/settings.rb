@@ -574,7 +574,6 @@ class Puppet::Settings
     # Changing the run mode has far-reaching consequences. Flush any cached
     # settings so they will be re-generated.
     flush_cache
-    mode
   end
 
   def parse_config(text, file = "text")
