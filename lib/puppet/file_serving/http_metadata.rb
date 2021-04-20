@@ -41,8 +41,6 @@ class Puppet::FileServing::HttpMetadata < Puppet::FileServing::Metadata
     end
 
     @ftype = 'file'
-
-    self
   end
 
   # Override of the parent class method. Does not call super!

@@ -597,7 +597,6 @@ class Factory
 
   def lambda=(lambda)
     @init_hash['lambda'] = lambda
-    self
   end
 
   # Assignment =
