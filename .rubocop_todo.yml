@@ -70,13 +70,6 @@ Naming/RescuedExceptionsVariableName:
 Naming/VariableNumber:
   Enabled: false
 
-# Offense count: 1
-# Configuration parameters: EnforcedStyle, AllowModifiersOnSymbols.
-# SupportedStyles: inline, group
-Style/AccessModifierDeclarations:
-  Exclude:
-    - 'lib/puppet/util/suidmanager.rb'
-
 # Offense count: 183
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.

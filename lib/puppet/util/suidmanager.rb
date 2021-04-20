@@ -13,7 +13,7 @@ module Puppet::Util::SUIDManager
 
   to_delegate_to_process.each do |method|
     def_delegator Process, method
-    module_function method
+    module_function method # rubocop:disable Style/AccessModifierDeclarations
   end
 
   def osx_maj_ver
