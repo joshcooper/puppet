@@ -40,14 +40,6 @@ Lint/StructNewOverride:
   Exclude:
     - 'lib/puppet/network/http/request.rb'
 
-# Offense count: 5
-# This cop supports safe autocorrection (--autocorrect).
-Lint/ToJSON:
-  Exclude:
-    - 'lib/puppet/module_tool/metadata.rb'
-    - 'lib/puppet/network/http/error.rb'
-    - 'lib/puppet/pops/serialization/json.rb'
-
 # Offense count: 1
 # Configuration parameters: AllowedPatterns, IgnoredPatterns.
 # AllowedPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
