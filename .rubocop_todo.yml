@@ -80,12 +80,6 @@ Lint/SuppressedException:
     - 'lib/puppet/util/execution.rb'
     - 'util/rspec_grouper'
 
-# Configuration parameters: AllowedPatterns, IgnoredPatterns.
-# AllowedPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
-Lint/UnreachableLoop:
-  Exclude:
-    - 'lib/puppet/util/at_fork.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
 Lint/UnusedBlockArgument:

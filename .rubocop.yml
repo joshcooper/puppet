@@ -655,6 +655,11 @@ Lint/UnderscorePrefixedVariableName:
     - 'lib/puppet/type/file/checksum_value.rb'
     - 'lib/puppet/type/file/content.rb'
 
+# This code is very fragile, just exclude this one
+Lint/UnreachableLoop:
+  Exclude:
+    - 'lib/puppet/util/at_fork.rb'
+
 Metrics/AbcSize:
   Enabled: false
 
