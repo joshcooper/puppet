@@ -12,6 +12,7 @@ require_relative '../../puppet'
 #   killed in the process as a consequence of running in the same contract as the
 #   service.
 module Puppet::Util::AtFork
+  # rubocop:disable Lint/UnreachableLoop
   @handler_class = loop do
     if Puppet::Util::Platform.solaris?
       begin
@@ -28,6 +29,7 @@ module Puppet::Util::AtFork
     # using break to return a value from the loop block
     break Puppet::Util::AtFork::Noop
   end
+  # rubocop:enable Lint/UnreachableLoop
 
   def self.get_handler
     @handler_class.new

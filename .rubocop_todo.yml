@@ -41,13 +41,6 @@ Lint/StructNewOverride:
     - 'lib/puppet/network/http/request.rb'
 
 # Offense count: 1
-# Configuration parameters: AllowedPatterns, IgnoredPatterns.
-# AllowedPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
-Lint/UnreachableLoop:
-  Exclude:
-    - 'lib/puppet/util/at_fork.rb'
-
-# Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
 Lint/UriRegexp:
   Exclude:
