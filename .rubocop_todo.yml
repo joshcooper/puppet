@@ -45,11 +45,6 @@ Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'lib/puppet/util.rb'
 
-# Offense count: 1
-Lint/StructNewOverride:
-  Exclude:
-    - 'lib/puppet/network/http/request.rb'
-
 # Offense count: 5
 # Cop supports --auto-correct.
 Lint/ToJSON:
