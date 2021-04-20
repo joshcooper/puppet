@@ -37,6 +37,7 @@ class StaticLoader < Loader
 
   attr_reader :loaded
   def initialize
+    super('static'.freeze, nil)
     @loaded = {}
     @runtime_3_initialized = false
     create_built_in_types

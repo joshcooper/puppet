@@ -31,6 +31,7 @@ class Dispatch < Evaluator::CallableSignature
   # @param argument_mismatch_handler [Boolean] true if this is a dispatch for an argument mismatch
   # @api private
   def initialize(type, method_name, param_names, last_captures = false, block_name = nil, injections = EMPTY_ARRAY, weaving = EMPTY_ARRAY, argument_mismatch_handler = false)
+    super()
     @type = type
     @method_name = method_name
     @param_names = param_names
