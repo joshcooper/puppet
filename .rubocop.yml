@@ -601,6 +601,11 @@ Lint/IdentityComparison:
     - 'lib/puppet/ssl/verifier.rb'
     - 'lib/puppet/type.rb'
 
+# This code is very fragile, just exclude this one
+Lint/UnreachableLoop:
+  Exclude:
+    - 'lib/puppet/util/at_fork.rb'
+
 Metrics/AbcSize:
   Enabled: false
 
