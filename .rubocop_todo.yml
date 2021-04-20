@@ -45,12 +45,6 @@ Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'lib/puppet/util.rb'
 
-# Offense count: 3
-Lint/ReturnInVoidContext:
-  Exclude:
-    - 'lib/puppet/type/component.rb'
-    - 'lib/puppet/util/suidmanager.rb'
-
 # Offense count: 4
 Lint/SelfAssignment:
   Exclude:
