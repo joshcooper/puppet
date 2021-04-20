@@ -45,13 +45,6 @@ Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'lib/puppet/util.rb'
 
-# Offense count: 1
-# Configuration parameters: IgnoredPatterns.
-# IgnoredPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
-Lint/UnreachableLoop:
-  Exclude:
-    - 'lib/puppet/util/at_fork.rb'
-
 # Offense count: 2
 Lint/UriEscapeUnescape:
   Exclude:

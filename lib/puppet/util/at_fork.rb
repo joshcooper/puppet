@@ -12,12 +12,11 @@ require 'puppet'
 #   killed in the process as a consequence of running in the same contract as the
 #   service.
 module Puppet::Util::AtFork
-  @handler_class = loop do
+  def self.get_handler_class
     if Puppet::Util::Platform.solaris?
       begin
         require 'puppet/util/at_fork/solaris'
-        # using break to return a value from the loop block
-        break Puppet::Util::AtFork::Solaris
+        Puppet::Util::AtFork::Solaris
       rescue LoadError => detail
         Puppet.log_exception(detail, _('Failed to load Solaris implementation of the Puppet::Util::AtFork handler. Child process contract management will be unavailable, which means that agent runs executed by the puppet agent service will be killed when they attempt to restart the service.'))
         # fall through to use the no-op implementation
@@ -25,11 +24,12 @@ module Puppet::Util::AtFork
     end
 
     require 'puppet/util/at_fork/noop'
-    # using break to return a value from the loop block
-    break Puppet::Util::AtFork::Noop
+    Puppet::Util::AtFork::Noop
   end
+  private_class_method :get_handler_class
 
   def self.get_handler
+    @handler_class ||= get_handler_class
     @handler_class.new
   end
 end
