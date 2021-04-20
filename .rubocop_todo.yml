@@ -45,17 +45,6 @@ Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'lib/puppet/util.rb'
 
-# Offense count: 2
-Lint/UriEscapeUnescape:
-  Exclude:
-    - 'lib/puppet/util.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/UriRegexp:
-  Exclude:
-    - 'lib/puppet/pops/pcore.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: ContextCreatingMethods, MethodCreatingMethods.

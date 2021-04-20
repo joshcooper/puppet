@@ -31,6 +31,11 @@ Lint/HashCompareByIdentity:
 Lint/SuppressedException:
   Enabled: false
 
+# Don't add any new usages of URI.escape/unescape besides the ones in util.rb
+Lint/UriEscapeUnescape:
+  Exclude:
+    - 'lib/puppet/util.rb'
+
 # DISABLED really useless. Detects return as last statement.
 Style/RedundantReturn:
   Enabled: false
