@@ -479,8 +479,6 @@ module Runtime3Support
 
   # Configure the severity of failures
   class SeverityProducer < Validation::SeverityProducer
-    Issues = Issues
-
     def initialize
       super
       p = self
