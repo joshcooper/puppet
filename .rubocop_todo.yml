@@ -84,12 +84,6 @@ Style/AccessModifierDeclarations:
 Style/AccessorGrouping:
   Enabled: false
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/BisectedAttrAccessor:
-  Exclude:
-    - 'lib/puppet/module.rb'
-
 # Offense count: 52
 # Cop supports --auto-correct.
 Style/CaseLikeIf:
