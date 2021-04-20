@@ -3,8 +3,9 @@ require 'puppet/settings/errors'
 
 # The base setting type
 class Puppet::Settings::BaseSetting
-  attr_accessor :name, :desc, :section, :default, :call_hook
-  attr_reader :short, :deprecated
+  attr_accessor :name, :desc, :section
+  attr_writer :default
+  attr_reader :call_hook, :short, :deprecated
 
   # Hooks are called during different parts of the settings lifecycle:
   #

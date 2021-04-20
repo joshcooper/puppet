@@ -31,10 +31,6 @@ Lint/ConstantDefinitionInBlock:
     - 'lib/puppet/type/schedule.rb'
     - 'lib/puppet/type/tidy.rb'
 
-# Offense count: 24
-Lint/DuplicateMethods:
-  Enabled: false
-
 # Offense count: 1
 Lint/MixedRegexpCaptureTypes:
   Exclude:
