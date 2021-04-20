@@ -45,14 +45,6 @@ Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'lib/puppet/util.rb'
 
-# Offense count: 5
-# Cop supports --auto-correct.
-Lint/ToJSON:
-  Exclude:
-    - 'lib/puppet/module_tool/metadata.rb'
-    - 'lib/puppet/network/http/error.rb'
-    - 'lib/puppet/pops/serialization/json.rb'
-
 # Offense count: 1
 # Configuration parameters: IgnoredPatterns.
 # IgnoredPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
