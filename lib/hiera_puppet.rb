@@ -48,12 +48,10 @@ module HieraPuppet
     return [key, default, override]
   end
 
-  private
-  module_function
-
   def hiera
     @hiera ||= Hiera.new(:config => hiera_config)
   end
+  private_class_method :hiera
 
   def hiera_config
     config = {}
@@ -66,6 +64,7 @@ module HieraPuppet
     config[:logger] = 'puppet'
     config
   end
+  private_class_method :hiera_config
 
   def hiera_config_file
     hiera_config = Puppet.settings[:hiera_config]
@@ -76,5 +75,6 @@ module HieraPuppet
       nil
     end
   end
+  private_class_method :hiera_config_file
 end
 
