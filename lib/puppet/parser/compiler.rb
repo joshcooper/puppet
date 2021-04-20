@@ -237,7 +237,7 @@ class Puppet::Parser::Compiler
     class_parameters = nil
     # if we are a param class, save the classes hash
     # and transform classes to be the keys
-    if classes.class == Hash
+    if classes.instance_of?(Hash)
       class_parameters = classes
       classes = classes.keys
     end
@@ -541,7 +541,7 @@ class Puppet::Parser::Compiler
     @resources = []
 
     # Make sure any external node classes are in our class list
-    if @node.classes.class == Hash
+    if @node.classes.instance_of?(Hash)
       @catalog.add_class(*@node.classes.keys)
     else
       @catalog.add_class(*@node.classes)

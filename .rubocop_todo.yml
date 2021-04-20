@@ -82,13 +82,6 @@ Style/AccessorGrouping:
 Style/CaseLikeIf:
   Enabled: false
 
-# Offense count: 30
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoredMethods.
-# IgnoredMethods: ==, equal?, eql?
-Style/ClassEqualityComparison:
-  Enabled: false
-
 # Offense count: 5
 Style/CombinableLoops:
   Exclude:

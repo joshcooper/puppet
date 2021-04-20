@@ -870,7 +870,7 @@ Puppet::Type.newtype(:file) do
     method = :stat
 
     # Files are the only types that support links
-    if (self.class.name == :file and self[:links] != :follow) or self.class.name == :tidy
+    if (self.class.name == :file and self[:links] != :follow) or self.class.name == :tidy # rubocop:disable Style/ClassEqualityComparison
       method = :lstat
     end
 
