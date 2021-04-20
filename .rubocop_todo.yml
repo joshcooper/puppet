@@ -131,13 +131,6 @@ Lint/SuppressedException:
     - 'lib/puppet/util/execution.rb'
     - 'util/rspec_grouper'
 
-# This cop supports safe autocorrection (--autocorrect).
-Lint/ToJSON:
-  Exclude:
-    - 'lib/puppet/module_tool/metadata.rb'
-    - 'lib/puppet/network/http/error.rb'
-    - 'lib/puppet/pops/serialization/json.rb'
-
 # Configuration parameters: AllowKeywordBlockArguments.
 Lint/UnderscorePrefixedVariableName:
   Exclude:
