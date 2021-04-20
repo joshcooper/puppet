@@ -35,11 +35,6 @@ class EvaluatorImpl
 
   COMMA_SEPARATOR = ', '.freeze
 
-  # Reference to Issues name space makes it easier to refer to issues
-  # (Issues are shared with the validator).
-  #
-  Issues = Issues
-
   def initialize
     @@initialized ||= static_initialize
 
