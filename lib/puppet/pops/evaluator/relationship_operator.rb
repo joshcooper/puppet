@@ -19,6 +19,7 @@ class RelationshipOperator
     attr_reader :operand
 
     def initialize operand
+      super
       @operand = operand
     end
   end
@@ -27,6 +28,7 @@ class RelationshipOperator
     attr_reader :type
 
     def initialize type
+      super
       @type = type
     end
   end

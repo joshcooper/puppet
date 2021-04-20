@@ -30,10 +30,6 @@ Lint/EmptyConditionalBody:
   Exclude:
     - 'lib/puppet/external/pson/pure/parser.rb'
 
-# Offense count: 71
-Lint/MissingSuper:
-  Enabled: false
-
 # Offense count: 1
 Lint/MixedRegexpCaptureTypes:
   Exclude:
