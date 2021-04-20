@@ -45,13 +45,6 @@ Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'lib/puppet/util.rb'
 
-# Offense count: 4
-Lint/SelfAssignment:
-  Exclude:
-    - 'lib/puppet/pops/evaluator/evaluator_impl.rb'
-    - 'lib/puppet/pops/evaluator/runtime3_support.rb'
-    - 'lib/puppet/pops/validation/validator_factory_4_0.rb'
-    - 'lib/puppet/provider/nameservice/directoryservice.rb'
 
 # Offense count: 3
 # Configuration parameters: IgnoreImplicitReferences.
