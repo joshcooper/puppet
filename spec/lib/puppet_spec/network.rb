@@ -47,7 +47,7 @@ module PuppetSpec::Network
         'accept' => request[:accept_header],
         'content-type' => "application/json"
       },
-      :method => "HEAD",
+      :meth => "HEAD",
       :path => "#{master_url_prefix}/#{data.class.indirection.name}/#{data.value}",
       :params => params,
     })
@@ -59,7 +59,7 @@ module PuppetSpec::Network
         'accept' => request[:accept_header],
         'content-type' => request[:content_type_header] || "application/json"
       },
-      :method => "PUT",
+      :meth => "PUT",
       :path => "#{master_url_prefix}/#{data.class.indirection.name}/#{data.value}",
       :params => params,
       :body => request[:body].nil? ? data.render("json") : request[:body]
@@ -72,7 +72,7 @@ module PuppetSpec::Network
         'accept' => request[:accept_header],
         'content-type' => "application/json"
       },
-      :method => "DELETE",
+      :meth => "DELETE",
       :path => "#{master_url_prefix}/#{data.class.indirection.name}/#{data.value}",
       :params => params,
       :body => ''
@@ -85,7 +85,7 @@ module PuppetSpec::Network
         'accept' => request[:accept_header],
         'content-type' => "application/json"
       },
-      :method => "GET",
+      :meth => "GET",
       :path => "#{master_url_prefix}/#{data.class.indirection.name}/#{data.value}",
       :params => params,
       :body => ''
@@ -98,7 +98,7 @@ module PuppetSpec::Network
         'accept' => request[:accept_header],
         'content-type' => "application/json"
       },
-      :method => "GET",
+      :meth => "GET",
       :path => "#{master_url_prefix}/#{data.class.indirection.name}s/#{data.name}",
       :params => params,
       :body => ''

@@ -1,11 +1,11 @@
-Puppet::Network::HTTP::Request = Struct.new(:headers, :params, :method, :path, :routing_path, :client_cert, :body) do
+Puppet::Network::HTTP::Request = Struct.new(:headers, :params, :meth, :path, :routing_path, :client_cert, :body) do
   def self.from_hash(hash)
     symbol_members = members.collect(&:intern)
     unknown = hash.keys - symbol_members
     if unknown.empty?
       new(hash[:headers] || {},
           hash[:params] || {},
-          hash[:method] || "GET",
+          hash[:meth] || "GET",
           hash[:path],
           hash[:routing_path] || hash[:path],
           hash[:client_cert],
@@ -16,7 +16,7 @@ Puppet::Network::HTTP::Request = Struct.new(:headers, :params, :method, :path, :
   end
 
   def route_into(prefix)
-    self.class.new(headers, params, method, path, routing_path.sub(prefix, ''), client_cert, body)
+    self.class.new(headers, params, meth, path, routing_path.sub(prefix, ''), client_cert, body)
   end
 
   def formatter

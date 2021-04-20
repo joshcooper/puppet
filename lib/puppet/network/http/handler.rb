@@ -63,8 +63,8 @@ module Puppet::Network::HTTP::Handler
     profiler = configure_profiler(request.headers, request.params)
 
     Puppet::Util::Profiler.profile(
-      _("Processed request %{request_method} %{request_path}") % { request_method: request.method, request_path: request.path },
-      [:http, request.method, request.path]
+      _("Processed request %{request_method} %{request_path}") % { request_method: request.meth, request_path: request.path },
+      [:http, request.meth, request.path]
     ) do
       yield
     end
@@ -109,7 +109,7 @@ module Puppet::Network::HTTP::Handler
       return route
     else
       raise Puppet::Network::HTTP::Error::HTTPNotFoundError.new(
-              _("No route for %{request} %{path}") % { request: request.method, path: request.path },
+              _("No route for %{request} %{path}") % { request: request.meth, path: request.path },
               HANDLER_NOT_FOUND)
     end
   end

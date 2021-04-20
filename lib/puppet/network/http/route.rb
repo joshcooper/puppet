@@ -1,6 +1,6 @@
 class Puppet::Network::HTTP::Route
   MethodNotAllowedHandler = lambda do |req, res|
-    raise Puppet::Network::HTTP::Error::HTTPMethodNotAllowedError.new("method #{req.method} not allowed for route #{req.path}", Puppet::Network::HTTP::Issues::UNSUPPORTED_METHOD)
+    raise Puppet::Network::HTTP::Error::HTTPMethodNotAllowedError.new("method #{req.meth} not allowed for route #{req.path}", Puppet::Network::HTTP::Issues::UNSUPPORTED_METHOD)
   end
 
   NO_HANDLERS = [MethodNotAllowedHandler]
@@ -77,7 +77,7 @@ class Puppet::Network::HTTP::Route
   end
 
   def process(request, response)
-    handlers = @method_handlers[request.method.upcase.intern] || NO_HANDLERS
+    handlers = @method_handlers[request.meth.upcase.intern] || NO_HANDLERS
     handlers.each do |handler|
       handler.call(request, response)
     end

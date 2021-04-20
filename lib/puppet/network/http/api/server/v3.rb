@@ -11,7 +11,7 @@ module Puppet
             def self.wrap(&block)
               lambda do |request, response|
                 Puppet::Network::Authorization.
-                  check_external_authorization(request.method,
+                  check_external_authorization(request.meth,
                                                request.path)
 
                 block.call.call(request, response)

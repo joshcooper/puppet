@@ -12,11 +12,6 @@
 Lint/ConstantDefinitionInBlock:
   Enabled: false
 
-# Offense count: 1
-Lint/StructNewOverride:
-  Exclude:
-    - 'lib/puppet/network/http/request.rb'
-
 # Offense count: 183
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.

@@ -32,7 +32,7 @@ class Puppet::Network::HTTP::API::IndirectedRoutes
   # Handle an HTTP request. The request has already been authenticated prior
   # to calling this method.
   def call(request, response)
-    indirection, method, key, params = uri2indirection(request.method, request.path, request.params)
+    indirection, method, key, params = uri2indirection(request.meth, request.path, request.params)
     certificate = request.client_cert
 
     if !indirection.allow_remote_requests?

@@ -15,7 +15,7 @@ describe Puppet::Network::HTTP::Handler do
     {
       :accept_header => "application/json",
       :content_type_header => "application/json",
-      :method => method,
+      :meth => method,
       :path => path,
       :params => {},
       :client_cert => nil,

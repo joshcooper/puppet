@@ -17,7 +17,7 @@ class PuppetSpec::Handler
   end
 
   def http_method(request)
-    request[:method]
+    request[:meth]
   end
 
   def path(request)

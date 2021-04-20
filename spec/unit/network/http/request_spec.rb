@@ -17,7 +17,7 @@ describe Puppet::Network::HTTP::Request do
 
   def a_request(headers, body = "")
     described_class.from_hash(
-      :method => "PUT",
+      :meth   => "PUT",
       :path   => "/path/to/endpoint",
       :body   => body,
       :headers => headers

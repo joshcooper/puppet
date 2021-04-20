@@ -6,7 +6,7 @@ require 'puppet/network/http'
 describe Puppet::Network::HTTP::Route do
   def request(method, path)
     Puppet::Network::HTTP::Request.from_hash({
-      :method => method,
+      :meth => method,
       :path => path,
       :routing_path => path })
   end
