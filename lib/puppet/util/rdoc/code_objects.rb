@@ -17,7 +17,7 @@ module RDoc
   # @api private
   module AddClassModuleComment
     def add_comment(comment, location = nil)
-        super
+      super
     end
   end
 
@@ -183,10 +183,6 @@ module RDoc
   # A node is just a variation of a class
   class PuppetNode < PuppetClass
     include AddClassModuleComment
-
-    def initialize(name, superclass)
-      super(name,superclass)
-    end
 
     def is_module?
       false

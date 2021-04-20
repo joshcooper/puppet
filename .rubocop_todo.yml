@@ -45,19 +45,6 @@ Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'lib/puppet/util.rb'
 
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: AllowComments.
-Lint/UselessMethodDefinition:
-  Exclude:
-    - 'lib/puppet/pops/evaluator/closure.rb'
-    - 'lib/puppet/pops/types/type_conversion_error.rb'
-    - 'lib/puppet/pops/types/type_mismatch_describer.rb'
-    - 'lib/puppet/settings/file_or_directory_setting.rb'
-    - 'lib/puppet/util/profiler/aggregate.rb'
-    - 'lib/puppet/util/rdoc/code_objects.rb'
-    - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
-
 # Offense count: 9
 # Configuration parameters: CheckForMethodsWithNoSideEffects.
 Lint/Void:

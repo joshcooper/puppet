@@ -13,15 +13,9 @@ module Evaluator
   end
 
   class Next < Jumper
-    def initialize(value, file, line)
-      super
-    end
   end
 
   class Return < Jumper
-    def initialize(value, file, line)
-      super
-    end
   end
 
   class PuppetStopIteration < StopIteration
