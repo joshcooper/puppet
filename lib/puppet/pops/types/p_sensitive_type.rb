@@ -31,7 +31,7 @@ class PSensitiveType < PTypeWithContainedType
   end
 
   def initialize(type = nil)
-    @type = type.nil? ? PAnyType.new : type.generalize
+    super(type.nil? ? PAnyType.new : type.generalize)
   end
 
   def instance?(o, guard = nil)

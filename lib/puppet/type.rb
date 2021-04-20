@@ -1499,6 +1499,7 @@ class Type
     @subclasses = []
 
     def self.inherited(sub)
+      super(sub)
       @subclasses << sub
     end
 

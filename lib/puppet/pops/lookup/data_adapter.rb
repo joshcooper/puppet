@@ -8,6 +8,7 @@ class DataAdapter < Adaptable::Adapter
   end
 
   def initialize
+    super
     @data = {}
   end
 

@@ -3,6 +3,7 @@ require 'puppet/indirector/terminus'
 # Manage a memory-cached list of instances.
 class Puppet::Indirector::Memory < Puppet::Indirector::Terminus
   def initialize
+    super
     clear
   end
 

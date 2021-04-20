@@ -40,10 +40,6 @@ Lint/ConstantDefinitionInBlock:
 Lint/DuplicateMethods:
   Enabled: false
 
-# Offense count: 71
-Lint/MissingSuper:
-  Enabled: false
-
 # Offense count: 1
 Lint/MixedRegexpCaptureTypes:
   Exclude:
