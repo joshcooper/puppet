@@ -121,12 +121,6 @@ Style/EvalWithLocation:
   Exclude:
     - 'lib/puppet/interface/action_builder.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/ExpandPathArguments:
-  Exclude:
-    - 'lib/puppet/util/libuser.rb'
-
 # Offense count: 69
 # Cop supports --auto-correct.
 Style/ExplicitBlockArgument:
