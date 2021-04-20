@@ -704,6 +704,9 @@ Style/TernaryParentheses:
 Style/YodaCondition:
   Enabled: false
 
+I18n/RailsI18n:
+  Enabled: false
+
 I18n/GetText/DecorateFunctionMessage:
   Enabled: false
 
