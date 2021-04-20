@@ -159,12 +159,6 @@ Style/HashTransformValues:
     - 'lib/puppet/pops/types/p_type_set_type.rb'
     - 'lib/puppet/transaction/report.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/KeywordParametersOrder:
-  Exclude:
-    - 'lib/puppet/http/service/file_server.rb'
-
 # Offense count: 5
 Style/MissingRespondToMissing:
   Exclude:

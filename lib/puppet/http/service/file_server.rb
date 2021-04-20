@@ -99,7 +99,7 @@ class Puppet::HTTP::Service::FileServer < Puppet::HTTP::Service
   #
   # @api public
   #
-  def get_file_metadatas(path: nil, environment:, recurse: false, recurselimit: nil, ignore: nil, links: :manage, checksum_type: Puppet[:digest_algorithm], source_permissions: :ignore)
+  def get_file_metadatas(path:, environment:, recurse: false, recurselimit: nil, ignore: nil, links: :manage, checksum_type: Puppet[:digest_algorithm], source_permissions: :ignore)
     validate_path(path)
 
     if recurse != :remote
