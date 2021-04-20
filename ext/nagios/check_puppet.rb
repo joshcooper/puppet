@@ -2,7 +2,7 @@
 
 require 'optparse'
 require 'sys/proctable'
-include Sys
+include Sys # rubocop:disable Style/MixinUsage
 
 class CheckPuppet
 
