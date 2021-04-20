@@ -89,7 +89,6 @@ class Puppet::Node
       @parameters[ENVIRONMENT] = @environment.name.to_s
       self.environment_name = @environment.name
     end
-    @environment
   end
 
   def has_environment_instance?
