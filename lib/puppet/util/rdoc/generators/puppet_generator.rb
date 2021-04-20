@@ -649,11 +649,6 @@ module Generators
   end
 
   class HTMLPuppetModule < HtmlClass
-
-    def initialize(context, html_file, prefix, options)
-      super(context, html_file, prefix, options)
-    end
-
     def value_hash
       @values = super
 
