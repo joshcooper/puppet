@@ -45,10 +45,6 @@ Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'lib/puppet/util.rb'
 
-# Offense count: 1
-Lint/OutOfRangeRegexpRef:
-  Exclude:
-    - 'lib/puppet/vendor.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.

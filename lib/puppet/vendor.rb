@@ -31,7 +31,7 @@ module Puppet
 
       # @api private
       def load_entry(entry)
-        Puppet.debug("Loading vendored #{$1}")
+        Puppet.debug("Loading vendored #{entry}")
         load "#{vendor_dir}/#{entry}"
       end
 
