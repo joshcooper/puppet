@@ -45,15 +45,6 @@ Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'lib/puppet/util.rb'
 
-
-# Offense count: 3
-# Configuration parameters: IgnoreImplicitReferences.
-Lint/ShadowedArgument:
-  Exclude:
-    - 'lib/puppet/pops/lookup.rb'
-    - 'lib/puppet/settings/file_setting.rb'
-    - 'lib/puppet/settings/port_setting.rb'
-
 # Offense count: 1
 Lint/StructNewOverride:
   Exclude:

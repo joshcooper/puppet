@@ -37,7 +37,7 @@ module Lookup
     if result_with_name[1].equal?(not_found)
       default_values = lookup_invocation.default_values
       unless default_values.empty?
-        result_with_name = names.reduce(result_with_name) do |memo, key|
+        result_with_name = names.reduce(result_with_name) do |_, key|
           value = default_values.include?(key) ? assert_type(["Value found for key '%s' in default values hash", key], value_type, default_values[key]) : not_found
           memo = [key, value]
           break memo unless value.equal?(not_found)
