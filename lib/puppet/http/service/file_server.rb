@@ -1,4 +1,5 @@
 require 'puppet/file_serving/metadata'
+require 'puppet/coercion'
 
 # The FileServer service is used to retrieve file metadata and content.
 #
@@ -71,7 +72,7 @@ class Puppet::HTTP::Service::FileServer < Puppet::HTTP::Service
   #
   # @param [String] path path to the file(s) to retrieve data from
   # @param [String] environment the name of the environment we are operating in
-  # @param [Symbol] recurse  Can be `:true`, `:false`, or `:remote`. Defines if
+  # @param [Symbol] recurse  Can be `true`, `:true`, `false`, `:false`, or `:remote`. Defines if
   #   we recursively return the contents of the directory. Used in conjunction
   #   with `:recurselimit`. See the reference documentation for the file type
   #   for more details.
@@ -98,8 +99,12 @@ class Puppet::HTTP::Service::FileServer < Puppet::HTTP::Service
   #
   # @api public
   #
-  def get_file_metadatas(path: nil, environment:, recurse: :false, recurselimit: nil, ignore: nil, links: :manage, checksum_type: Puppet[:digest_algorithm], source_permissions: :ignore)
+  def get_file_metadatas(path: nil, environment:, recurse: false, recurselimit: nil, ignore: nil, links: :manage, checksum_type: Puppet[:digest_algorithm], source_permissions: :ignore)
     validate_path(path)
+
+    if recurse != :remote
+      recurse = Puppet::Coercion.boolean(recurse)
+    end
 
     headers = add_puppet_headers('Accept' => get_mime_types(Puppet::FileServing::Metadata).join(', '))
 
