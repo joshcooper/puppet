@@ -16,10 +16,6 @@ I18n/RailsI18n/DecorateString:
 Lint/ConstantDefinitionInBlock:
   Enabled: false
 
-# Offense count: 24
-Lint/DuplicateMethods:
-  Enabled: false
-
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowComments.

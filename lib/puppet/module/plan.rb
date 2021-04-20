@@ -105,7 +105,7 @@ class Puppet::Module
       end
     end
 
-    attr_reader :name, :module, :metadata_file, :metadata
+    attr_reader :name, :module, :metadata_file
 
     # file paths must be relative to the modules plan directory
     def initialize(pup_module, plan_name, plan_files)

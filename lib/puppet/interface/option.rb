@@ -132,8 +132,7 @@ class Puppet::Interface::Option
     @default and @default.call
   end
 
-  attr_reader   :parent, :name, :aliases, :optparse
-  attr_accessor :required
+  attr_reader   :parent, :name, :aliases, :optparse, :required
 
   def required=(value)
     if has_default?
@@ -142,7 +141,7 @@ class Puppet::Interface::Option
     @required = value
   end
 
-  attr_accessor :before_action
+  attr_reader :before_action
 
   def before_action=(proc)
     unless proc.is_a? Proc
@@ -154,7 +153,7 @@ class Puppet::Interface::Option
       @parent.__send__(:__add_method, __decoration_name(:before), proc)
   end
 
-  attr_accessor :after_action
+  attr_reader :after_action
 
   def after_action=(proc)
     unless proc.is_a? Proc

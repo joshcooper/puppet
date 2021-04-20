@@ -139,10 +139,9 @@ class Puppet::Interface::Action
   end
   private :__render_method_name_for
 
-
   # @api private
   # @return [Symbol]
-  attr_accessor :render_as
+  attr_reader :render_as
 
   def render_as=(value)
     @render_as = value.to_sym
@@ -222,7 +221,7 @@ class Puppet::Interface::Action
 
   # The block that is executed when the action is invoked
   # @return [block]
-  attr_accessor :when_invoked
+  attr_reader :when_invoked
 
   def when_invoked=(block)
 
