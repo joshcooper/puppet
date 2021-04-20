@@ -35,14 +35,6 @@ Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'lib/puppet/util.rb'
 
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantCopDisableDirective:
-  Exclude:
-    - 'lib/puppet/pops/loader/static_loader.rb'
-    - 'lib/puppet/util/posix.rb'
-
 # Offense count: 3
 Lint/ReturnInVoidContext:
   Exclude:
