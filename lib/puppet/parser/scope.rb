@@ -819,6 +819,7 @@ class Puppet::Parser::Scope
   # Array, Hash, Numeric, Boolean, Regexp, NilClass, or String. All other types raises an Error.
   # (i.e. if they are assignable to Puppet::Pops::Types::Data type).
   #
+  # @api private
   def deep_freeze(object)
     case object
     when Array
@@ -836,7 +837,6 @@ class Puppet::Parser::Scope
     end
     object
   end
-  private :deep_freeze
 
   # Return the effective "table" for setting variables.
   # This method returns the first ephemeral "table" that acts as a local scope, or this

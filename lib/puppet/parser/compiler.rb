@@ -762,9 +762,9 @@ class Puppet::Parser::Compiler
       # node.parameters.
       next if param.to_s == 'environment'
       # Ensure node does not leak Symbol instances in general
-      @topscope[param.to_s] = value.is_a?(Symbol) ? value.to_s : value
+      @topscope[param.to_s.freeze] = value.is_a?(Symbol) ? value.to_s.freeze : @topscope.deep_freeze(value)
     end
-    @topscope['environment'] = node.environment.name.to_s
+    @topscope['environment'.freeze] = node.environment.name.to_s.freeze
 
     # These might be nil.
     catalog.client_version = node.parameters["clientversion"]
