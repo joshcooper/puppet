@@ -3,7 +3,7 @@ require 'spec_helper'
 require 'puppet/file_system/uniquefile'
 require 'puppet_spec/character_encoding'
 
-describe Puppet::Util::Execution, if: !Puppet::Util::Platform.jruby? do
+describe Puppet::Util::Execution, if: !Puppet::Util::Platform.jruby?, allow_execution: true do
   include Puppet::Util::Execution
 
   # utility methods to help us test some private methods without being quite so verbose

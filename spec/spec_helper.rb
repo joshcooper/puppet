@@ -155,7 +155,7 @@ RSpec.configure do |config|
     FileUtils.mkdir_p Puppet[:statedir]
     FileUtils.mkdir_p Puppet[:publicdir]
 
-    Puppet::Test::TestHelper.before_each_test()
+    Puppet::Test::TestHelper.before_each_test
   end
 
   # Facter 2 uses two versions of the GCE API, so match using regex
@@ -190,8 +190,12 @@ RSpec.configure do |config|
     end
   end
 
+  config.around :each do |example|
+    Puppet::Test::TestHelper.around_each_test(example)
+  end
+
   config.after :each do
-    Puppet::Test::TestHelper.after_each_test()
+    Puppet::Test::TestHelper.after_each_test
 
     # TODO: would like to move this into puppetlabs_spec_helper, but there are namespace issues at the moment.
     allow(Dir).to receive(:entries).and_call_original

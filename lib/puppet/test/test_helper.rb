@@ -89,6 +89,11 @@ module Puppet::Test
     #
     ROLLBACK_MARK = "initial testing state"
 
+    MOCK_EXECUTOR = proc do |command, options|
+      # Extends Exception so it's unlikely to be caught/masked by a test
+      raise Exception, "The command '#{command}' should be stubbed"
+    end
+
     # Call this method once per test, prior to execution of each individual test.
     # @return nil
     def self.before_each_test()
@@ -150,13 +155,26 @@ module Puppet::Test
       Puppet::Node::Facts.indirection.terminus_class = :memory
       facts = Puppet::Node::Facts.new(Puppet[:node_name_value])
       Puppet::Node::Facts.indirection.save(facts)
+#      Puppet::Util::ExecutionStub.set(&MOCK_EXECUTOR)
 
       Puppet.clear_deprecation_warnings
     end
 
+    def self.around_each_test(example)
+      # only reset if the test didn't register its own stub
+      # if example.metadata[:allow_execution] && Puppet::Util::ExecutionStub.current_value == MOCK_EXECUTOR
+      #   Puppet::Util::ExecutionStub.reset
+      # end
+      unless example.metadata[:allow_execution]
+        require 'byebug'; byebug
+        allow(Puppet::Util::Execution).to receive(:execute).never
+      end
+      example.run
+    end
+
     # Call this method once per test, after execution of each individual test.
     # @return nil
-    def self.after_each_test()
+    def self.after_each_test
       # Ensure that a matching tear down only happens once per completed setup
       # (see #before_each_test).
       return unless @@reentry_count == 1
@@ -216,7 +234,7 @@ module Puppet::Test
     #  of this class!)
     #########################################################################################
 
-    def self.app_defaults_for_tests()
+    def self.app_defaults_for_tests
       {
           :logdir     => "/dev/null",
           :confdir    => "/dev/null",
@@ -229,7 +247,7 @@ module Puppet::Test
     end
     private_class_method :app_defaults_for_tests
 
-    def self.initialize_settings_before_each()
+    def self.initialize_settings_before_each
       Puppet.settings.preferred_run_mode = "user"
       # Initialize "app defaults" settings to a good set of test values
       Puppet.settings.initialize_app_defaults(app_defaults_for_tests)

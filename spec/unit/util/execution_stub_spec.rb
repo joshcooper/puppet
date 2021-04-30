@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Puppet::Util::ExecutionStub do
+describe Puppet::Util::ExecutionStub, allow_execution: true do
   it "should use the provided stub code when 'set' is called" do
     Puppet::Util::ExecutionStub.set do |command, options|
       expect(command).to eq(['/bin/foo', 'bar'])
