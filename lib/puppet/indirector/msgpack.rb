@@ -36,7 +36,7 @@ class Puppet::Indirector::Msgpack < Puppet::Indirector::Terminus
   end
 
   def search(request)
-    Dir.glob(path(request.key)).collect do |file|
+    Dir.glob(path(request.key)).sort.collect do |file|
       load_msgpack_from_file(file, request.key)
     end
   end

@@ -279,7 +279,7 @@ class Puppet::Module
   def all_manifests
     return [] unless Puppet::FileSystem.exist?(manifests)
 
-    Dir.glob(File.join(manifests, '**', '*.pp'))
+    Dir.glob(File.join(manifests, '**', '*.pp')).sort
   end
 
   def metadata_file

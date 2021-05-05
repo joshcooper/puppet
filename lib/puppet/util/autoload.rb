@@ -14,7 +14,7 @@ class Puppet::Util::ModuleDirectoriesAdapter < Puppet::Pops::Adaptable::Adapter
   def self.create_adapter(env)
     adapter = super(env)
     adapter.directories = env.modulepath.flat_map do |dir|
-      Dir.glob(File.join(dir, '*', 'lib'))
+      Dir.glob(File.join(dir, '*', 'lib')).sort
     end
     adapter
   end
@@ -118,7 +118,7 @@ class Puppet::Util::Autoload
     # @api private
     def files_in_dir(dir, path)
       dir = Pathname.new(File.expand_path(dir))
-      Dir.glob(File.join(dir, path, "*.rb")).collect do |file|
+      Dir.glob(File.join(dir, path, "*.rb")).sort.collect do |file|
         Pathname.new(file).relative_path_from(dir).to_s
       end
     end

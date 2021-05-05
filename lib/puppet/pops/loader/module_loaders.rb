@@ -476,7 +476,7 @@ module ModuleLoaders
     end
 
     def add_to_index(smart_path)
-      found = Dir.glob(File.join(smart_path.generic_path, '**', "*#{smart_path.extension}"))
+      found = Dir.glob(File.join(smart_path.generic_path, '**', "*#{smart_path.extension}")).sort
 
       # The reason for not always rejecting directories here is performance (avoid extra stat calls). The
       # false positives (directories with a matching extension) is an error in any case and will be caught

@@ -128,7 +128,7 @@ class Puppet::Module
             msg = _("Directories specified in task metadata must include a trailing slash: %{dir}" % { dir: file } )
             raise InvalidMetadata.new(msg, 'puppet.tasks/invalid-metadata')
           end
-          dir_files = Dir.glob("#{path}**/*").select { |f| File.file?(f) }
+          dir_files = Dir.glob("#{path}**/*").sort.select { |f| File.file?(f) }
           dir_files.map { |f| get_file_details(f, pup_module) }
         else
           if last_char
@@ -199,7 +199,7 @@ class Puppet::Module
     end
 
     def self.tasks_in_module(pup_module)
-      task_files = Dir.glob(File.join(pup_module.tasks_directory, '*'))
+      task_files = Dir.glob(File.join(pup_module.tasks_directory, '*')).sort
         .keep_if { |f| is_tasks_filename?(f) }
 
       module_executables = task_files.reject(&method(:is_tasks_metadata_filename?)).map.to_a

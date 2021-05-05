@@ -28,7 +28,7 @@ module Puppet::ModuleTranslations
   # @param [String] vardir the path to Puppet's vardir
   def self.load_from_vardir(vardir)
     locale = Puppet::GettextConfig.current_locale
-    Dir.glob("#{vardir}/locales/#{locale}/*.po") do |f|
+    Dir.glob("#{vardir}/locales/#{locale}/*.po").sort.each do |f|
       module_name = File.basename(f, ".po")
       if Puppet::GettextConfig.load_translations(module_name, File.join(vardir, "locales"), :po)
         Puppet.debug { "Loaded translations for #{module_name}." }

@@ -20,7 +20,7 @@ class Puppet::Parser::TypeLoader
       abspat = File.expand_path(pattern, dir)
       file_pattern = abspat + (File.extname(abspat).empty? ? '.pp' : '' )
 
-      files = Dir.glob(file_pattern).uniq.reject { |f| FileTest.directory?(f) }
+      files = Dir.glob(file_pattern).sort.uniq.reject { |f| FileTest.directory?(f) }
       modname = nil
 
       if files.empty?

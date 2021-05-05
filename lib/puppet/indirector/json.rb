@@ -29,7 +29,7 @@ class Puppet::Indirector::JSON < Puppet::Indirector::Terminus
   end
 
   def search(request)
-    Dir.glob(path(request.key)).collect do |file|
+    Dir.glob(path(request.key)).sort.collect do |file|
       load_json_from_file(file, request.key)
     end
   end

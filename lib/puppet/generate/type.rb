@@ -123,7 +123,8 @@ module Puppet
           end
 
           Puppet.debug "Searching '#{mod.name}' module for custom types."
-          Dir.glob("#{directory}/*.rb") do |file|
+          # inputs are sorted across all modules before we return
+          dirs = Dir.glob("#{directory}/*.rb") do |file|
             next unless Puppet::FileSystem.file?(file)
             Puppet.debug "Found custom type source file '#{file}'."
             inputs << Input.new(mod.path, file, format)

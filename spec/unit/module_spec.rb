@@ -677,11 +677,11 @@ describe Puppet::Module, "when finding matching manifests" do
     @fq_glob_with_extension = "/a/manifests/#{@pq_glob_with_extension}"
   end
 
-  it "should return all manifests matching the glob pattern" do
+  it "should return all manifests matching the glob pattern in order" do
     expect(Dir).to receive(:glob).with(@fq_glob_with_extension).and_return(%w{foo bar})
     allow(FileTest).to receive(:directory?).and_return(false)
 
-    expect(@mod.match_manifests(@pq_glob_with_extension)).to eq(%w{foo bar})
+    expect(@mod.match_manifests(@pq_glob_with_extension)).to eq(%w{bar foo})
   end
 
   it "should not return directories" do

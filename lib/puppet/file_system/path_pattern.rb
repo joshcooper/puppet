@@ -32,7 +32,7 @@ module Puppet::FileSystem
     end
 
     def glob
-      Dir.glob(pathname.to_s)
+      Dir.glob(pathname.to_s).sort
     end
 
     def to_s

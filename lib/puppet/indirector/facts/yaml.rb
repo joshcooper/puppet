@@ -10,7 +10,7 @@ class Puppet::Node::Facts::Yaml < Puppet::Indirector::Yaml
 
   def search(request)
     node_names = []
-    Dir.glob(yaml_dir_path).each do |file|
+    Dir.glob(yaml_dir_path).sort.each do |file|
       facts = load_file(file)
       if facts && node_matches?(facts, request.options)
         node_names << facts.name

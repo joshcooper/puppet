@@ -120,7 +120,7 @@ Puppet::Type.type(:service).provide :launchd, :parent => :base do
   #
   # @return [Array] of String instances modeling file paths
   def self.return_globbed_list_of_file_paths(path)
-    array_of_files = Dir.glob(File.join(path, '*')).collect do |filepath|
+    array_of_files = Dir.glob(File.join(path, '*')).sort.collect do |filepath|
       File.file?(filepath) ? filepath : nil
     end
     array_of_files.compact

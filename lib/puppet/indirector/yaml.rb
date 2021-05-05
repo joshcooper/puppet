@@ -50,7 +50,7 @@ class Puppet::Indirector::Yaml < Puppet::Indirector::Terminus
   end
 
   def search(request)
-    Dir.glob(path(request.key,'')).collect do |file|
+    Dir.glob(path(request.key,'')).sort.collect do |file|
       load_file(file)
     end
   end

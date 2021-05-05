@@ -330,8 +330,9 @@ config_version=relative/script
           expect(loader.get("env1")).to environment(:env1).
             with_manifest(File.join(envdir, 'env1', 'relative', 'manifest')).
             with_modulepath([File.join(envdir, 'env1', 'relative', 'modules'),
-                             File.join(envdir, 'env1', 'other', 'foo', 'modules'),
-                             File.join(envdir, 'env1', 'other', 'bar', 'modules')]).
+                             # modules are sorted within an entry in the modulepath
+                             File.join(envdir, 'env1', 'other', 'bar', 'modules'),
+                             File.join(envdir, 'env1', 'other', 'foo', 'modules')]).
             with_config_version(File.join(envdir, 'env1', 'relative', 'script'))
         end
       end

@@ -48,7 +48,7 @@ class Puppet::Node::Facts::Facter < Puppet::Indirector::Code
     # Add any per-module fact directories to facter's search path
     dirs = request.environment.modulepath.collect do |dir|
       ['lib', 'plugins'].map do |subdirectory|
-        Dir.glob("#{dir}/*/#{subdirectory}/facter")
+        Dir.glob("#{dir}/*/#{subdirectory}/facter").sort
       end
     end.flatten + Puppet[:factpath].split(File::PATH_SEPARATOR)
 
@@ -60,7 +60,7 @@ class Puppet::Node::Facts::Facter < Puppet::Indirector::Code
       # developers may find that information useful for debugging purposes
       if Puppet::Util::Log.sendlevel?(:info)
         Puppet.info _("Loading facts")
-        Dir.glob("#{dir}/*.rb").each do |file|
+        Dir.glob("#{dir}/*.rb").sort.each do |file|
           Puppet.debug { "Loading facts from #{file}" }
         end
       end

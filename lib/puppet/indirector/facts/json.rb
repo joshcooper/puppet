@@ -10,7 +10,7 @@ class Puppet::Node::Facts::Json < Puppet::Indirector::JSON
   
   def search(request)
     node_names = []
-    Dir.glob(json_dir_path).each do |file|
+    Dir.glob(json_dir_path).sort.each do |file|
       facts = load_json_from_file(file, '')
       if facts && node_matches?(facts, request.options)
         node_names << facts.name
