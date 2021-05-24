@@ -91,6 +91,32 @@ class Puppet::Transaction
     end
   end
 
+  BatchContext = Struct.new(:resources, :provider_class) do
+    def initialize(provider_class)
+      @provider_class = provider_class
+      @resources = []
+    end
+
+    def <<(resource)
+      @resources << resource
+    end
+
+    def batch(progress, total)
+      @provider_class.batch(self) do |resource|
+        if resource.is_a?(Puppet::Type::Component)
+          Puppet.warning _("Somehow left a component in the relationship graph")
+        else
+          if Puppet[:evaltrace] && @catalog.host_config?
+            resource.info _("Starting to evaluate the resource (%{progress} of %{total})") % { progress: progress, total: total }
+          end
+          seconds = thinmark { block.call(resource) }
+          resource.info _("Evaluated in %{seconds} seconds") % { seconds: "%0.2f" % seconds } if Puppet[:evaltrace] && @catalog.host_config?
+        end
+      end
+      @resources.size
+    end
+  end
+
   # This method does all the actual work of running a transaction.  It
   # collects all of the changes, executes them, and responds to any
   # necessary events.
@@ -171,26 +197,31 @@ class Puppet::Transaction
       raise Puppet::Error, _('One or more resource dependency cycles detected in graph')
     end
 
+
+    batch_context = nil
+    batch_handler = lambda do |resource|
+    end
+
     # Generate the relationship graph, set up our generator to use it
     # for eval_generate, then kick off our traversal.
     generator.relationship_graph = relationship_graph
     progress = 0
+    batch_context = nil
     relationship_graph.traverse(:while => continue_while,
                                 :pre_process => pre_process,
                                 :overly_deferred_resource_handler => overly_deferred_resource_handler,
                                 :canceled_resource_handler => canceled_resource_handler,
                                 :graph_cycle_handler => graph_cycle_handler,
                                 :teardown => teardown) do |resource|
-      progress += 1
-      if resource.is_a?(Puppet::Type::Component)
-        Puppet.warning _("Somehow left a component in the relationship graph")
-      else
-        if Puppet[:evaltrace] && @catalog.host_config?
-          resource.info _("Starting to evaluate the resource (%{progress} of %{total})") % { progress: progress, total: relationship_graph.size }
-        end
-        seconds = thinmark { block.call(resource) }
-        resource.info _("Evaluated in %{seconds} seconds") % { seconds: "%0.2f" % seconds } if Puppet[:evaltrace] && @catalog.host_config?
+      batch_context ||= BatchContext.new(resource.provider.class)
+
+      if resource.provider.batch?(batch_context, resource)
+        batch_context << resource
+        next
       end
+
+      progress += batch_context.batch(progress, relationship_graph.size)
+      batch_context = nil
     end
 
     # if one or more resources has attempted and failed to generate resources,

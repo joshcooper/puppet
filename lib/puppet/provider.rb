@@ -609,4 +609,12 @@ class Puppet::Provider
   # applied to the managed entity's current state.
   # @return [void]
   # @api public
+
+  def batch?(batch_context, resource)
+    batch_context && batch_context.provider_class == resource.provider.class
+  end
+
+  def batch(batch_context)
+    raise NotImplementedError
+  end
 end
