@@ -1187,16 +1187,18 @@ class Type
         # We always want to use the "first" provider instance we find, unless the resource
         # is already managed and has a different provider set
         title = instance.respond_to?(:title) ? instance.title : instance.name
-        other = provider_instances[title]
+        result = new(:name => instance.name, :provider => instance, :title => title)
+        key = result.uniqueness_key.compact.join(':')
+        other = provider_instances[key]
+        puts "KEY #{key}"
         if other
           Puppet.debug {
             "%s %s found in both %s and %s; skipping the %s version" % [self.name.to_s.capitalize, title, other.class.name, instance.class.name, instance.class.name]
           }
           next
         end
-        provider_instances[title] = instance
+        provider_instances[key] = instance
 
-        result = new(:name => instance.name, :provider => instance, :title => title)
         properties.each { |name| result.newattr(name) }
         result
       end
