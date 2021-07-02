@@ -49,6 +49,10 @@ module Puppet::Environments
         root.instance_variable_set(:@rich_data, nil)
       end
     end
+
+    def with_guard(env, &block)
+      yield
+    end
   end
 
   # @!macro [new] loader_search_paths
@@ -345,6 +349,7 @@ module Puppet::Environments
 
     END_OF_TIME = end_of_time
     START_OF_TIME = Time.gm(1)
+    GUARD_KEY = :__environment_guard__
 
     def initialize(loader)
       @loader = loader
@@ -479,6 +484,17 @@ module Puppet::Environments
       @loader.get_conf(name)
     end
 
+    def with_guard(env, &block)
+      Thread.current[GUARD_KEY] = true
+      begin
+        # ensure env is cached for the duration
+        get(env.name)
+        yield
+      ensure
+        Thread.current[GUARD_KEY] = nil
+      end
+    end
+
     # Creates a suitable cache entry given the time to live for one environment
     #
     def entry(env)
@@ -520,12 +536,16 @@ module Puppet::Environments
       def label
         ""
       end
+
+      def guarded?
+        !!Thread.current[GUARD_KEY]
+      end
     end
 
     # Always evicting entry
     class NotCachedEntry < Entry
       def expired?(now)
-        true
+        !guarded?
       end
 
       def label
@@ -542,7 +562,7 @@ module Puppet::Environments
       end
 
       def expired?(now)
-        now > @ttl
+        !guarded? && now > @ttl
       end
 
       def label
