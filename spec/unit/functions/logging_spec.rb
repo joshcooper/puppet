@@ -32,6 +32,7 @@ describe 'the log function' do
 
   before(:each) do
     Puppet[:log_level] = 'debug'
+    Puppet[:environment_timeout] = 'unlimited'
   end
 
   Puppet::Util::Log.levels.each do |level|
@@ -52,9 +53,7 @@ describe 'the log function' do
 
       it 'returns undef value' do
         logs = collect_logs("notice(type(#{level.to_s}('yay')))")
-        expect(logs.size).to eql(2)
-        expect(logs[1].level).to eql(:notice)
-        expect(logs[1].message).to eql('Undef')
+        expect(logs).to include(an_object_having_attributes(level: :notice, message: 'Undef'))
       end
     end
   end
