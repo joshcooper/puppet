@@ -53,7 +53,7 @@ class Puppet::Resource::Catalog::Compiler < Puppet::Indirector::Code
     node.trusted_data = Puppet.lookup(:trusted_information) { Puppet::Context::TrustedInformation.local(node) }.to_h
 
     if node.environment
-      node.environment.with_text_domain do
+      Puppet.lookup(:environments).with_guard(node.environment) do
         compile(node, request.options)
       end
     else
