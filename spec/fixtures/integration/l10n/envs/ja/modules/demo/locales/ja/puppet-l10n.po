@@ -1,0 +1,3 @@
+#: ../lib/puppet/functions/l10n.rb:5
+msgid "IT'S HAPPY FUN TIME"
+msgstr "puppet-l10n function: それは楽しい時間です"
