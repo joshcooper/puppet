@@ -247,13 +247,13 @@ module Puppet::Util::Windows::File
     converted = ''
     FFI::Pointer.from_string_to_wide_string(path) do |path_ptr|
       # includes terminating NULL
-      buffer_size = GetLongPathNameW(path_ptr, FFI::Pointer::NULL, 0)
-      FFI::MemoryPointer.new(:wchar, buffer_size) do |converted_ptr|
-        if GetLongPathNameW(path_ptr, converted_ptr, buffer_size) == FFI::WIN32_FALSE
+      cchBuffer = GetLongPathNameW(path_ptr, FFI::Pointer::NULL, 0)
+      FFI::MemoryPointer.new(:wchar, cchBuffer) do |converted_ptr|
+        if GetLongPathNameW(path_ptr, converted_ptr, cchBuffer) == FFI::WIN32_FALSE
           raise Puppet::Util::Windows::Error.new(_("Failed to call GetLongPathName"))
         end
 
-        converted = converted_ptr.read_wide_string(buffer_size - 1)
+        converted = converted_ptr.read_wide_string(cchBuffer - 1)
       end
     end
 
@@ -265,13 +265,13 @@ module Puppet::Util::Windows::File
     converted = ''
     FFI::Pointer.from_string_to_wide_string(path) do |path_ptr|
       # includes terminating NULL
-      buffer_size = GetShortPathNameW(path_ptr, FFI::Pointer::NULL, 0)
-      FFI::MemoryPointer.new(:wchar, buffer_size) do |converted_ptr|
-        if GetShortPathNameW(path_ptr, converted_ptr, buffer_size) == FFI::WIN32_FALSE
+      cchBuffer = GetShortPathNameW(path_ptr, FFI::Pointer::NULL, 0)
+      FFI::MemoryPointer.new(:wchar, cchBuffer) do |converted_ptr|
+        if GetShortPathNameW(path_ptr, converted_ptr, cchBuffer) == FFI::WIN32_FALSE
           raise Puppet::Util::Windows::Error.new("Failed to call GetShortPathName")
         end
 
-        converted = converted_ptr.read_wide_string(buffer_size - 1)
+        converted = converted_ptr.read_wide_string(cchBuffer - 1)
       end
     end
 
@@ -279,6 +279,40 @@ module Puppet::Util::Windows::File
   end
   module_function :get_short_pathname
 
+  def get_final_pathname(path)
+  #require 'byebug'; byebug
+    converted = ''
+    handle = create_file(
+      path,
+      0,
+      0,
+      FFI::Pointer::NULL,
+      OPEN_EXISTING,
+      FILE_FLAG_BACKUP_SEMANTICS,
+      FFI::Pointer::NULL_HANDLE
+    )
+    begin
+      # includes terminating NULL
+      cchBuffer = GetFinalPathNameByHandleW(handle, nil, 0, 0)
+	  raise Puppet::Util::Windows::Error.new(_("Failed to call GetFinalPathNameByHandleW")) if cchBuffer.zero?
+      FFI::MemoryPointer.new(:wchar, cchBuffer) do |ptr|
+        # 0x0 FILE_NAME_NORMALIZED
+        # 0 VOLUME_NAME_DOS
+        len = GetFinalPathNameByHandleW(handle, ptr, cchBuffer, 0)
+		raise Puppet::Util::Windows::Error.new(_("Failed to call GetFinalPathNameByHandleW")) if len.zero?
+        converted = ptr.read_wide_string(len)
+      end
+    ensure
+      FFI::WIN32.CloseHandle(handle)
+    end
+	if converted.start_with?("\\\\?\\")
+	  converted[4..-1]
+	else
+	  converted
+	end
+  end
+  module_function :get_final_pathname
+  
   def stat(file_name)
     file_name = file_name.to_s # accommodate PathName or String
     stat = File.stat(file_name)

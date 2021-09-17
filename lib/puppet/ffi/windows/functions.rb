@@ -581,6 +581,17 @@ module Puppet::FFI::Windows
     attach_function_private :GetFullPathNameW,
       [:lpcwstr, :dword, :lpwstr, :pointer], :dword
 
+    # https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfinalpathnamebyhandlew
+    # DWORD GetFinalPathNameByHandleW(
+    #   HANDLE hFile,
+    #   LPWSTR lpszFilePath,
+    #   DWORD  cchFilePath,
+    #   DWORD  dwFlags
+    # );
+    ffi_lib :kernel32
+    attach_function_private :GetFinalPathNameByHandleW,
+                            [:handle, :lpwstr, :dword, :dword], :dword
+
     # https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-shgetfolderpathw
     # SHFOLDERAPI SHGetFolderPathW(
     #   HWND   hwnd,

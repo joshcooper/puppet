@@ -73,6 +73,7 @@ class Puppet::Util::Autoload
     def load_file(name, env)
       file = get_file(name.to_s, env)
       return false unless file
+	  file = Puppet::Util::Windows::File.get_long_pathname(file)
       begin
         mark_loaded(name, file)
         Kernel.load file
