@@ -85,6 +85,7 @@ class Runtime3Converter
     # Although wasteful, a dup is needed because user code may mutate these strings when applying
     # Resources. This does not happen when in server mode since it only uses Resources that are
     # in puppet core and those are all safe.
+    # REMIND: should run benchmark in server mode
     o.frozen? && !Puppet.run_mode.server? ? o.dup : o
   end
 

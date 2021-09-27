@@ -252,6 +252,7 @@ class Puppet::Resource::TypeCollection
   end
 
   def munge_name(name)
+    # REMIND: this gets called alot
     name.to_s.downcase
   end
 
