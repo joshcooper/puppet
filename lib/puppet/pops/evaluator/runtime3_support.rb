@@ -8,6 +8,13 @@ module Evaluator
 module Runtime3Support
 
   NAME_SPACE_SEPARATOR = '::'.freeze
+  PARROW = '+>'.freeze
+  SERVER_FACTS = 'server_facts'.freeze
+  EMPTY_STRING = ''.freeze
+
+  TYPE_NODE = 'node'.freeze
+  TYPE_CLASS = 'class'.freeze
+  UNKNOWN_FILE_LINE = [nil, -1].freeze
 
   # Fails the evaluation of _semantic_ with a given issue.
   #
@@ -78,7 +85,7 @@ module Runtime3Support
     # The error is not specific enough to allow catching it - need to check the actual message text.
     # TODO: Improve the messy implementation in Scope.
     #
-    if name == "server_facts"
+    if name == SERVER_FACTS
       fail(Issues::ILLEGAL_RESERVED_ASSIGNMENT, o, {:name => name} )
     end
 
@@ -224,7 +231,7 @@ module Runtime3Support
     else
       # transform into the wonderful String representation in 3x
       type, title = Runtime3Converter.instance.catalog_type_to_split_type_title(source)
-      type = Runtime3ResourceSupport.find_resource_type(scope, type) unless type == 'class' || type == 'node'
+      type = Runtime3ResourceSupport.find_resource_type(scope, type) unless type == TYPE_CLASS || type == TYPE_NODE
       source_resource = Puppet::Resource.new(type, title)
     end
     if target.is_a?(Collectors::AbstractCollector)
@@ -233,7 +240,7 @@ module Runtime3Support
     else
       # transform into the wonderful String representation in 3x
       type, title = Runtime3Converter.instance.catalog_type_to_split_type_title(target)
-      type = Runtime3ResourceSupport.find_resource_type(scope, type) unless type == 'class' || type == 'node'
+      type = Runtime3ResourceSupport.find_resource_type(scope, type) unless type == TYPE_CLASS || type == TYPE_NODE
       target_resource = Puppet::Resource.new(type, title)
     end
     # Add the relationship to the compiler for later evaluation.
@@ -289,7 +296,7 @@ module Runtime3Support
 
     # Arguments must be mapped since functions are unaware of the new and magical creatures in 4x.
     # NOTE: Passing an empty string last converts nil/:undef to empty string
-    mapped_args = Runtime3FunctionArgumentConverter.map_args(args, scope, '')
+    mapped_args = Runtime3FunctionArgumentConverter.map_args(args, scope, EMPTY_STRING)
     result = scope.send("function_#{name}", mapped_args, &block)
     # Prevent non r-value functions from leaking their result (they are not written to care about this)
     Puppet::Parser::Functions.rvalue?(name) ? result : nil
@@ -302,7 +309,7 @@ module Runtime3Support
     if func
       Puppet::Util::Profiler.profile(name, [:functions, name]) do
         # Add stack frame when calling.
-        return Puppet::Pops::PuppetStack.stack(file || '', line, func, :call, [scope, *args], &block)
+        return Puppet::Pops::PuppetStack.stack(file || EMPTY_STRING, line, func, :call, [scope, *args], &block)
       end
     end
     # Call via 3x API if function exists there without having been autoloaded
@@ -310,7 +317,7 @@ module Runtime3Support
 
     # Arguments must be mapped since functions are unaware of the new and magical creatures in 4x.
     # NOTE: Passing an empty string last converts nil/:undef to empty string
-    mapped_args = Runtime3FunctionArgumentConverter.map_args(args, scope, '')
+    mapped_args = Runtime3FunctionArgumentConverter.map_args(args, scope, EMPTY_STRING)
     # The 3x function performs return value mapping and returns nil if it is not of rvalue type
     Puppet::Pops::PuppetStack.stack(file, line, scope, "function_#{name}", [mapped_args], &block)
   end
@@ -322,7 +329,7 @@ module Runtime3Support
       :name   => name,
       :value  => convert(value, scope, nil), # converted to 3x since 4x supports additional objects / types
       :source => scope.source, :line => line, :file => file,
-      :add    => operator == '+>'
+      :add    => operator == PARROW
     )
   end
 
@@ -370,7 +377,7 @@ module Runtime3Support
     # A *=> results in an array of arrays
     evaluated_parameters = evaluated_parameters.flatten
     evaluated_resources.each do |r|
-      unless r.is_a?(Types::PResourceType) && r.type_name != 'class'
+      unless r.is_a?(Types::PResourceType) && r.type_name != TYPE_CLASS
         fail(Issues::ILLEGAL_OVERRIDDEN_TYPE, o, {:actual => r} )
       end
       t = Runtime3ResourceSupport.find_resource_type(scope, r.type_name)
@@ -466,7 +473,7 @@ module Runtime3Support
   end
 
   def extract_file_line(o)
-    o.is_a?(Model::Positioned) ? [o.file, o.line] : [nil, -1]
+    o.is_a?(Model::Positioned) ? [o.file, o.line] : UNKNOWN_FILE_LINE
   end
 
   # Creates a diagnostic producer

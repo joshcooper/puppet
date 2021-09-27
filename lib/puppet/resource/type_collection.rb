@@ -230,7 +230,7 @@ class Puppet::Resource::TypeCollection
   def find_or_load(name, type)
     @lock.synchronize do
       # Name is always absolute, but may start with :: which must be removed
-      fqname = (name[0,2] == COLON_COLON ? name[2..-1] : name)
+      fqname = (name.start_with?(COLON_COLON) ? name[2..-1] : name)
 
       result = send(type, fqname)
       unless result

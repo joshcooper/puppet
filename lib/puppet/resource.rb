@@ -28,6 +28,21 @@ class Puppet::Resource
 
   EMPTY_ARRAY = [].freeze
   EMPTY_HASH = {}.freeze
+  EMPTY_STRING = ''.freeze
+
+  EQ_STRING = '='.freeze
+  SLASH_STRING = '/'.freeze
+  COMPONENT_STRING = 'component'.freeze
+  TYPE_STRING = 'type'.freeze
+  TITLE_STRING = 'title'.freeze
+  PARAMETERS_STRING = 'parameters'.freeze
+  SENSITIVE_PARAMETERS_STRING = 'sensitive_parameters'.freeze
+  TAGS_STRING = 'tags'.freeze
+  EXPORTED_STRING = 'exported'.freeze
+  QUESTION_STRING = '?'.freeze
+  STAGE_STRING = 'stage'.freeze
+  ENSURE_STRING = 'ensure'.freeze
+  ABSENT_STRING = 'absent'.freeze
 
   ATTRIBUTES = [:file, :line, :exported].freeze
   TYPE_CLASS = 'Class'.freeze
@@ -44,13 +59,13 @@ class Puppet::Resource
   end
 
   def initialize_from_hash(data)
-    type = data['type']
+    type = data[TYPE_STRING]
     raise ArgumentError, _('No resource type provided in serialized data') unless type
-    title = data['title']
+    title = data[TITLE_STRING]
     raise ArgumentError, _('No resource title provided in serialized data') unless title
     @type, @title = self.class.type_and_title(type, title)
 
-    params = data['parameters']
+    params = data[PARAMETERS_STRING]
     if params
       params = Puppet::Pops::Serialization::FromDataConverter.convert(params)
       @parameters = {}
@@ -59,21 +74,21 @@ class Puppet::Resource
       @parameters = EMPTY_HASH
     end
 
-    sensitives = data['sensitive_parameters']
+    sensitives = data[SENSITIVE_PARAMETERS_STRING]
     if sensitives
       @sensitive_parameters = sensitives.map(&:to_sym)
     else
       @sensitive_parameters = EMPTY_ARRAY
     end
 
-    tags = data['tags']
+    tags = data[TAGS_STRING]
     if tags
       tag(*tags)
     end
 
     ATTRIBUTES.each do |a|
       value = data[a.to_s]
-      send("#{a}=", value) unless value.nil?
+      send("#{a}#{EQ_STRING}", value) unless value.nil?
     end
   end
 
@@ -90,16 +105,16 @@ class Puppet::Resource
   #
   def to_data_hash
     data = {
-      'type' => type,
-      'title' => title.to_s,
-      'tags' => tags.to_data_hash
+      TYPE_STRING => type,
+      TITLE_STRING => title.to_s,
+      TAGS_STRING => tags.to_data_hash
     }
     ATTRIBUTES.each do |param|
       value = send(param)
       data[param.to_s] = value unless value.nil?
     end
 
-    data['exported'] ||= false
+    data[EXPORTED_STRING] ||= false
 
     # To get stringified parameter values the flag :stringify_rich can be set
     # in the puppet context.
@@ -120,7 +135,7 @@ class Puppet::Resource
     end
 
     unless params.empty?
-      data['parameters'] = Puppet::Pops::Serialization::ToDataConverter.convert(params, {
+      data[PARAMETERS_STRING] = Puppet::Pops::Serialization::ToDataConverter.convert(params, {
         :rich_data => Puppet.lookup(:rich_data),
         :symbol_as_string => true,
         :local_reference => false,
@@ -130,7 +145,7 @@ class Puppet::Resource
       })
     end
 
-    data['sensitive_parameters'] = sensitive_parameters.map(&:to_s) unless sensitive_parameters.empty?
+    data[SENSITIVE_PARAMETERS_STRING] = sensitive_parameters.map(&:to_s) unless sensitive_parameters.empty?
     data
   end
 
@@ -204,7 +219,7 @@ class Puppet::Resource
   end
 
   %w{exported virtual strict}.each do |m|
-    define_method(m+"?") do
+    define_method(m + QUESTION_STRING) do
       self.send(m)
     end
   end
@@ -214,7 +229,7 @@ class Puppet::Resource
   end
 
   def stage?
-    @is_stage ||= @type.to_s.casecmp("stage").zero?
+    @is_stage ||= @type.to_s.casecmp(STAGE_STRING).zero?
   end
 
   # Construct a resource from data.
@@ -276,7 +291,7 @@ class Puppet::Resource
         #TRANSLATORS 'Puppet::Resource.new' should not be translated
         raise ArgumentError, _("Puppet::Resource.new does not take a hash as the first argument.") + ' ' +
           _("Did you mean (%{type}, %{title}) ?") %
-              { type: (type[:type] || type["type"]).inspect, title: (type[:title] || type["title"]).inspect }
+              { type: (type[:type] || type[TYPE_STRING]).inspect, title: (type[:title] || type[TITLE_STRING]).inspect }
       end
 
       # In order to avoid an expensive search of 'known_resource_types" and
@@ -303,7 +318,7 @@ class Puppet::Resource
       # Set things like environment, strictness first.
       attributes.each do |attr, value|
         next if attr == :parameters
-        send(attr.to_s + "=", value)
+        send(attr.to_s + EQ_STRING, value)
       end
 
       @type, @title = self.class.type_and_title(type, title)
@@ -375,7 +390,7 @@ class Puppet::Resource
   # @api private
   def self.resource_type(type, title, environment)
     case type
-    when TYPE_CLASS; environment.known_resource_types.hostclass(title == :main ? "" : title)
+    when TYPE_CLASS; environment.known_resource_types.hostclass(title == :main ? EMPTY_STRING : title)
     when TYPE_NODE; environment.known_resource_types.node(title)
     when TYPE_SITE; environment.known_resource_types.site(nil)
     else
@@ -458,14 +473,14 @@ class Puppet::Resource
     # to_data_hash converts to safe Data types, e.g. no symbols, unicode replacement character
     h = to_data_hash
 
-    params = h['parameters'] || {}
-    value = params.delete('ensure')
+    params = h[PARAMETERS_STRING] || {}
+    value = params.delete(ENSURE_STRING)
 
     res = {}
-    res['ensure'] = value if value
+    res[ENSURE_STRING] = value if value
     res.merge!(Hash[params.sort])
 
-    return { h['title'] => res }
+    return { h[TITLE_STRING] => res }
   end
 
   # Convert our resource to Puppet code.
@@ -504,7 +519,7 @@ class Puppet::Resource
     # this is potential namespace conflict
     # between the notion of an "indirector name"
     # and a "resource name"
-    [ type, title ].join('/')
+    [ type, title ].join(SLASH_STRING)
   end
 
   def missing_arguments
@@ -602,7 +617,7 @@ class Puppet::Resource
     dup.collect do |attribute, value|
       if value.to_s.empty? or Array(value).empty?
         delete(attribute)
-      elsif value.to_s == "absent" and attribute.to_s != "ensure"
+      elsif value.to_s == ABSENT_STRING and attribute.to_s != ENSURE_STRING
         delete(attribute)
       end
 
@@ -619,7 +634,7 @@ class Puppet::Resource
     type, title = extract_type_and_title(type, title)
     type = munge_type_name(type)
     if type == TYPE_CLASS
-      title = title == '' ? :main : munge_type_name(title)
+      title = title == EMPTY_STRING ? :main : munge_type_name(title)
     end
     [type, title]
   end
@@ -639,7 +654,7 @@ class Puppet::Resource
 
   def self.munge_type_name(value)
     return :main if value == :main
-    return TYPE_CLASS if value == '' || value.nil? || value.to_s.casecmp('component') == 0
+    return TYPE_CLASS if value == EMPTY_STRING || value.nil? || value.to_s.casecmp(COMPONENT_STRING) == 0
     Puppet::Pops::Types::TypeFormatter.singleton.capitalize_segments(value.to_s)
   end
   private_class_method :munge_type_name

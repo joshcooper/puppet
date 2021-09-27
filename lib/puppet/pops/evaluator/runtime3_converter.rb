@@ -10,6 +10,10 @@ class Runtime3Converter
   MAX_INTEGER =  Puppet::Pops::MAX_INTEGER
   MIN_INTEGER = Puppet::Pops::MIN_INTEGER
 
+  EMPTY_STRING = ''.freeze
+  CLASS_STRING = 'class'.freeze
+  NODE_STRING = 'node'.freeze
+
   # Converts 4x supported values to a 3x values. Same as calling Runtime3Converter.instance.map_args(...)
   #
   # @param args [Array] Array of values to convert
@@ -120,7 +124,7 @@ class Runtime3Converter
     # absolute and others cannot be.
     # Thus there is no need to call scope.resolve_type_and_titles to do dynamic lookup.
     t, title = catalog_type_to_split_type_title(o)
-    t = Runtime3ResourceSupport.find_resource_type(scope, t) unless t == 'class' || t == 'node'
+    t = Runtime3ResourceSupport.find_resource_type(scope, t) unless t == CLASS_STRING || t == NODE_STRING
     Puppet::Resource.new(t, title)
   end
 
@@ -134,16 +138,16 @@ class Runtime3Converter
     case split_type
       when Puppet::Pops::Types::PClassType
         class_name = split_type.class_name
-        ['class', class_name.nil? ? nil : class_name.sub(/^::/, '')]
+        [CLASS_STRING, class_name.nil? ? nil : class_name.sub(/^::/, EMPTY_STRING)]
       when Puppet::Pops::Types::PResourceType
         type_name = split_type.type_name
         title = split_type.title
         if type_name =~ /^(::)?[Cc]lass$/
-          ['class', title.nil? ? nil : title.sub(/^::/, '')]
+          [CLASS_STRING, title.nil? ? nil : title.sub(/^::/, EMPTY_STRING)]
         else
           # Ensure that title is '' if nil
           # Resources with absolute name always results in error because tagging does not support leading ::
-          [type_name.nil? ? nil : type_name.sub(/^::/, '').downcase, title.nil? ? '' : title]
+          [type_name.nil? ? nil : type_name.sub(/^::/, EMPTY_STRING).downcase, title.nil? ? EMPTY_STRING : title]
         end
       else
         #TRANSLATORS 'PClassType' and 'PResourceType' are Puppet types and should not be translated

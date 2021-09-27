@@ -109,7 +109,7 @@ class Lexer2
 
   # This is used for unrecognized tokens, will always be a single character. This particular instance
   # is not used, but is kept here for documentation purposes.
-  TOKEN_OTHER = [:OTHER, nil, 0]
+  TOKEN_OTHER = [:OTHER, nil, 0].freeze
 
   # Keywords are all singleton tokens with pre calculated lengths.
   # Booleans are pre-calculated (rather than evaluating the strings "false" "true" repeatedly.
@@ -139,7 +139,7 @@ class Lexer2
     'consumes'    => [:CONSUMES,    'consumes',     8],
     'produces'    => [:PRODUCES,    'produces',     8],
     'site'        => [:SITE,        'site',         4],
-  }
+  }.freeze
 
   KEYWORDS.each {|k,v| v[1].freeze; v.freeze }
   KEYWORDS.freeze

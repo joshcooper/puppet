@@ -3,6 +3,7 @@ require 'puppet/util/tag_set'
 
 module Puppet::Util::Tagging
   ValidTagRegex = /\A[[:alnum:]_][[:alnum:]_:.-]*\Z/u
+  COLON_COLON = '::'.freeze
 
   # Add a tag to the current tag set.
   # When a tag set is used for a scope, these tags will be added to all of
@@ -21,7 +22,7 @@ module Puppet::Util::Tagging
         if valid_tag?(name)
           if split_qualified_tags?
           # avoid adding twice by first testing if the string contains '::'
-            @tags.merge(name.split('::')) if name.include?('::')
+            @tags.merge(name.split(COLON_COLON)) if name.include?(COLON_COLON)
           end
         else
           @tags.delete(name)
@@ -44,8 +45,8 @@ module Puppet::Util::Tagging
     if name.is_a?(String) && valid_tag?(name)
       name = name.downcase
       @tags ||= new_tags
-      if @tags.add?(name) && name.include?('::')
-        @tags.merge(name.split('::'))
+      if @tags.add?(name) && name.include?(COLON_COLON)
+        @tags.merge(name.split(COLON_COLON))
       end
     end
   end

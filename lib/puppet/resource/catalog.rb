@@ -23,6 +23,9 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
 
   include Puppet::Util::Tagging
 
+  LBRACK = '['.freeze
+  RBRACK = ']'.freeze
+
   # The host name this is a catalog for.
   attr_accessor :name
 
@@ -86,8 +89,8 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
   # Returns [nil, nil] if '[' ']' not detected.
   #
   def title_key_for_ref( ref )
-    s = ref.index('[')
-    e = ref.rindex(']')
+    s = ref.index(LBRACK)
+    e = ref.rindex(RBRACK)
     if s && e && e > s
       a = [ref[0, s], ref[s+1, e-s-1]]
     else

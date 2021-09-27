@@ -175,6 +175,8 @@
 #
 # @api public
 module Puppet::Functions
+  EMPTY_STRING = ''.freeze
+
   # @param func_name [String, Symbol] a simple or qualified function name
   # @param block [Proc] the block that defines the methods and dispatch of the
   #   Function to create
@@ -628,7 +630,7 @@ module Puppet::Functions
       begin
         result = parser.parse_string("type #{assignment_string}", nil)
       rescue StandardError => e
-        rb_location = rb_location.gsub(/:in.*$/, '')
+        rb_location = rb_location.gsub(/:in.*$/, EMPTY_STRING)
         # Create a meaningful location for parse errors - show both what went wrong with the parsing
         # and in which ruby file it was found.
         raise ArgumentError, _("Parsing of 'type \"%{assignment_string}\"' failed with message: <%{message}>.\n" +
@@ -639,7 +641,7 @@ module Puppet::Functions
         }
       end
       unless result.body.kind_of?(Puppet::Pops::Model::TypeAlias)
-        rb_location = rb_location.gsub(/:in.*$/, '')
+        rb_location = rb_location.gsub(/:in.*$/, EMPTY_STRING)
         raise ArgumentError, _("Expected a type alias assignment on the form 'AliasType = T', got '%{assignment_string}'.\n"+
         "Called from <%{ruby_file_location}>") % {
           assignment_string: assignment_string,
@@ -746,7 +748,7 @@ module Puppet::Functions
         def call(scope, *args, &block)
           begin
             result = catch(:return) do
-              mapped_args = Puppet::Pops::Evaluator::Runtime3FunctionArgumentConverter.map_args(args, scope, '')
+              mapped_args = Puppet::Pops::Evaluator::Runtime3FunctionArgumentConverter.map_args(args, scope, EMPTY_STRING)
               # this is the scope.function_xxx(...) call
               return scope.send(self.class.method3x, mapped_args)
             end
