@@ -108,12 +108,20 @@ namespace :benchmark do
           abort("Run `bundle install --with development` to install the 'memory_profiler' gem.")
         end
 
-        report = MemoryProfiler.report do
+        report = MemoryProfiler.report(allow_files: ['puppet/pops/parser/code_merger.rb',
+                                                     'puppet/pops/parser/lexer2.rb'], top: 50) do
           @benchmark.run(args)
         end
 
         path = "mem_profile_#{$PID}"
-        report.pretty_print(to_file: path)
+        report.instance_variable_set(:@colorize, MemoryProfiler::Monochrome.new)
+        options = {retained_strings: 0, normalize_paths: true, detailed_path: false}
+#        report.send(:dump_data, $stdout, "allocated", "objects", "class", options)
+        report.send(:dump_data, $stdout, "allocated", "objects", "file", options)
+        report.send(:dump_data, $stdout, "allocated", "memory", "file", options)
+        report.send(:dump_data, $stdout, "allocated", "objects", "location", options)
+        report.send(:dump_data, $stdout, "allocated", "objects", "class", options)
+#        report.pretty_print(options) #(to_file: path)
 
         puts "Generated memory profile: #{File.absolute_path(path)}"
       end
