@@ -225,7 +225,11 @@ class Puppet::Resource::Type
       return
     end
 
-    self.code = Puppet::Parser::ParserFactory.code_merger.concatenate([self, other])
+    if self.code.is_a?(Puppet::Parser::AST::PopsBridge::Program)
+      self.code = Puppet::Parser::AST::BlockExpression.new(children: [self.code])
+    end
+
+    self.code = Puppet::Parser::ParserFactory.code_merger.concatenate([other], self.code)
   end
 
   # Make an instance of the resource type, and place it in the catalog
