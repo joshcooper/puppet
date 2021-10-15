@@ -186,399 +186,486 @@ class Lexer2
 
   def initialize()
     @selector = {
-      '.' =>  lambda { emit(TOKEN_DOT, @scanner.pos) },
-      ',' => lambda {  emit(TOKEN_COMMA, @scanner.pos) },
-      '[' => lambda do
-        before = @scanner.pos
-        # Must check the preceding character to see if it is whitespace.
-        # The fastest thing to do is to simply byteslice to get the string ending at the offset before
-        # and then check what the last character is. (This is the same as  what an locator.char_offset needs
-        # to compute, but with less overhead of trying to find out the global offset from a local offset in the
-        # case when this is sublocated in a heredoc).
-        if before == 0 || @scanner.string.byteslice(0, before)[-1] =~ /[[:blank:]\r\n]+/
-          emit(TOKEN_LISTSTART, before)
-        else
-          emit(TOKEN_LBRACK, before)
-        end
-      end,
-      ']' => lambda { emit(TOKEN_RBRACK, @scanner.pos) },
-      '(' => lambda do
-        before = @scanner.pos
-        # If first on a line, or only whitespace between start of line and '('
-        # then the token is special to avoid being taken as start of a call.
-        line_start = @lexing_context[:line_lexical_start]
-        if before == line_start || @scanner.string.byteslice(line_start, before - line_start) =~ /\A[[:blank:]\r]+\Z/
-          emit(TOKEN_WSLPAREN, before)
-        else
-          emit(TOKEN_LPAREN, before)
-        end
-      end,
-      ')' => lambda { emit(TOKEN_RPAREN, @scanner.pos) },
-      ';' => lambda { emit(TOKEN_SEMIC, @scanner.pos) },
-      '?' => lambda { emit(TOKEN_QMARK, @scanner.pos) },
-      '*' => lambda { emit(TOKEN_TIMES, @scanner.pos) },
-      '%' => lambda do
-        scn = @scanner
-        before = scn.pos
-        la = scn.peek(2)
-        if la[1] == '>' && @lexing_context[:epp_mode]
-          scn.pos += 2
-          if @lexing_context[:epp_mode] == :expr
-            enqueue_completed(TOKEN_EPPEND, before)
-          end
-          @lexing_context[:epp_mode] = :text
-          interpolate_epp
-        else
-          emit(TOKEN_MODULO, before)
-        end
-      end,
-      '{' => lambda do
-        # The lexer needs to help the parser since the technology used cannot deal with
-        # lookahead of same token with different precedence. This is solved by making left brace
-        # after ? into a separate token.
-        #
-        @lexing_context[:brace_count] += 1
-        emit(if @lexing_context[:after] == :QMARK
-               TOKEN_SELBRACE
-             else
-               TOKEN_LBRACE
-             end, @scanner.pos)
-      end,
-      '}' => lambda do
-        @lexing_context[:brace_count] -= 1
-        emit(TOKEN_RBRACE, @scanner.pos)
-      end,
-
+      '.' => method(:handle_dot),
+      ',' => method(:handle_comma),
+      '[' => method(:handle_lbrack),
+      ']' => method(:handle_rbrack),
+      '(' => method(:handle_lparen),
+      ')' => method(:handle_rparen),
+      ';' => method(:handle_semicolon),
+      '?' => method(:handle_qmark),
+      '*' => method(:handle_times),
+      '%' => method(:handle_percent),
+      '{' => method(:handle_lbrace),
+      '}' => method(:handle_rbrace),
 
       # TOKENS @, @@, @(
-      '@' => lambda do
-        scn = @scanner
-        la = scn.peek(2)
-        if la[1] == '@'
-          emit(TOKEN_ATAT, scn.pos) # TODO; Check if this is good for the grammar
-        elsif la[1] == '('
-          heredoc
-        else
-          emit(TOKEN_AT, scn.pos)
-        end
-      end,
+      '@' => method(:handle_at),
 
       # TOKENS |, |>, |>>
-      '|' => lambda do
-        scn = @scanner
-        la = scn.peek(3)
-        emit(la[1] == '>' ? (la[2] == '>' ? TOKEN_RRCOLLECT : TOKEN_RCOLLECT) : TOKEN_PIPE, scn.pos)
-      end,
+      '|' => method(:handle_pipe),
 
       # TOKENS =, =>, ==, =~
-      '=' => lambda do
-        scn = @scanner
-        la = scn.peek(2)
-        emit(case la[1]
-             when '='
-               TOKEN_ISEQUAL
-             when '>'
-               TOKEN_FARROW
-             when '~'
-               TOKEN_MATCH
-             else
-               TOKEN_EQUALS
-             end, scn.pos)
-      end,
+      '=' => method(:handle_equal),
 
       # TOKENS '+', '+=', and '+>'
-      '+' => lambda do
-        scn = @scanner
-        la = scn.peek(2)
-        emit(case la[1]
-             when '='
-               TOKEN_APPENDS
-             when '>'
-               TOKEN_PARROW
-             else
-               TOKEN_PLUS
-             end, scn.pos)
-      end,
+      '+' => method(:handle_plus),
 
       # TOKENS '-', '->', and epp '-%>' (end of interpolation with trim)
-      '-' => lambda do
-        scn = @scanner
-        la = scn.peek(3)
-        before = scn.pos
-        if @lexing_context[:epp_mode] && la[1] == '%' && la[2] == '>'
-          scn.pos += 3
-          if @lexing_context[:epp_mode] == :expr
-            enqueue_completed(TOKEN_EPPEND_TRIM, before)
-          end
-          interpolate_epp(:with_trim)
-        else
-          emit(case la[1]
-               when '>'
-                 TOKEN_IN_EDGE
-               when '='
-                 TOKEN_DELETES
-               else
-                 TOKEN_MINUS
-               end, before)
-        end
-      end,
+      '-' => method(:handle_minus),
 
       # TOKENS !, !=, !~
-      '!' => lambda do
-        scn = @scanner
-        la = scn.peek(2)
-        emit(case la[1]
-             when '='
-               TOKEN_NOTEQUAL
-             when '~'
-               TOKEN_NOMATCH
-             else
-               TOKEN_NOT
-             end, scn.pos)
-      end,
+      '!' => method(:handle_bang),
 
       # TOKENS ~>, ~
-      '~' => lambda do
-        scn = @scanner
-        la = scn.peek(2)
-        emit(la[1] == '>' ? TOKEN_IN_EDGE_SUB : TOKEN_TILDE, scn.pos)
-      end,
+      '~' => method(:handle_tilde),
 
-      '#' => lambda { @scanner.skip(PATTERN_COMMENT); nil },
+      '#' => method(:handle_comment),
 
       # TOKENS '/', '/*' and '/ regexp /'
-      '/' => lambda do
-        scn = @scanner
-        la = scn.peek(2)
-        if la[1] == '*'
-          lex_error(Issues::UNCLOSED_MLCOMMENT) if scn.skip(PATTERN_MLCOMMENT).nil?
-          nil
-        else
-          before = scn.pos
-          # regexp position is a regexp, else a div
-          value = scn.scan(PATTERN_REGEX) if regexp_acceptable?
-          if value
-            # Ensure an escaped / was not matched
-            while escaped_end(value)
-              more = scn.scan_until(PATTERN_REGEX_END)
-              return emit(TOKEN_DIV, before) unless more
-              value << more
-            end
-            regex = value.sub(PATTERN_REGEX_A, '').sub(PATTERN_REGEX_Z, '').gsub(PATTERN_REGEX_ESC, '/')
-            emit_completed([:REGEX, Regexp.new(regex), scn.pos-before], before)
-          else
-            emit(TOKEN_DIV, before)
-          end
-        end
-      end,
+      '/' => method(:handle_slash),
 
       # TOKENS <, <=, <|, <<|, <<, <-, <~
-      '<' => lambda do
-        scn = @scanner
-        la = scn.peek(3)
-        emit(case la[1]
-             when '<'
-               if la[2] == '|'
-                 TOKEN_LLCOLLECT
-               else
-                 TOKEN_LSHIFT
-               end
-             when '='
-               TOKEN_LESSEQUAL
-             when '|'
-               TOKEN_LCOLLECT
-             when '-'
-               TOKEN_OUT_EDGE
-             when '~'
-               TOKEN_OUT_EDGE_SUB
-             else
-               TOKEN_LESSTHAN
-             end, scn.pos)
-      end,
+      '<' => method(:handle_lessthan),
 
       # TOKENS >, >=, >>
-      '>' => lambda do
-        scn = @scanner
-        la = scn.peek(2)
-        emit(case la[1]
-             when '>'
-               TOKEN_RSHIFT
-             when '='
-               TOKEN_GREATEREQUAL
-             else
-               TOKEN_GREATERTHAN
-             end, scn.pos)
-      end,
+      '>' => method(:handle_greaterthan),
 
       # TOKENS :, ::CLASSREF, ::NAME
-      ':' => lambda do
-        scn = @scanner
-        la = scn.peek(3)
-        before = scn.pos
-        if la[1] == ':'
-          # PERFORMANCE NOTE: This could potentially be speeded up by using a case/when listing all
-          # upper case letters. Alternatively, the 'A', and 'Z' comparisons may be faster if they are
-          # frozen.
-          #
-          la2 = la[2]
-          if la2 >= 'A' && la2 <= 'Z'
-            # CLASSREF or error
-            value = scn.scan(PATTERN_CLASSREF)
-            if value && scn.peek(2) != '::'
-              after = scn.pos
-              emit_completed([:CLASSREF, value.freeze, after-before], before)
-            else
-              # move to faulty position ('::<uc-letter>' was ok)
-              scn.pos = scn.pos + 3
-              lex_error(Issues::ILLEGAL_FULLY_QUALIFIED_CLASS_REFERENCE)
-            end
-          else
-            value = scn.scan(PATTERN_BARE_WORD)
-            if value
-              if value =~ PATTERN_NAME
-                emit_completed([:NAME, value.freeze, scn.pos - before], before)
-              else
-                emit_completed([:WORD, value.freeze, scn.pos - before], before)
-              end
-            else
-              # move to faulty position ('::' was ok)
-              scn.pos = scn.pos + 2
-              lex_error(Issues::ILLEGAL_FULLY_QUALIFIED_NAME)
-            end
-          end
-        else
-          emit(TOKEN_COLON, before)
-        end
-      end,
+      ':' => method(:handle_colon),
 
-      '$' => lambda do
-        scn = @scanner
-        before = scn.pos
-        value = scn.scan(PATTERN_DOLLAR_VAR)
-        if value
-          emit_completed([:VARIABLE, value[1..-1].freeze, scn.pos - before], before)
-        else
-          # consume the $ and let higher layer complain about the error instead of getting a syntax error
-          emit(TOKEN_VARIABLE_EMPTY, before)
-        end
-      end,
+      '$' => method(:handle_dollar),
 
-      '"' => lambda do
-        # Recursive string interpolation, 'interpolate' either returns a STRING token, or
-        # a DQPRE with the rest of the string's tokens placed in the @token_queue
-        interpolate_dq
-      end,
+      '"' => method(:handle_dquote),
 
-      "'" => lambda do
-        scn = @scanner
-        before = scn.pos
-        emit_completed([:STRING, slurp_sqstring.freeze, scn.pos - before], before)
-      end,
+      "'" => method(:handle_squote),
 
-      "\n" => lambda do
-        # If heredoc_cont is in effect there are heredoc text lines to skip over
-        # otherwise just skip the newline.
-        #
-        ctx = @lexing_context
-        if ctx[:newline_jump]
-          @scanner.pos = ctx[:newline_jump]
-          ctx[:newline_jump] = nil
-        else
-          @scanner.pos += 1
-        end
-        ctx[:line_lexical_start] = @scanner.pos
-        nil
-      end,
-      '' => lambda { nil } # when the peek(1) returns empty
+      "\n" => method(:handle_newline),
+
+      '' => method(:handle_empty) # when the peek(1) returns empty
     }
 
-    [ ' ', "\t", "\r" ].each { |c| @selector[c] = lambda { @scanner.skip(PATTERN_WS); nil } }
+    [ ' ', "\t", "\r" ].each { |c| @selector[c] = method(:handle_whitespace) }
 
     [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].each do |c|
-      @selector[c] = lambda do
-        scn = @scanner
-        before = scn.pos
-        value = scn.scan(PATTERN_NUMBER)
-        if value
-          length = scn.pos - before
-          assert_numeric(value, before)
-          emit_completed([:NUMBER, value.freeze, length], before)
-        else
-          invalid_number = scn.scan_until(PATTERN_NON_WS)
-          if before > 1
-            after = scn.pos
-            scn.pos = before - 1
-            if scn.peek(1) == '.'
-              # preceded by a dot. Is this a bad decimal number then?
-              scn.pos = before - 2
-              while scn.peek(1) =~ /^\d$/
-                invalid_number = nil
-                before = scn.pos
-                break if before == 0
-                scn.pos = scn.pos - 1
-              end
-            end
-            scn.pos = before
-            invalid_number = scn.peek(after - before) unless invalid_number
-          end
-          assert_numeric(invalid_number, before)
-          scn.pos = before + 1
-          lex_error(Issues::ILLEGAL_NUMBER, {:value => invalid_number})
-        end
-      end
+      @selector[c] = method(:handle_number)
     end
     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '_'].each do |c|
-      @selector[c] = lambda do
-        scn = @scanner
-        before = scn.pos
-        value = scn.scan(PATTERN_BARE_WORD)
-        if value && value =~ PATTERN_NAME
-          emit_completed(KEYWORDS[value] || @taskm_keywords[value] || [:NAME, value.freeze, scn.pos - before], before)
-        elsif value
-          emit_completed([:WORD, value.freeze, scn.pos - before], before)
-        else
-          # move to faulty position ([a-z_] was ok)
-          scn.pos = scn.pos + 1
-          fully_qualified = scn.match?(/::/)
-          if fully_qualified
-            lex_error(Issues::ILLEGAL_FULLY_QUALIFIED_NAME)
-          else
-            lex_error(Issues::ILLEGAL_NAME_OR_BARE_WORD)
-          end
-        end
-      end
+      @selector[c] = method(:handle_word)
     end
 
     ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
       'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'].each do |c|
-      @selector[c] = lambda do
-        scn = @scanner
-        before = scn.pos
-        value = @scanner.scan(PATTERN_CLASSREF)
-        if value && @scanner.peek(2) != '::'
-          emit_completed([:CLASSREF, value.freeze, scn.pos - before], before)
-        else
-          # move to faulty position ([A-Z] was ok)
-          scn.pos = scn.pos + 1
-          lex_error(Issues::ILLEGAL_CLASS_REFERENCE)
-        end
-      end
+      @selector[c] = method(:handle_classref)
     end
 
-    @selector.default = lambda do
-      # In case of unicode spaces of various kinds that are captured by a regexp, but not by the
-      # simpler case expression above (not worth handling those special cases with better performance).
-      scn = @scanner
-      if scn.skip(PATTERN_WS)
-        nil
-      else
-        # "unrecognized char"
-        emit([:OTHER, scn.peek(0), 1], scn.pos)
-      end
-    end
+    @selector.default = method(:handle_default)
     @selector.each { |k,v| k.freeze }
     @selector.freeze
+  end
+
+  def handle_dot
+    emit(TOKEN_DOT, @scanner.pos)
+  end
+
+  def handle_comma
+    emit(TOKEN_COMMA, @scanner.pos)
+  end
+
+  def handle_lbrack
+    before = @scanner.pos
+    # Must check the preceding character to see if it is whitespace.
+    # The fastest thing to do is to simply byteslice to get the string ending at the offset before
+    # and then check what the last character is. (This is the same as  what an locator.char_offset needs
+    # to compute, but with less overhead of trying to find out the global offset from a local offset in the
+    # case when this is sublocated in a heredoc).
+    if before == 0 || @scanner.string.byteslice(0, before)[-1] =~ /[[:blank:]\r\n]+/
+      emit(TOKEN_LISTSTART, before)
+    else
+      emit(TOKEN_LBRACK, before)
+    end
+  end
+
+  def handle_rbrack
+    emit(TOKEN_RBRACK, @scanner.pos)
+  end
+
+  def handle_lparen
+    before = @scanner.pos
+    # If first on a line, or only whitespace between start of line and '('
+    # then the token is special to avoid being taken as start of a call.
+    line_start = @lexing_context[:line_lexical_start]
+    if before == line_start || @scanner.string.byteslice(line_start, before - line_start) =~ /\A[[:blank:]\r]+\Z/
+      emit(TOKEN_WSLPAREN, before)
+    else
+      emit(TOKEN_LPAREN, before)
+    end
+  end
+
+  def handle_rparen
+    emit(TOKEN_RPAREN, @scanner.pos)
+  end
+
+  def handle_semicolon
+    emit(TOKEN_SEMIC, @scanner.pos)
+  end
+
+  def handle_qmark
+    emit(TOKEN_QMARK, @scanner.pos)
+  end
+
+  def handle_times
+    emit(TOKEN_TIMES, @scanner.pos)
+  end
+
+  def handle_percent
+    scn = @scanner
+    before = scn.pos
+    la = scn.peek(2)
+    if la[1] == '>' && @lexing_context[:epp_mode]
+      scn.pos += 2
+      if @lexing_context[:epp_mode] == :expr
+        enqueue_completed(TOKEN_EPPEND, before)
+      end
+      @lexing_context[:epp_mode] = :text
+      interpolate_epp
+    else
+      emit(TOKEN_MODULO, before)
+    end
+  end
+  def handle_lbrace
+    # The lexer needs to help the parser since the technology used cannot deal with
+    # lookahead of same token with different precedence. This is solved by making left brace
+    # after ? into a separate token.
+    #
+    @lexing_context[:brace_count] += 1
+    emit(if @lexing_context[:after] == :QMARK
+         TOKEN_SELBRACE
+        else
+          TOKEN_LBRACE
+         end, @scanner.pos)
+  end
+
+  def handle_rbrace
+    @lexing_context[:brace_count] -= 1
+    emit(TOKEN_RBRACE, @scanner.pos)
+  end
+
+  def handle_at
+    scn = @scanner
+    la = scn.peek(2)
+    if la[1] == '@'
+      emit(TOKEN_ATAT, scn.pos) # TODO; Check if this is good for the grammar
+    elsif la[1] == '('
+      heredoc
+    else
+      emit(TOKEN_AT, scn.pos)
+    end
+  end
+
+  def handle_pipe
+    scn = @scanner
+    la = scn.peek(3)
+    emit(la[1] == '>' ? (la[2] == '>' ? TOKEN_RRCOLLECT : TOKEN_RCOLLECT) : TOKEN_PIPE, scn.pos)
+  end
+
+  def handle_equal
+    scn = @scanner
+    la = scn.peek(2)
+    emit(case la[1]
+         when '='
+           TOKEN_ISEQUAL
+         when '>'
+           TOKEN_FARROW
+         when '~'
+           TOKEN_MATCH
+         else
+           TOKEN_EQUALS
+         end, scn.pos)
+  end
+
+  def handle_plus
+    scn = @scanner
+    la = scn.peek(2)
+    emit(case la[1]
+         when '='
+           TOKEN_APPENDS
+         when '>'
+           TOKEN_PARROW
+         else
+           TOKEN_PLUS
+         end, scn.pos)
+  end
+
+  def handle_minus
+    scn = @scanner
+    la = scn.peek(3)
+    before = scn.pos
+    if @lexing_context[:epp_mode] && la[1] == '%' && la[2] == '>'
+      scn.pos += 3
+      if @lexing_context[:epp_mode] == :expr
+        enqueue_completed(TOKEN_EPPEND_TRIM, before)
+      end
+      interpolate_epp(:with_trim)
+    else
+      emit(case la[1]
+           when '>'
+             TOKEN_IN_EDGE
+           when '='
+             TOKEN_DELETES
+           else
+             TOKEN_MINUS
+           end, before)
+    end
+  end
+
+  def handle_bang
+    scn = @scanner
+    la = scn.peek(2)
+    emit(case la[1]
+         when '='
+           TOKEN_NOTEQUAL
+         when '~'
+           TOKEN_NOMATCH
+         else
+           TOKEN_NOT
+         end, scn.pos)
+  end
+
+  def handle_tilde
+    scn = @scanner
+    la = scn.peek(2)
+    emit(la[1] == '>' ? TOKEN_IN_EDGE_SUB : TOKEN_TILDE, scn.pos)
+  end
+
+  def handle_comment
+    @scanner.skip(PATTERN_COMMENT); nil
+  end
+
+  def handle_slash
+    scn = @scanner
+    la = scn.peek(2)
+    if la[1] == '*'
+      lex_error(Issues::UNCLOSED_MLCOMMENT) if scn.skip(PATTERN_MLCOMMENT).nil?
+      nil
+    else
+      before = scn.pos
+      # regexp position is a regexp, else a div
+      value = scn.scan(PATTERN_REGEX) if regexp_acceptable?
+      if value
+        # Ensure an escaped / was not matched
+        while escaped_end(value)
+          more = scn.scan_until(PATTERN_REGEX_END)
+          return emit(TOKEN_DIV, before) unless more
+          value << more
+        end
+        regex = value.sub(PATTERN_REGEX_A, '').sub(PATTERN_REGEX_Z, '').gsub(PATTERN_REGEX_ESC, '/')
+        emit_completed([:REGEX, Regexp.new(regex), scn.pos-before], before)
+      else
+        emit(TOKEN_DIV, before)
+      end
+    end
+  end
+
+  def handle_lessthan
+    scn = @scanner
+    la = scn.peek(3)
+    emit(case la[1]
+         when '<'
+           if la[2] == '|'
+             TOKEN_LLCOLLECT
+           else
+             TOKEN_LSHIFT
+           end
+         when '='
+           TOKEN_LESSEQUAL
+         when '|'
+           TOKEN_LCOLLECT
+         when '-'
+           TOKEN_OUT_EDGE
+         when '~'
+           TOKEN_OUT_EDGE_SUB
+         else
+           TOKEN_LESSTHAN
+         end, scn.pos)
+  end
+
+  def handle_greaterthan
+    scn = @scanner
+    la = scn.peek(2)
+    emit(case la[1]
+         when '>'
+           TOKEN_RSHIFT
+         when '='
+           TOKEN_GREATEREQUAL
+         else
+           TOKEN_GREATERTHAN
+         end, scn.pos)
+  end
+
+  def handle_colon
+    scn = @scanner
+    la = scn.peek(3)
+    before = scn.pos
+    if la[1] == ':'
+      # PERFORMANCE NOTE: This could potentially be speeded up by using a case/when listing all
+      # upper case letters. Alternatively, the 'A', and 'Z' comparisons may be faster if they are
+      # frozen.
+      #
+      la2 = la[2]
+      if la2 >= 'A' && la2 <= 'Z'
+        # CLASSREF or error
+        value = scn.scan(PATTERN_CLASSREF)
+        if value && scn.peek(2) != '::'
+          after = scn.pos
+          emit_completed([:CLASSREF, value.freeze, after-before], before)
+        else
+          # move to faulty position ('::<uc-letter>' was ok)
+          scn.pos = scn.pos + 3
+          lex_error(Issues::ILLEGAL_FULLY_QUALIFIED_CLASS_REFERENCE)
+        end
+      else
+        value = scn.scan(PATTERN_BARE_WORD)
+        if value
+          if value =~ PATTERN_NAME
+            emit_completed([:NAME, value.freeze, scn.pos - before], before)
+          else
+            emit_completed([:WORD, value.freeze, scn.pos - before], before)
+          end
+        else
+          # move to faulty position ('::' was ok)
+          scn.pos = scn.pos + 2
+          lex_error(Issues::ILLEGAL_FULLY_QUALIFIED_NAME)
+        end
+      end
+    else
+      emit(TOKEN_COLON, before)
+    end
+  end
+
+  def handle_dollar
+    scn = @scanner
+    before = scn.pos
+    value = scn.scan(PATTERN_DOLLAR_VAR)
+    if value
+      emit_completed([:VARIABLE, value[1..-1].freeze, scn.pos - before], before)
+    else
+      # consume the $ and let higher layer complain about the error instead of getting a syntax error
+      emit(TOKEN_VARIABLE_EMPTY, before)
+    end
+  end
+
+  def handle_dquote
+    # Recursive string interpolation, 'interpolate' either returns a STRING token, or
+    # a DQPRE with the rest of the string's tokens placed in the @token_queue
+    interpolate_dq
+  end
+
+  def handle_squote
+    scn = @scanner
+    before = scn.pos
+    emit_completed([:STRING, slurp_sqstring.freeze, scn.pos - before], before)
+  end
+
+  def handle_newline
+    # If heredoc_cont is in effect there are heredoc text lines to skip over
+    # otherwise just skip the newline.
+    #
+    ctx = @lexing_context
+    if ctx[:newline_jump]
+      @scanner.pos = ctx[:newline_jump]
+      ctx[:newline_jump] = nil
+    else
+      @scanner.pos += 1
+    end
+    ctx[:line_lexical_start] = @scanner.pos
+    nil
+  end
+
+  def handle_empty
+    nil
+  end
+
+  def handle_whitespace
+    @scanner.skip(PATTERN_WS); nil
+  end
+
+  def handle_number
+    scn = @scanner
+    before = scn.pos
+    value = scn.scan(PATTERN_NUMBER)
+    if value
+      length = scn.pos - before
+      assert_numeric(value, before)
+      emit_completed([:NUMBER, value.freeze, length], before)
+    else
+      invalid_number = scn.scan_until(PATTERN_NON_WS)
+      if before > 1
+        after = scn.pos
+        scn.pos = before - 1
+        if scn.peek(1) == '.'
+          # preceded by a dot. Is this a bad decimal number then?
+          scn.pos = before - 2
+          while scn.peek(1) =~ /^\d$/
+            invalid_number = nil
+            before = scn.pos
+            break if before == 0
+            scn.pos = scn.pos - 1
+          end
+        end
+        scn.pos = before
+        invalid_number = scn.peek(after - before) unless invalid_number
+      end
+      assert_numeric(invalid_number, before)
+      scn.pos = before + 1
+      lex_error(Issues::ILLEGAL_NUMBER, {:value => invalid_number})
+    end
+  end
+
+  def handle_word
+    scn = @scanner
+    before = scn.pos
+    value = scn.scan(PATTERN_BARE_WORD)
+    if value && value =~ PATTERN_NAME
+      emit_completed(KEYWORDS[value] || @taskm_keywords[value] || [:NAME, value.freeze, scn.pos - before], before)
+    elsif value
+      emit_completed([:WORD, value.freeze, scn.pos - before], before)
+    else
+      # move to faulty position ([a-z_] was ok)
+      scn.pos = scn.pos + 1
+      fully_qualified = scn.match?(/::/)
+      if fully_qualified
+        lex_error(Issues::ILLEGAL_FULLY_QUALIFIED_NAME)
+      else
+        lex_error(Issues::ILLEGAL_NAME_OR_BARE_WORD)
+      end
+    end
+  end
+
+  def handle_classref
+    scn = @scanner
+    before = scn.pos
+    value = @scanner.scan(PATTERN_CLASSREF)
+    if value && @scanner.peek(2) != '::'
+      emit_completed([:CLASSREF, value.freeze, scn.pos - before], before)
+    else
+      # move to faulty position ([A-Z] was ok)
+      scn.pos = scn.pos + 1
+      lex_error(Issues::ILLEGAL_CLASS_REFERENCE)
+    end
+  end
+
+  def handle_default
+    # In case of unicode spaces of various kinds that are captured by a regexp, but not by the
+    # simpler case expression above (not worth handling those special cases with better performance).
+    scn = @scanner
+    if scn.skip(PATTERN_WS)
+      nil
+    else
+      # "unrecognized char"
+      emit([:OTHER, scn.peek(0), 1], scn.pos)
+    end
   end
 
   # Determine if last char of value is escaped by a backslash
