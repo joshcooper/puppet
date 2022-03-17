@@ -383,18 +383,19 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
 
       log_config if Puppet[:daemonize]
 
-      # run ssl state machine, waiting if needed
-      ssl_context = wait_for_certificates
 
       # Each application is responsible for pushing loaders onto the context.
       # Use the current environment that has already been established, though
       # it may change later during the configurer run.
       env = Puppet.lookup(:current_environment)
-      Puppet.override(ssl_context: ssl_context,
-                      current_environment: env,
+      Puppet.override(current_environment: env,
                       loaders: Puppet::Pops::Loaders.new(env, true)) do
         if Puppet[:onetime]
-          onetime(daemon)
+          # run ssl state machine, waiting if needed
+          ssl_context = wait_for_certificates
+          Puppet.override(ssl_context: ssl_context) do
+            onetime(daemon)
+          end
         else
           main(daemon)
         end
@@ -497,6 +498,12 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
     end
   end
 
+  def wait_for_certificates
+    waitforcert = options[:waitforcert] || (Puppet[:onetime] ? 0 : Puppet[:waitforcert])
+    sm = Puppet::SSL::StateMachine.new(waitforcert: waitforcert)
+    sm.ensure_client_certificate
+  end
+
   private
 
   def enable_disable_client(agent)
@@ -517,17 +524,11 @@ Copyright (c) 2011 Puppet Inc., LLC Licensed under the Apache 2.0 License
   end
 
   def daemonize_process_when(should_daemonize)
-    daemon = Puppet::Daemon.new(@agent, Puppet::Util::Pidlock.new(Puppet[:pidfile]))
+    daemon = Puppet::Daemon.new(@agent, Puppet::Util::Pidlock.new(Puppet[:pidfile]), Puppet::Scheduler::Scheduler.new, self)
     daemon.argv = @argv
 
     daemon.daemonize if should_daemonize
 
     daemon
-  end
-
-  def wait_for_certificates
-    waitforcert = options[:waitforcert] || (Puppet[:onetime] ? 0 : Puppet[:waitforcert])
-    sm = Puppet::SSL::StateMachine.new(waitforcert: waitforcert)
-    sm.ensure_client_certificate
   end
 end

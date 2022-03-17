@@ -22,11 +22,12 @@ class Puppet::Daemon
   attr_accessor :argv
   attr_reader :signals, :agent
 
-  def initialize(agent, pidfile, scheduler = Puppet::Scheduler::Scheduler.new())
+  def initialize(agent, pidfile, scheduler = Puppet::Scheduler::Scheduler.new(), app = nil)
     raise Puppet::DevError, _("Daemons must have an agent") unless agent
     @scheduler = scheduler
     @pidfile = pidfile
     @agent = agent
+    @app = app
     @signals = []
   end
 
@@ -86,7 +87,7 @@ class Puppet::Daemon
   end
 
   def reload
-    agent.run({:splay => false})
+    run_with_certs
   rescue Puppet::LockError
     Puppet.notice "Not triggering already-running agent"
   end
@@ -154,8 +155,7 @@ class Puppet::Daemon
   # Loop forever running events - or, at least, until we exit.
   def run_event_loop
     agent_run = Puppet::Scheduler.create_job(Puppet[:runinterval], Puppet[:splay], Puppet[:splaylimit]) do
-      # Splay for the daemon is handled in the scheduler
-      agent.run(:splay => false)
+      run_with_certs
     end
 
     reparse_run = Puppet::Scheduler.create_job(Puppet[:filetimeout]) do
@@ -178,5 +178,15 @@ class Puppet::Daemon
     reparse_run.disable if Puppet[:filetimeout] == 0
 
     @scheduler.run_loop([reparse_run, agent_run, signal_loop])
+  end
+
+  private
+
+  def run_with_certs
+    ssl_context = @app.wait_for_certificates
+    Puppet.override(ssl_context: ssl_context) do
+      # Splay for the daemon is handled in the scheduler
+      agent.run(:splay => false)
+    end
   end
 end
