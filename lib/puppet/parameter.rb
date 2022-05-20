@@ -23,6 +23,7 @@ class Puppet::Parameter
   include Puppet::Util::Logging
 
   require_relative 'parameter/value_collection'
+  require_relative 'parameter/data'
 
   class << self
     include Puppet::Util

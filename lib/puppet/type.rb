@@ -449,6 +449,11 @@ class Type
   def self.newparam(name, options = {}, &block)
     options[:attributes] ||= {}
 
+    if options[:datatype]
+      options[:attributes][:datatype] = options[:datatype]
+      options[:parent] = Puppet::Parameter::Data
+    end
+
     param = genclass(
       name,
       :parent     => options[:parent] || Puppet::Parameter,
@@ -501,6 +506,8 @@ class Type
     parent = options[:parent]
     if parent
       options.delete(:parent)
+    elsif options[:datatype]
+      parent = Puppet::Property::Data
     else
       parent = Puppet::Property
     end

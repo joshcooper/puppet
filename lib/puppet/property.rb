@@ -40,6 +40,7 @@ require_relative '../puppet/parameter'
 #
 class Puppet::Property < Puppet::Parameter
   require_relative 'property/ensure'
+  require_relative 'property/data'
 
   # Returns the original wanted value(s) _(should)_ unprocessed by munging/unmunging.
   # The original values are set by {#value=} or {#should=}.
