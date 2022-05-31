@@ -93,6 +93,8 @@ module Puppet::Pops
     # @return [Object] The result of the merge
     #
     def merge(e1, e2)
+      Puppet.notice("Merging #{e1} and #{e2}")
+
       checked_merge(
         assert_type('The first element of the merge', value_t, e1),
         assert_type('The second element of the merge', value_t, e2)
@@ -128,10 +130,13 @@ module Puppet::Pops
       when 0
         throw :no_such_key
       when 1
+        Puppet.notice("Lookup from #{lookup_variants[0]}")
         merge_single(yield(lookup_variants[0]))
       else
+        Puppet.notice("Lookup #{lookup_variants.map(&:to_s)} locations")
         lookup_invocation.with(:merge, self) do
           result = lookup_variants.reduce(NOT_FOUND) do |memo, lookup_variant|
+            Puppet.notice("Lookup in #{lookup_variant} #{lookup_variant.class}")
             not_found = true
             value = catch(:no_such_key) do
               v = yield(lookup_variant)
@@ -365,14 +370,26 @@ module Puppet::Pops
   class DeepMergeStrategy < MergeStrategy
     INSTANCE = new(EMPTY_HASH)
 
+    def initialize(options)
+      super
+      @antivalues = []
+    end
+
     def self.key
       :deep
     end
 
     def checked_merge(e1, e2)
+      require 'byebug'; byebug
+      prefix = options["knockout_all"]
+      if prefix
+        @antivalues.concat(e1.find_all { |e| e.start_with?(prefix) })
+      end
+      e1 = e1 + @antivalues
       dm_options = { :preserve_unmergeables => false }
       options.each_pair { |k, v| dm_options[k.to_sym] = v unless k == 'strategy' }
       # e2 (the destination) is deep cloned to avoid that the passed in object mutates
+      Puppet.notice("Merge instance #{self.object_id} #{e1} #{e2} using options #{dm_options}")
       DeepMerge.deep_merge!(e1, deep_clone(e2), dm_options)
     end
 
@@ -400,6 +417,7 @@ module Puppet::Pops
         @options_t ||= Types::TypeParser.singleton.parse('Struct[{'\
                                                          "strategy=>Optional[Pattern[#{key}]],"\
                                                          'knockout_prefix=>Optional[String],'\
+                                                         'knockout_all=>Optional[Boolean],'\
                                                          'merge_debug=>Optional[Boolean],'\
                                                          'merge_hash_arrays=>Optional[Boolean],'\
                                                          'sort_merged_arrays=>Optional[Boolean],'\

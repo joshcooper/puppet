@@ -295,6 +295,7 @@ class Puppet::Application::Lookup < Puppet::Application
 
         if options[:prefix]
           merge_options['knockout_prefix'] = options[:prefix]
+          merge_options['knockout_all'] = true
         end
 
       else
