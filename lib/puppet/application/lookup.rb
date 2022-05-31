@@ -297,6 +297,7 @@ Copyright (c) 2015 Puppet Inc., LLC Licensed under the Apache 2.0 License
 
         if options[:prefix]
           merge_options['knockout_prefix'] = options[:prefix]
+          merge_options['knockout_all'] = true
         end
 
       else
