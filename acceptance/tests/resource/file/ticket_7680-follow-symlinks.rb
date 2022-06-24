@@ -5,12 +5,7 @@ tag 'audit:high',
     'audit:acceptance'
 
 agents.each do |agent|
-  if agent.platform.variant == 'windows'
-    # symlinks are supported only on Vista+ (version 6.0 and higher)
-    on agent, facter('kernelmajversion') do
-      skip_test "Test not supported on this platform" if stdout.chomp.to_f < 6.0
-    end
-  end
+  pending_test("Windows 11 backslashes") if agent['platform'] =~ /windows-11/
 
   step "Create file content"
   real_source = agent.tmpfile('follow_links_source')
@@ -23,6 +18,7 @@ agents.each do |agent|
     # but that requires backslashes, that need to be escaped,
     # and the link cannot exist prior.
     on agent, "rm -f #{symlink}"
+    #    on agent, "cmd /c mklink #{symlink.gsub('/', '\\\\\\\\\\\\')} #{real_source.gsub('/', '\\\\\\\\\\\\')}"
     on agent, "cmd /c mklink #{symlink.gsub('/', '\\\\\\\\')} #{real_source.gsub('/', '\\\\\\\\')}"
   else
     on agent, "ln -sf #{real_source} #{symlink}"
