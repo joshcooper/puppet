@@ -17,3 +17,40 @@ AllCops:
     - 'lib/puppet/external/**/*'
     - 'lib/puppet/pops/parser/eparser.rb'
 
+
+# Configuration parameters: IgnoredMethods.
+Metrics/AbcSize:
+  Enabled: false
+
+# Configuration parameters: CountComments, CountAsOne, ExcludedMethods.
+# ExcludedMethods: refine
+Metrics/BlockLength:
+  Enabled: false
+
+# Configuration parameters: CountBlocks.
+Metrics/BlockNesting:
+  Enabled: false
+
+# Configuration parameters: CountComments, CountAsOne.
+Metrics/ClassLength:
+  Enabled: false
+
+# Configuration parameters: IgnoredMethods.
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+# Configuration parameters: CountComments, CountAsOne, ExcludedMethods.
+Metrics/MethodLength:
+  Enabled: false
+
+# Configuration parameters: CountComments, CountAsOne.
+Metrics/ModuleLength:
+  Enabled: false
+
+# Configuration parameters: CountKeywordArgs.
+Metrics/ParameterLists:
+  Enabled: false
+
+# Configuration parameters: IgnoredMethods.
+Metrics/PerceivedComplexity:
+  Enabled: false
