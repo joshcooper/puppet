@@ -36,12 +36,6 @@ Lint/EmptyConditionalBody:
   Exclude:
     - 'lib/puppet/external/pson/pure/parser.rb'
 
-# Offense count: 2
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Lint/InterpolationCheck:
-  Exclude:
-    - 'lib/puppet/util/package/version/pip.rb'
-
 # Offense count: 71
 Lint/MissingSuper:
   Enabled: false
