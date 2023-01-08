@@ -24,11 +24,6 @@ Lint/EmptyConditionalBody:
     - 'lib/puppet/external/pson/pure/parser.rb'
 
 # Offense count: 1
-Lint/MixedRegexpCaptureTypes:
-  Exclude:
-    - 'lib/puppet/util.rb'
-
-# Offense count: 1
 Lint/StructNewOverride:
   Exclude:
     - 'lib/puppet/network/http/request.rb'
