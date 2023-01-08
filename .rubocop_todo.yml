@@ -238,11 +238,3 @@ Style/StderrPuts:
 # Configuration parameters: Mode.
 Style/StringConcatenation:
   Enabled: false
-
-# Offense count: 5
-# This cop supports safe autocorrection (--autocorrect).
-Style/UnpackFirst:
-  Exclude:
-    - 'lib/puppet/file_serving/http_metadata.rb'
-    - 'lib/puppet/provider/nameservice/directoryservice.rb'
-    - 'lib/puppet/provider/user/directoryservice.rb'
