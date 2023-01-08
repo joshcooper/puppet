@@ -735,3 +735,8 @@ Naming/RescuedExceptionsVariableName:
 
 Naming/VariableNumber:
   Enabled: false
+
+# Need to regenerate AST using RubyGenerator
+Style/RedundantFetchBlock:
+  Exclude:
+    - 'lib/puppet/pops/model/ast.rb'

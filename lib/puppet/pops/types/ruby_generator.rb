@@ -236,9 +236,9 @@ class RubyGenerator < TypeFormatter
         if ip.value.nil?
           bld << "      init_hash['" << ip.name << "'],\n"
         else
-          bld << "      init_hash.fetch('" << ip.name << "') { "
+          bld << "      init_hash.fetch('" << ip.name << "', "
           default_string(bld, ip)
-          bld << " },\n"
+          bld << "),\n"
         end
       end
       bld.chomp!(",\n")
