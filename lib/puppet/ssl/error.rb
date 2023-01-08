@@ -3,6 +3,7 @@ module Puppet::SSL
 
   class CertVerifyError < Puppet::SSL::SSLError
     attr_reader :code, :cert
+
     def initialize(message, code, cert)
       super(message)
       @code = code

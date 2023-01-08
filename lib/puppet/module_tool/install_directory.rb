@@ -8,6 +8,7 @@ module Puppet
       include Puppet::ModuleTool::Errors
 
       attr_reader :target
+
       def initialize(target)
         @target = target
       end

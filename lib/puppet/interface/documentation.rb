@@ -267,6 +267,7 @@ class Puppet::Interface
     # @return [String] Comma-separated list of copyright owners
     # @api private
     attr_accessor :copyright_owner
+
     def copyright_owner=(value)
       case value
       when String then @copyright_owner = value
@@ -284,6 +285,7 @@ class Puppet::Interface
     # @return [String]
     # @api private
     attr_accessor :copyright_years
+
     def copyright_years=(value)
       years = munge_copyright_year value
       years = (years.is_a?(Array) ? years : [years]).

@@ -68,6 +68,7 @@ module PN
 
   class Indent
     attr_reader :current
+
     def initialize(indent = '  ', current = '')
       @indent = indent
       @current = current
@@ -119,6 +120,7 @@ module PN
 
   class Entry
     attr_reader :key, :value
+
     def initialize(key, value)
       @key = key
       @value = value

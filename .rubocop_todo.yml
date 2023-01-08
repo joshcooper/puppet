@@ -10,13 +10,6 @@
 I18n/RailsI18n/DecorateString:
   Enabled: false
 
-# Offense count: 49
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowAliasSyntax, AllowedMethods.
-# AllowedMethods: alias_method, public, protected, private
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: false
-
 Lint/BooleanSymbol:
   Enabled: false
 

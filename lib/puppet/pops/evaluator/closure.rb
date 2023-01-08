@@ -4,6 +4,7 @@ module Evaluator
     attr_reader :value
     attr_reader :file
     attr_reader :line
+
     def initialize(value, file, line)
       @value = value
       @file = file

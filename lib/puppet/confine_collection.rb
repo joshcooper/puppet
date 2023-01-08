@@ -25,6 +25,7 @@ class Puppet::ConfineCollection
   end
 
   attr_reader :label
+
   def initialize(label)
     @label = label
     @confines = []

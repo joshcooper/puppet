@@ -134,6 +134,7 @@ class Puppet::Interface::Option
 
   attr_reader   :parent, :name, :aliases, :optparse
   attr_accessor :required
+
   def required=(value)
     if has_default?
       raise ArgumentError, _("%{name} can't be optional and have a default value") % { name: self }
@@ -142,6 +143,7 @@ class Puppet::Interface::Option
   end
 
   attr_accessor :before_action
+
   def before_action=(proc)
     unless proc.is_a? Proc
       #TRANSLATORS 'proc' is a Ruby block of code
@@ -153,6 +155,7 @@ class Puppet::Interface::Option
   end
 
   attr_accessor :after_action
+
   def after_action=(proc)
     unless proc.is_a? Proc
       #TRANSLATORS 'proc' is a Ruby block of code

@@ -30,6 +30,7 @@ Puppet::Type.type(:package).provide(:windows, :parent => Puppet::Provider::Packa
   has_feature :versionable
 
   attr_accessor :package
+
   class << self
     attr_accessor :paths
   end

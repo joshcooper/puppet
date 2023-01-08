@@ -2231,6 +2231,7 @@ class Type
     # @return [Boolean] true if the type should send itself a refresh event on change.
     #
     attr_accessor :self_refresh
+
     include Enumerable, Puppet::Util::ClassGen
 
     include Puppet::Util
