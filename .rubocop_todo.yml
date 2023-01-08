@@ -978,14 +978,6 @@ Style/RedundantFetchBlock:
   Exclude:
     - 'lib/puppet/pops/types/p_sem_ver_range_type.rb'
 
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantFileExtensionInRequire:
-  Exclude:
-    - 'lib/puppet/parser.rb'
-    - 'lib/puppet/type/file/content.rb'
-    - 'lib/puppet/util/rdoc/parser.rb'
-    - 'lib/puppet/util/rdoc/parser/puppet_parser_rdoc2.rb'
-
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/RedundantInterpolation:
   Enabled: false
