@@ -213,7 +213,7 @@ defaultfor :osfamily => :redhat, :operatingsystemmajrelease => (4..7).to_a
         end
       end
 
-      version = versions.sort.last if versions.any?
+      version = versions.max if versions.any?
 
       if version
         version = version.to_s.sub(/^\d+:/, '')
