@@ -691,6 +691,9 @@ Style/NumericLiteralPrefix:
 Style/NumericPredicate:
   Enabled: false
 
+Style/RedundantPercentQ:
+  Enabled: false
+
 Style/SymbolArray:
   Enabled: false
 
