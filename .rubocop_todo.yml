@@ -75,11 +75,6 @@ Style/CommentedKeyword:
 
 
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/ExpandPathArguments:
-  Exclude:
-    - 'lib/puppet/util/libuser.rb'
 
 # Offense count: 73
 # This cop supports safe autocorrection (--autocorrect).
