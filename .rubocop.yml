@@ -18,6 +18,9 @@ AllCops:
     - 'lib/puppet/pops/model/ast.rb'
     - 'lib/puppet/pops/parser/eparser.rb'
 
+I18n/RailsI18n/DecorateString:
+  Enabled: false
+
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle, IndentationWidth.
 # SupportedStyles: outdent, indent

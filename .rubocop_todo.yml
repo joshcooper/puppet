@@ -19,9 +19,6 @@ I18n/GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-I18n/RailsI18n/DecorateString:
-  Enabled: false
-
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Lint/BooleanSymbol:
   Enabled: false
