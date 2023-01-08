@@ -980,12 +980,6 @@ Style/RedundantCondition:
     - 'lib/puppet/util/inifile.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
-Style/RedundantConditional:
-  Exclude:
-    - 'lib/puppet/type/exec.rb'
-    - 'lib/puppet/type/file.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
 Style/RedundantException:
   Exclude:
     - 'lib/puppet/file_bucket/dipper.rb'
