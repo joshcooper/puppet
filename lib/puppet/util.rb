@@ -526,7 +526,7 @@ module Util
   module_function :uri_unescape
 
   def safe_posix_fork(stdin=$stdin, stdout=$stdout, stderr=$stderr, &block)
-    child_pid = Kernel.fork do
+    Kernel.fork do
       STDIN.reopen(stdin)
       STDOUT.reopen(stdout)
       STDERR.reopen(stderr)
@@ -547,7 +547,6 @@ module Util
 
       block.call if block
     end
-    child_pid
   end
   module_function :safe_posix_fork
 
@@ -563,11 +562,9 @@ module Util
 
   # Just benchmark, with no logging.
   def thinmark
-    seconds = Benchmark.realtime {
+    Benchmark.realtime {
       yield
     }
-
-    seconds
   end
 
   module_function :thinmark

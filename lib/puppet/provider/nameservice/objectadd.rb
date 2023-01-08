@@ -14,9 +14,7 @@ class Puppet::Provider::NameService
 
     def posixmethod(name)
       name   = name.intern if name.is_a? String
-      method = self.class.option(name, :method) || name
-
-      method
+      self.class.option(name, :method) || name
     end
   end
 end

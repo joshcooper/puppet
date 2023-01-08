@@ -959,10 +959,6 @@ Style/RaiseArgs:
   Enabled: false
 
 # This cop supports safe autocorrection (--autocorrect).
-Style/RedundantAssignment:
-  Enabled: false
-
-# This cop supports safe autocorrection (--autocorrect).
 Style/RedundantBegin:
   Enabled: false
 

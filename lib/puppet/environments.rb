@@ -237,13 +237,12 @@ module Puppet::Environments
 
       env_symbol = name.intern
       setting_values = Puppet.settings.values(env_symbol, Puppet.settings.preferred_run_mode)
-      env = Puppet::Node::Environment.create(
+      Puppet::Node::Environment.create(
         env_symbol,
         Puppet::Node::Environment.split_path(setting_values.interpolate(:modulepath)),
         setting_values.interpolate(:manifest),
         setting_values.interpolate(:config_version)
       )
-      env
     end
 
     def validated_directory(envdir)
