@@ -485,11 +485,6 @@ Style/Encoding:
     - 'lib/puppet/util/windows/service.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
-Style/EvalWithLocation:
-  Exclude:
-    - 'lib/puppet/interface/action_builder.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
 Style/EvenOdd:
   Exclude:
     - 'lib/puppet/pops/serialization/json.rb'
