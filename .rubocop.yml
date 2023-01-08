@@ -709,5 +709,8 @@ I18n/GetText/DecorateString:
 I18n/GetText/DecorateStringFormattingUsingPercent:
   Enabled: false
 
+I18n/RailsI18n/DecorateString:
+  Enabled: false
+
 Style/SafeNavigation:
   Enabled: false
