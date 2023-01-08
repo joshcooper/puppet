@@ -47,7 +47,7 @@ Puppet::Type.type(:package).provide :aptrpm, :parent => :rpm, :source => :rpm do
     if output =~ /Versions:\s*\n((\n|.)+)^$/
       versions = $1
       available_versions = versions.split(/\n/).collect { |version|
-        if version =~ /^([^\(]+)\(/
+        if version =~ /^([^(]+)\(/
           $1
         else
           self.warning _("Could not match version '%{version}'") % { version: version }

@@ -35,7 +35,7 @@ class VersionNeeded < StandardError; end
 FLOAT_RE = /^-?((\d+(\.\d+)?)|(\.\d+))([eE][-+]?[\d]+)?$/
 
 ## Regex for parameters
-PARAM_RE = /^-(-|\.$|[^\d\.])/
+PARAM_RE = /^-(-|\.$|[^\d.])/
 
 ## The commandline parser. In typical usage, the methods in this class
 ## will be handled internally by Trollop::options. In this case, only the

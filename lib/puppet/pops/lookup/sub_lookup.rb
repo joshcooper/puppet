@@ -1,7 +1,7 @@
 module Puppet::Pops
 module Lookup
 module SubLookup
-  SPECIAL = /['"\.]/
+  SPECIAL = /['".]/
 
   # Split key into segments. A segment may be a quoted string (both single and double quotes can
   # be used) and the segment separator is the '.' character. Whitespace will be trimmed off on
