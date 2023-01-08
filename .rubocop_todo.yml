@@ -1032,16 +1032,6 @@ Style/RedundantSelfAssignment:
   Exclude:
     - 'lib/puppet/context.rb'
 
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/RedundantSort:
-  Exclude:
-    - 'lib/puppet/interface/face_collection.rb'
-    - 'lib/puppet/module/plan.rb'
-    - 'lib/puppet/module_tool/applications/unpacker.rb'
-    - 'lib/puppet/provider/package/apt.rb'
-    - 'lib/puppet/provider/package/yum.rb'
-    - 'lib/puppet/provider/package/zypper.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle, AllowInnerSlashes.
 # SupportedStyles: slashes, percent_r, mixed

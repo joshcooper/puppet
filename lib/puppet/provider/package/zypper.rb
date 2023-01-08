@@ -78,7 +78,7 @@ Puppet::Type.type(:package).provide :zypper, :parent => :rpm, :source => :rpm do
         end
       end
 
-      return versions.sort.last if versions.any?
+      return versions.max if versions.any?
 
       Puppet.debug("No available version for package #{@resource[:name]} is included in range #{should_range}")
       should
