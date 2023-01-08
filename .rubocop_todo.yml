@@ -177,11 +177,6 @@ Style/OrAssignment:
     - 'lib/puppet/util/errors.rb'
     - 'util/rspec_grouper'
 
-# Offense count: 17
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantAssignment:
-  Enabled: false
-
 # Offense count: 21
 # This cop supports safe autocorrection (--autocorrect).
 Style/RedundantCondition:

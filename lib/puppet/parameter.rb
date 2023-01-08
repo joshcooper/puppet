@@ -382,9 +382,7 @@ class Puppet::Parameter
   #
   def noop
     @noop ||= false
-    tmp = @noop || self.resource.noop || Puppet[:noop] || false
-    #debug "noop is #{tmp}"
-    tmp
+    @noop || self.resource.noop || Puppet[:noop] || false
   end
 
   # Returns an array of strings representing the containment hierarchy
