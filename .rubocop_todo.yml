@@ -73,11 +73,6 @@ Style/CommentedKeyword:
     - 'lib/puppet/util/rpm_compare.rb'
     - 'lib/puppet/util/windows/service.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/EmptyBlockParameter:
-  Exclude:
-    - 'lib/puppet/parser/type_loader.rb'
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
