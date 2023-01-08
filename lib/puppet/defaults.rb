@@ -188,7 +188,7 @@ module Puppet
         ",
     },
     :strict => {
-      :default    => :warning,
+      :default    => :error,
       :type       => :symbolic_enum,
       :values     => [:off, :warning, :error],
       :desc       => "The strictness level of puppet. Allowed values are:
@@ -2210,7 +2210,7 @@ EOT
     EOT
     },
   :strict_variables => {
-    :default => false,
+    :default => true,
     :type => :boolean,
     :desc => <<-'EOT'
       Causes an evaluation error when referencing unknown variables. (This does not affect
