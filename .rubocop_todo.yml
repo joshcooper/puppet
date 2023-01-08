@@ -36,14 +36,6 @@ Lint/UselessMethodDefinition:
     - 'lib/puppet/util/rdoc/code_objects.rb'
     - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle, AllowModifiersOnSymbols.
-# SupportedStyles: inline, group
-Style/AccessModifierDeclarations:
-  Exclude:
-    - 'lib/puppet/util/suidmanager.rb'
-
 # Offense count: 183
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
