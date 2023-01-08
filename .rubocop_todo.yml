@@ -185,15 +185,6 @@ Style/RedundantFetchBlock:
     - 'lib/puppet/pops/model/ast.rb'
     - 'lib/puppet/pops/types/p_sem_ver_range_type.rb'
 
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantFileExtensionInRequire:
-  Exclude:
-    - 'lib/puppet/parser.rb'
-    - 'lib/puppet/type/file/content.rb'
-    - 'lib/puppet/util/rdoc/parser.rb'
-    - 'lib/puppet/util/rdoc/parser/puppet_parser_rdoc2.rb'
-
 # Offense count: 12
 # This cop supports safe autocorrection (--autocorrect).
 Style/RedundantPercentQ:
