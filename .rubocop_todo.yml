@@ -435,11 +435,6 @@ Style/EachWithObject:
   Enabled: false
 
 # This cop supports safe autocorrection (--autocorrect).
-Style/EmptyBlockParameter:
-  Exclude:
-    - 'lib/puppet/parser/type_loader.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
 Style/EmptyCaseCondition:
   Exclude:
     - 'lib/puppet/pops/lookup/hiera_config.rb'
