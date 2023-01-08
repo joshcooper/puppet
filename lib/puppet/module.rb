@@ -62,8 +62,8 @@ class Puppet::Module
     SemanticPuppet::VersionRange.parse(range)
   end
 
-  attr_reader :name, :environment, :path, :metadata
-  attr_writer :environment
+  attr_accessor :environment
+  attr_reader :name, :path, :metadata
 
   attr_accessor :dependencies, :forge_name
   attr_accessor :source, :author, :version, :license, :summary, :description, :project_page
