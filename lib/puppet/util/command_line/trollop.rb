@@ -331,7 +331,7 @@ class Parser
       when /^--no-([^-]\S*)$/
         @long["[no-]#{$1}"]
       when /^--([^-]\S*)$/
-        @long[$1] ? @long[$1] : @long["[no-]#{$1}"]
+        @long[$1] || @long["[no-]#{$1}"]
       else
         raise CommandlineError, _("invalid argument syntax: '%{arg}'") % { arg: arg }
       end
