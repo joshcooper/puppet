@@ -1254,13 +1254,6 @@ Style/UnlessElse:
     - 'lib/puppet/util/command_line/trollop.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
-Style/UnpackFirst:
-  Exclude:
-    - 'lib/puppet/file_serving/http_metadata.rb'
-    - 'lib/puppet/provider/nameservice/directoryservice.rb'
-    - 'lib/puppet/provider/user/directoryservice.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
 Style/VariableInterpolation:
   Exclude:
     - 'lib/puppet/util/command_line/trollop.rb'
