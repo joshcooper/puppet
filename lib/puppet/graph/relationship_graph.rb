@@ -261,6 +261,7 @@ class Puppet::Graph::RelationshipGraph < Puppet::Graph::SimpleGraph
     #
     # Implement the six requirements listed above
     #
+    # rubocop:disable Style/CombinableLoops
     containers.each { |x|
       contents = catalog.adjacent(x, :direction => :out)
       add_edge(admissible[x],completed[x]) if contents.empty? # (0)
@@ -280,5 +281,6 @@ class Puppet::Graph::RelationshipGraph < Puppet::Graph::SimpleGraph
       }
     }
     containers.each { |x| remove_vertex! x } # (5)
+    # rubocop:enable Style/CombinableLoops
   end
 end

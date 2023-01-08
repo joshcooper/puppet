@@ -146,7 +146,8 @@ Puppet::Type.type(:service).provide :init, :parent => :base do
       end
     end
 
-    paths.each do |path|
+    # try searching for script with .sh extension
+    paths.each do |path| # rubocop:disable Style/CombinableLoops
       fqname_sh = File.join(path,"#{name}.sh")
       if Puppet::FileSystem.exist? fqname_sh
         return fqname_sh
@@ -154,6 +155,7 @@ Puppet::Type.type(:service).provide :init, :parent => :base do
         self.debug("Could not find #{name}.sh in #{path}")
       end
     end
+
     raise Puppet::Error, "Could not find init script for '#{name}'"
   end
 

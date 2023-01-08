@@ -139,10 +139,8 @@ module Generators
 
         classes.each do |k|
           @allclasses[k.index_name] = k if !@allclasses.has_key?(k.index_name)
-        end
 
-        # generate nodes and plugins found
-        classes.each do |k|
+          # generate nodes and plugins found
           if k.context.is_module?
             k.context.each_node do |name,node|
               nodes << HTMLPuppetNode.new(node, toplevel, NODE_DIR, @options)

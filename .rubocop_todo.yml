@@ -18,14 +18,6 @@ Style/AccessorGrouping:
 Style/CaseLikeIf:
   Enabled: false
 
-# Offense count: 5
-Style/CombinableLoops:
-  Exclude:
-    - 'lib/puppet/graph/relationship_graph.rb'
-    - 'lib/puppet/pops/types/ruby_generator.rb'
-    - 'lib/puppet/provider/service/init.rb'
-    - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
-
 # Offense count: 10
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/CommentedKeyword:

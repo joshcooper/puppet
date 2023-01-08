@@ -210,8 +210,10 @@ class RubyGenerator < TypeFormatter
     constants, others = obj.attributes(true).values.partition { |a| a.kind == PObjectType::ATTRIBUTE_KIND_CONSTANT }
     constants = constants.select { |ca| ca.container.equal?(obj) }
     unless constants.empty?
-      constants.each { |ca| bld << "\n  def self." << rname(ca.name) << "\n    _pcore_type['" << ca.name << "'].value\n  end\n" }
-      constants.each { |ca| bld << "\n  def " << rname(ca.name) << "\n    self.class." << ca.name << "\n  end\n" }
+      constants.each { |ca|
+        bld << "\n  def self." << rname(ca.name) << "\n    _pcore_type['" << ca.name << "'].value\n  end\n"
+        bld << "\n  def " << rname(ca.name) << "\n    self.class." << ca.name << "\n  end\n"
+      }
     end
 
     init_params = others.reject { |a| a.kind == PObjectType::ATTRIBUTE_KIND_DERIVED }
