@@ -865,7 +865,7 @@ Puppet::Type.newtype(:file) do
     # The user doesn't really care, apparently
     if self[:ensure] == :present
       return true unless stat
-      return(stat.ftype == "file" ? true : false)
+      return(stat.ftype == "file")
     end
 
     # If we've gotten here, then :ensure isn't set
