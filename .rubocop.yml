@@ -582,6 +582,11 @@ Layout/TrailingEmptyLines:
 Layout/TrailingWhitespace:
   Enabled: false
 
+# This cop supports safe autocorrection (--autocorrect).
+Lint/ElseLayout:
+  Exclude:
+    - 'lib/puppet/resource.rb'
+
 # Seems better to call `object_id` explicitly
 Lint/HashCompareByIdentity:
   Exclude:

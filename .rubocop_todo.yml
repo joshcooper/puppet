@@ -31,11 +31,6 @@ Lint/ConstantDefinitionInBlock:
 Lint/DuplicateMethods:
   Enabled: false
 
-# This cop supports safe autocorrection (--autocorrect).
-Lint/ElseLayout:
-  Exclude:
-    - 'lib/puppet/resource.rb'
-
 # Configuration parameters: AllowComments.
 Lint/EmptyWhen:
   Exclude:
