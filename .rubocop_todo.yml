@@ -259,13 +259,6 @@ Security/Eval:
     - 'lib/puppet/pops/loader/ruby_function_instantiator.rb'
     - 'lib/puppet/pops/loader/ruby_legacy_function_instantiator.rb'
 
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle, AllowModifiersOnSymbols.
-# SupportedStyles: inline, group
-Style/AccessModifierDeclarations:
-  Exclude:
-    - 'lib/puppet/util/suidmanager.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: separated, grouped
