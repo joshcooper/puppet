@@ -32,10 +32,6 @@ Lint/EnsureReturn:
 Lint/MissingSuper:
   Enabled: false
 
-Lint/MixedRegexpCaptureTypes:
-  Exclude:
-    - 'lib/puppet/util.rb'
-
 # Configuration parameters: AllowedMethods, AllowedPatterns.
 Lint/NestedMethodDefinition:
   Exclude:
