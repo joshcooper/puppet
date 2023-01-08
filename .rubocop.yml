@@ -1,8 +1,10 @@
+inherit_from: .rubocop_todo.yml
+
 require:
   rubocop-i18n
 
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
   Include:
     - 'lib/**/*.rb'
     - 'ext/**/*.rb'
