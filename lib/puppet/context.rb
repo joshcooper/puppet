@@ -31,7 +31,7 @@ class Puppet::Context
 
   # @api private
   def push(overrides, description = '')
-    @stack.value = @stack.value.push(overrides, description)
+    @stack.value = @stack.value.push(overrides, description) # rubocop:disable Style/RedundantSelfAssignment
   end
 
   # Push a context and make this global across threads
