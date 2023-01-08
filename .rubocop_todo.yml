@@ -18,13 +18,6 @@ Style/AccessorGrouping:
 Style/CaseLikeIf:
   Enabled: false
 
-# Offense count: 30
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowedMethods, AllowedPatterns, IgnoredMethods.
-# AllowedMethods: ==, equal?, eql?
-Style/ClassEqualityComparison:
-  Enabled: false
-
 # Offense count: 5
 Style/CombinableLoops:
   Exclude:
