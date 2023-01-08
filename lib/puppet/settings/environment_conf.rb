@@ -170,7 +170,7 @@ class Puppet::Settings::EnvironmentConf
 
   def expand_glob(path)
     return nil if path.nil?
-    if path =~ /[*?\[\{]/
+    if path =~ /[*?\[{]/
       Dir.glob(path)
     else
       path
