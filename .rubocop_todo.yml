@@ -1027,11 +1027,6 @@ Style/RedundantReturn:
 Style/RedundantSelf:
   Enabled: false
 
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/RedundantSelfAssignment:
-  Exclude:
-    - 'lib/puppet/context.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle, AllowInnerSlashes.
 # SupportedStyles: slashes, percent_r, mixed
