@@ -74,11 +74,6 @@ Style/CommentedKeyword:
     - 'lib/puppet/util/windows/service.rb'
 
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/EvalWithLocation:
-  Exclude:
-    - 'lib/puppet/interface/action_builder.rb'
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
