@@ -17,8 +17,8 @@ Puppet::Type.type(:package).provide :yum, :parent => :rpm, :source => :rpm do
 
   has_feature :install_options, :versionable, :virtual_packages, :install_only
 
-  RPM_VERSION       = Puppet::Util::Package::Version::Rpm
-  RPM_VERSION_RANGE = Puppet::Util::Package::Version::Range
+  const_set(:RPM_VERSION, Puppet::Util::Package::Version::Rpm)
+  const_set(:RPM_VERSION_RANGE, Puppet::Util::Package::Version::Range)
 
   commands :cmd => "yum", :rpm => "rpm"
 
@@ -42,28 +42,28 @@ defaultfor :osfamily => :redhat, :operatingsystemmajrelease => (4..7).to_a
     should = @resource[:ensure]
     if should.is_a?(String)
       begin
-        should_version = RPM_VERSION_RANGE.parse(should, RPM_VERSION)
+        should_version = self.class::RPM_VERSION_RANGE.parse(should, self.class::RPM_VERSION)
 
-        if should_version.is_a?(RPM_VERSION_RANGE::Eq)
+        if should_version.is_a?(self.class::RPM_VERSION_RANGE::Eq)
           return super
         end
-      rescue RPM_VERSION_RANGE::ValidationFailure, RPM_VERSION::ValidationFailure
+      rescue self.class::RPM_VERSION_RANGE::ValidationFailure, self.class::RPM_VERSION::ValidationFailure
         Puppet.debug("Cannot parse #{should} as a RPM version range")
         return super
       end
 
       is.split(self.class::MULTIVERSION_SEPARATOR).any? do |version|
         begin
-          is_version = RPM_VERSION.parse(version)
+          is_version = self.class::RPM_VERSION.parse(version)
           should_version.include?(is_version)
-        rescue RPM_VERSION::ValidationFailure
+        rescue self.class::RPM_VERSION::ValidationFailure
           Puppet.debug("Cannot parse #{is} as a RPM version")
         end
       end
     end
   end
 
-  VERSION_REGEX = /^(?:(\d+):)?(\S+)-(\S+)$/
+  const_set(:VERSION_REGEX, /^(?:(\d+):)?(\S+)-(\S+)$/)
 
   def self.prefetch(packages)
     raise Puppet::Error, _("The yum provider can only be used as root") if Process.euid != 0
@@ -133,7 +133,7 @@ defaultfor :osfamily => :redhat, :operatingsystemmajrelease => (4..7).to_a
 
     body.split(/^\s*\n/).each do |line|
       line.split.each_slice(3) do |tuple|
-        next unless tuple[0].include?('.') && tuple[1] =~ VERSION_REGEX
+        next unless tuple[0].include?('.') && tuple[1] =~ self::VERSION_REGEX
 
         hash = update_to_hash(*tuple[0..1])
         # Create entries for both the package name without a version and a
@@ -158,7 +158,7 @@ defaultfor :osfamily => :redhat, :operatingsystemmajrelease => (4..7).to_a
       raise _("Failed to parse package name and architecture from '%{pkgname}'") % { pkgname: pkgname }
     end
 
-    match = pkgversion.match(VERSION_REGEX)
+    match = pkgversion.match(self::VERSION_REGEX)
     epoch = match[1] || '0'
     version = match[2]
     release = match[3]
@@ -195,20 +195,20 @@ defaultfor :osfamily => :redhat, :operatingsystemmajrelease => (4..7).to_a
   def best_version(should)
     if should.is_a?(String)
       begin
-        should_range = RPM_VERSION_RANGE.parse(should, RPM_VERSION)
-        if should_range.is_a?(RPM_VERSION_RANGE::Eq)
+        should_range = self.class::RPM_VERSION_RANGE.parse(should, self.class::RPM_VERSION)
+        if should_range.is_a?(self.class::RPM_VERSION_RANGE::Eq)
           return should
         end
-      rescue RPM_VERSION_RANGE::ValidationFailure, RPM_VERSION::ValidationFailure
+      rescue self.class::RPM_VERSION_RANGE::ValidationFailure, self.class::RPM_VERSION::ValidationFailure
         Puppet.debug("Cannot parse #{should} as a RPM version range")
         return should
       end
       versions = []
       available_versions(@resource[:name], disablerepo, enablerepo, disableexcludes).each do |version|
         begin
-          rpm_version = RPM_VERSION.parse(version)
+          rpm_version = self.class::RPM_VERSION.parse(version)
           versions << rpm_version if should_range.include?(rpm_version)
-        rescue RPM_VERSION::ValidationFailure
+        rescue self.class::RPM_VERSION::ValidationFailure
           Puppet.debug("Cannot parse #{version} as a RPM version")
         end
       end

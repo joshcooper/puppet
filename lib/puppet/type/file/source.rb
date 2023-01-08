@@ -100,7 +100,7 @@ module Puppet
       end
     end
 
-    SEPARATOR_REGEX = [Regexp.escape(File::SEPARATOR.to_s), Regexp.escape(File::ALT_SEPARATOR.to_s)].join
+    const_set(:SEPARATOR_REGEX, [Regexp.escape(File::SEPARATOR.to_s), Regexp.escape(File::ALT_SEPARATOR.to_s)].join.freeze)
 
     munge do |sources|
       sources = [sources] unless sources.is_a?(Array)
@@ -122,7 +122,7 @@ module Puppet
     end
 
     def self.normalize(source)
-      source.sub(/[#{SEPARATOR_REGEX}]+$/, '')
+      source.sub(/[#{self::SEPARATOR_REGEX}]+$/, '')
     end
 
     def change_to_s(currentvalue, newvalue)

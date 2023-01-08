@@ -228,13 +228,13 @@ module Puppet
 
       newvalues(:hourly, :daily, :weekly, :monthly, :never)
 
-      ScheduleScales = {
+      const_set(:ScheduleScales, {
         :hourly => 3600,
         :daily => 86400,
         :weekly => 604800,
         :monthly => 2592000
-      }
-      ScheduleMethods = {
+      }.freeze)
+      const_set(:ScheduleMethods, {
         :hourly => :hour,
         :daily => :day,
         :monthly => :month,
@@ -243,7 +243,7 @@ module Puppet
           # or if it's been more than a week since we ran
           prev.wday > now.wday or (now - prev) > (24 * 3600 * 7)
         end
-      }
+      }.freeze)
 
       def match?(previous, now)
         return false if value == :never
@@ -251,7 +251,7 @@ module Puppet
         value = self.value
         case @resource[:periodmatch]
         when :number
-          method = ScheduleMethods[value]
+          method = self.class::ScheduleMethods[value]
           if method.is_a?(Proc)
             return method.call(previous, now)
           else
@@ -259,7 +259,7 @@ module Puppet
             return now.send(method) != previous.send(method)
           end
         when :distance
-          scale = ScheduleScales[value]
+          scale = self.class::ScheduleScales[value]
 
           # If the number of seconds between the two times is greater
           # than the unit of time, we match.  We divide the scale

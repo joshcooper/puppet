@@ -1,6 +1,14 @@
 require_relative '../../puppet/ssl'
 
 module Puppet::SSL
+  DEFAULTS = {
+    cacerts: [],
+    crls: [],
+    client_chain: [],
+    revocation: true,
+    verify_peer: true
+  }.freeze
+
   SSLContext = Struct.new(
     :store,
     :cacerts,
@@ -11,14 +19,6 @@ module Puppet::SSL
     :revocation,
     :verify_peer
   ) do
-    DEFAULTS = {
-      cacerts: [],
-      crls: [],
-      client_chain: [],
-      revocation: true,
-      verify_peer: true
-    }.freeze
-
     # This is an idiom to initialize a Struct from keyword
     # arguments. Ruby 2.5 introduced `keyword_init: true` for
     # that purpose, but we need to support older versions.

@@ -19,11 +19,6 @@ I18n/GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-# Configuration parameters: AllowedMethods.
-# AllowedMethods: enums
-Lint/ConstantDefinitionInBlock:
-  Enabled: false
-
 # Configuration parameters: AllowComments.
 Lint/EmptyWhen:
   Exclude:
