@@ -99,6 +99,10 @@ Layout/DefEndAlignment:
 Layout/EndAlignment:
   Enabled: false
 
+Lint/EmptyConditionalBody:
+  Exclude:
+    - 'lib/puppet/external/pson/pure/parser.rb'
+
 # DISABLED
 Lint/ParenthesesAsGroupedExpression:
   Enabled: false
