@@ -91,7 +91,7 @@ class Loaders
   def self.static_implementation_registry
     if !class_variable_defined?(:@@static_implementation_registry) || @@static_implementation_registry.nil?
       ir = Types::ImplementationRegistry.new
-      Types::TypeParser.type_map.values.each { |t| ir.register_implementation(t.simple_name, t.class.name) }
+      Types::TypeParser.type_map.each_value { |t| ir.register_implementation(t.simple_name, t.class.name) }
       @@static_implementation_registry = ir
     end
     @@static_implementation_registry

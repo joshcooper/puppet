@@ -123,7 +123,7 @@ class PTypeSetType < PMetaType
 
     # Map downcase names to their camel-cased equivalent
     @dc_to_cc_map = {}
-    @types.keys.each { |key| @dc_to_cc_map[key.downcase] = key }
+    @types.each_key { |key| @dc_to_cc_map[key.downcase] = key }
 
     refs = init_hash[KEY_REFERENCES]
     if refs.nil?
@@ -262,7 +262,7 @@ class PTypeSetType < PMetaType
     super
     @references.each_value { |ref| ref.resolve(loader) }
     tsa_loader = TypeSetLoader.new(self, loader)
-    @types.values.each { |type| type.resolve(tsa_loader) }
+    @types.each_value { |type| type.resolve(tsa_loader) }
     self
   end
 

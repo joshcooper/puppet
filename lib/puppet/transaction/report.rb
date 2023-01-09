@@ -411,7 +411,7 @@ class Puppet::Transaction::Report
     @metrics.each do |name, metric|
       key = metric.name.to_s
       report[key] = {}
-      metric.values.each do |metric_name, label, value|
+      metric.each_value do |metric_name, label, value|
         report[key][metric_name.to_s] = value
       end
       report[key][TOTAL] = 0 unless key == "time" or report[key].include?(TOTAL)

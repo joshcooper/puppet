@@ -11,12 +11,6 @@
 Style/ExplicitBlockArgument:
   Enabled: false
 
-# Offense count: 36
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: AllowedReceivers.
-Style/HashEachMethods:
-  Enabled: false
-
 # Offense count: 6
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/HashTransformValues:

@@ -28,7 +28,7 @@ class Puppet::Runtime
   # @return Array[Symbol] the names of loaded implementations
   # @api private
   def load_services
-    @runtime_services.keys.each { |key| self[key] }
+    @runtime_services.each_key { |key| self[key] }
   end
 
   # Get a runtime implementation.

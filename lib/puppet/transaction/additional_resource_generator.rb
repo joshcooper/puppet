@@ -92,7 +92,7 @@ class Puppet::Transaction::AdditionalResourceGenerator
 
     redirect_edges_to_sentinel(resource, sentinel, made)
 
-    made.values.each do |res|
+    made.each_value do |res|
       # This resource isn't 'completed' until each child has run
       add_conditional_directed_dependency(res, sentinel, Puppet::Graph::RelationshipGraph::Default_label)
     end
@@ -112,7 +112,7 @@ class Puppet::Transaction::AdditionalResourceGenerator
   end
 
   def connect_resources_to_ancestors(resource, made)
-    made.values.each do |res|
+    made.each_value do |res|
       # Depend on the nearest ancestor we generated, falling back to the
       # resource if we have none
       parent_name = res.ancestors.find { |a| made[a] and made[a] != res }

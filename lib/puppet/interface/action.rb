@@ -345,7 +345,7 @@ WRAPPER
     # name of the argument while we are about it.
     overlap = Hash.new do |h, k| h[k] = [] end
     unknown = []
-    original.keys.each do |name|
+    original.each_key do |name|
       option = get_option(name)
       if option
         canonical = option.name

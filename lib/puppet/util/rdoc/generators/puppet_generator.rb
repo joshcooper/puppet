@@ -160,7 +160,7 @@ module Generators
       end
 
       # scan all classes to create the child's references
-      @allclasses.values.each do |klass|
+      @allclasses.each_value do |klass|
         superklass = klass.context.superclass
         if superklass
           superklass = AllReferences[superklass]

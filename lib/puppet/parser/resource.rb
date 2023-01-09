@@ -278,7 +278,7 @@ class Puppet::Parser::Resource < Puppet::Resource
   end
 
   def replace_sensitive_data
-    parameters.keys.each do |name|
+    parameters.each_key do |name|
       param = parameters[name]
       if param.value.is_a?(Puppet::Pops::Types::PSensitiveType::Sensitive)
         @sensitive_parameters << name

@@ -95,7 +95,7 @@ class Puppet::Util::Autoload
     end
 
     def reload_changed(env)
-      loaded.keys.each do |file|
+      loaded.each_key do |file|
         if changed?(file, env)
           load_file(file, env)
         end
