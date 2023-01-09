@@ -671,3 +671,9 @@ Style/CombinableLoops:
     - 'lib/puppet/pops/types/ruby_generator.rb'
     - 'lib/puppet/provider/service/init.rb'
     - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
+
+# This cop supports safe autocorrection (--autocorrect).
+# Configuration parameters: EnforcedStyle.
+# SupportedStyles: separated, grouped
+Style/AccessorGrouping:
+  Enabled: false
