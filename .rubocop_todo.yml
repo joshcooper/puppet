@@ -11,12 +11,6 @@
 Style/ExplicitBlockArgument:
   Enabled: false
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/KeywordParametersOrder:
-  Exclude:
-    - 'lib/puppet/http/service/file_server.rb'
-
 # Offense count: 5
 Style/MissingRespondToMissing:
   Exclude:
