@@ -6,11 +6,3 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 5
-Style/MissingRespondToMissing:
-  Exclude:
-    - 'lib/puppet/module_tool/metadata.rb'
-    - 'lib/puppet/parser/scope.rb'
-    - 'lib/puppet/settings/alias_setting.rb'
-    - 'lib/puppet/util/command_line/trollop.rb'
-    - 'lib/puppet/util/feature.rb'
