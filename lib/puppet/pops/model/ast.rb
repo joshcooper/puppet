@@ -652,9 +652,9 @@ class AccessExpression < Expression
     result
   end
 
-  def _pcore_contents
+  def _pcore_contents(&block)
     yield(@left_expr) unless @left_expr.nil?
-    @keys.each { |value| yield(value) }
+    @keys.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -981,8 +981,8 @@ class LiteralList < Expression
     result
   end
 
-  def _pcore_contents
-    @values.each { |value| yield(value) }
+  def _pcore_contents(&block)
+    @values.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -1128,8 +1128,8 @@ class LiteralHash < Expression
     result
   end
 
-  def _pcore_contents
-    @entries.each { |value| yield(value) }
+  def _pcore_contents(&block)
+    @entries.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -1197,8 +1197,8 @@ class BlockExpression < Expression
     result
   end
 
-  def _pcore_contents
-    @statements.each { |value| yield(value) }
+  def _pcore_contents(&block)
+    @statements.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -1280,8 +1280,8 @@ class CaseOption < Expression
     result
   end
 
-  def _pcore_contents
-    @values.each { |value| yield(value) }
+  def _pcore_contents(&block)
+    @values.each(&block)
     yield(@then_expr) unless @then_expr.nil?
   end
 
@@ -1361,9 +1361,9 @@ class CaseExpression < Expression
     result
   end
 
-  def _pcore_contents
+  def _pcore_contents(&block)
     yield(@test) unless @test.nil?
-    @options.each { |value| yield(value) }
+    @options.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -1713,10 +1713,10 @@ class CollectExpression < Expression
     result
   end
 
-  def _pcore_contents
+  def _pcore_contents(&block)
     yield(@type_expr) unless @type_expr.nil?
     yield(@query) unless @query.nil?
-    @operations.each { |value| yield(value) }
+    @operations.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -1918,8 +1918,8 @@ class NamedDefinition < Definition
     result
   end
 
-  def _pcore_contents
-    @parameters.each { |value| yield(value) }
+  def _pcore_contents(&block)
+    @parameters.each(&block)
     yield(@body) unless @body.nil?
   end
 
@@ -2000,8 +2000,8 @@ class FunctionDefinition < NamedDefinition
     result
   end
 
-  def _pcore_contents
-    @parameters.each { |value| yield(value) }
+  def _pcore_contents(&block)
+    @parameters.each(&block)
     yield(@body) unless @body.nil?
     yield(@return_type) unless @return_type.nil?
   end
@@ -2038,7 +2038,7 @@ class ResourceTypeDefinition < NamedDefinition
   end
 
   def _pcore_contents
-    @parameters.each { |value| yield(value) }
+    @parameters.each(&block)
     yield(@body) unless @body.nil?
   end
 
@@ -2409,9 +2409,9 @@ class NodeDefinition < Definition
     result
   end
 
-  def _pcore_contents
+  def _pcore_contents(&block)
     yield(@parent) unless @parent.nil?
-    @host_matches.each { |value| yield(value) }
+    @host_matches.each(&block)
     yield(@body) unless @body.nil?
   end
 
@@ -2573,7 +2573,7 @@ class HostClassDefinition < NamedDefinition
   end
 
   def _pcore_contents
-    @parameters.each { |value| yield(value) }
+    @parameters.each(&block)
     yield(@body) unless @body.nil?
   end
 
@@ -2605,7 +2605,7 @@ class PlanDefinition < FunctionDefinition
   end
 
   def _pcore_contents
-    @parameters.each { |value| yield(value) }
+    @parameters.each(&block)
     yield(@body) unless @body.nil?
     yield(@return_type) unless @return_type.nil?
   end
@@ -2696,7 +2696,7 @@ class LambdaExpression < Expression
   end
 
   def _pcore_contents
-    @parameters.each { |value| yield(value) }
+    @parameters.each(&block)
     yield(@body) unless @body.nil?
     yield(@return_type) unless @return_type.nil?
   end
@@ -2785,8 +2785,8 @@ class ApplyExpression < Expression
     result
   end
 
-  def _pcore_contents
-    @arguments.each { |value| yield(value) }
+  def _pcore_contents(&block)
+    @arguments.each(&block)
     yield(@body) unless @body.nil?
   end
 
@@ -3011,9 +3011,9 @@ class CallExpression < Expression
     result
   end
 
-  def _pcore_contents
+  def _pcore_contents(&block)
     yield(@functor_expr) unless @functor_expr.nil?
-    @arguments.each { |value| yield(value) }
+    @arguments.each(&block)
     yield(@lambda) unless @lambda.nil?
   end
 
@@ -3053,7 +3053,7 @@ class CallFunctionExpression < CallExpression
 
   def _pcore_contents
     yield(@functor_expr) unless @functor_expr.nil?
-    @arguments.each { |value| yield(value) }
+    @arguments.each(&block)
     yield(@lambda) unless @lambda.nil?
   end
 
@@ -3084,7 +3084,7 @@ class CallNamedFunctionExpression < CallExpression
 
   def _pcore_contents
     yield(@functor_expr) unless @functor_expr.nil?
-    @arguments.each { |value| yield(value) }
+    @arguments.each(&block)
     yield(@lambda) unless @lambda.nil?
   end
 
@@ -3115,7 +3115,7 @@ class CallMethodExpression < CallExpression
 
   def _pcore_contents
     yield(@functor_expr) unless @functor_expr.nil?
-    @arguments.each { |value| yield(value) }
+    @arguments.each(&block)
     yield(@lambda) unless @lambda.nil?
   end
 
@@ -3529,8 +3529,8 @@ class ConcatenatedString < Expression
     result
   end
 
-  def _pcore_contents
-    @segments.each { |value| yield(value) }
+  def _pcore_contents(&block)
+    @segments.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -3913,9 +3913,9 @@ class ResourceBody < Positioned
     result
   end
 
-  def _pcore_contents
+  def _pcore_contents(&block)
     yield(@title) unless @title.nil?
-    @operations.each { |value| yield(value) }
+    @operations.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -4068,9 +4068,9 @@ class ResourceExpression < AbstractResource
     result
   end
 
-  def _pcore_contents
+  def _pcore_contents(&block)
     yield(@type_name) unless @type_name.nil?
-    @bodies.each { |value| yield(value) }
+    @bodies.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -4154,9 +4154,9 @@ class ResourceDefaultsExpression < AbstractResource
     result
   end
 
-  def _pcore_contents
+  def _pcore_contents(&block)
     yield(@type_ref) unless @type_ref.nil?
-    @operations.each { |value| yield(value) }
+    @operations.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -4237,9 +4237,9 @@ class ResourceOverrideExpression < AbstractResource
     result
   end
 
-  def _pcore_contents
+  def _pcore_contents(&block)
     yield(@resources) unless @resources.nil?
-    @operations.each { |value| yield(value) }
+    @operations.each(&block)
   end
 
   def _pcore_all_contents(path, &block)
@@ -4396,9 +4396,9 @@ class SelectorExpression < Expression
     result
   end
 
-  def _pcore_contents
+  def _pcore_contents(&block)
     yield(@left_expr) unless @left_expr.nil?
-    @selectors.each { |value| yield(value) }
+    @selectors.each(&block)
   end
 
   def _pcore_all_contents(path, &block)

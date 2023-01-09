@@ -38,25 +38,19 @@ Puppet::Functions.create_function(:partition) do
     return_type 'Tuple[Array, Array]'
   end
 
-  def partition_1(collection)
-    collection.partition do |item|
-      yield(item)
-    end.freeze
+  def partition_1(collection, &block)
+    collection.partition(&block).freeze
   end
 
-  def partition_2a(array)
-    partitioned = array.size.times.zip(array).partition do |k, v|
-      yield(k, v)
-    end
+  def partition_2a(array, &block)
+    partitioned = array.size.times.zip(array).partition(&block)
 
     partitioned.map do |part|
       part.map { |item| item[1] }
     end.freeze
   end
 
-  def partition_2(collection)
-    collection.partition do |k, v|
-      yield(k, v)
-    end.freeze
+  def partition_2(collection, &block)
+    collection.partition(&block).freeze
   end
 end

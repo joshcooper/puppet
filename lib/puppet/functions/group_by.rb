@@ -38,25 +38,19 @@ Puppet::Functions.create_function(:group_by) do
     return_type 'Hash'
   end
 
-  def group_by_1(collection)
-    collection.group_by do |item|
-      yield(item)
-    end.freeze
+  def group_by_1(collection, &block)
+    collection.group_by(&block).freeze
   end
 
-  def group_by_2a(array)
-    grouped = array.size.times.zip(array).group_by do |k, v|
-      yield(k, v)
-    end
+  def group_by_2a(array, &block)
+    grouped = array.size.times.zip(array).group_by(&block)
 
     grouped.transform_values do |v|
       v.map { |item| item[1] }
     end.freeze
   end
 
-  def group_by_2(collection)
-    collection.group_by do |k, v|
-      yield(k, v)
-    end.freeze
+  def group_by_2(collection, &block)
+    collection.group_by(&block).freeze
   end
 end

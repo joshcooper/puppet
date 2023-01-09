@@ -10,8 +10,8 @@ class Puppet::Parser::AST::ResourceParam < Puppet::Parser::AST::Branch
     super(argshash)
   end
 
-  def each
-    [@param, @value].each { |child| yield child }
+  def each(&block)
+    [@param, @value].each(&block)
   end
 
   # Return the parameter and the value.

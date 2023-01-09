@@ -44,12 +44,12 @@ class StaticLoader < Loader
     create_built_in_types
   end
 
-  def discover(type, error_collector = nil, name_authority = Pcore::RUNTIME_NAME_AUTHORITY)
+  def discover(type, error_collector = nil, name_authority = Pcore::RUNTIME_NAME_AUTHORITY, &block)
     # Static loader only contains runtime types
     return EMPTY_ARRAY unless type == :type && name_authority == name_authority = Pcore::RUNTIME_NAME_AUTHORITY
 
     typed_names = type == :type && name_authority == Pcore::RUNTIME_NAME_AUTHORITY ? @loaded.keys : EMPTY_ARRAY
-    block_given? ? typed_names.select { |tn| yield(tn) } : typed_names
+    block_given? ? typed_names.select(&block) : typed_names
   end
 
   def load_typed(typed_name)

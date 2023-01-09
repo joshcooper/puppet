@@ -92,8 +92,8 @@ class Puppet::Util::Log
   end
 
   # Yield each valid level in turn
-  def Log.eachlevel
-    @levels.each { |level| yield level }
+  def Log.eachlevel(&block)
+    @levels.each(&block)
   end
 
   # Return the current log level.

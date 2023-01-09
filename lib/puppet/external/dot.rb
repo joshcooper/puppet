@@ -145,12 +145,12 @@ module DOT
       @options['label'] ||= @name if @name != 'node'
     end
 
-    def each_option
-      @options.each{ |i| yield i }
+    def each_option(&block)
+      @options.each(&block)
     end
 
-    def each_option_pair
-      @options.each_pair{ |key, val| yield key, val }
+    def each_option_pair(&block)
+      @options.each_pair(&block)
     end
 
     #def parent=( thing )
@@ -186,8 +186,8 @@ module DOT
       @ports = params['ports'] || []
     end
 
-    def each_port
-      @ports.each { |i| yield i }
+    def each_port(&block)
+      @ports.each(&block)
     end
 
     def <<(thing)
@@ -244,8 +244,8 @@ module DOT
       @dot_string = 'graph'
     end
 
-    def each_node
-      @nodes.each{ |i| yield i }
+    def each_node(&block)
+      @nodes.each(&block)
     end
 
     def <<(thing)

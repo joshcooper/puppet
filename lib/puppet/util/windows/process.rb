@@ -110,9 +110,7 @@ module Puppet::Util::Windows::Process
   # Execute a block with the current process token
   def with_process_token(access, &block)
     handle = get_current_process
-    open_process_token(handle, access) do |token_handle|
-      yield token_handle
-    end
+    open_process_token(handle, access, &block)
 
     # all handles have been closed, so nothing to safely return
     nil

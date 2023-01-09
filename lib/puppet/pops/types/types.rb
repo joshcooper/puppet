@@ -2013,9 +2013,9 @@ class PStructType < PAnyType
     @elements.each { |elem| elem.accept(visitor, guard) }
   end
 
-  def each
+  def each(&block)
     if block_given?
-      elements.each { |elem| yield elem }
+      elements.each(&block)
     else
       elements.to_enum
     end
@@ -2219,9 +2219,9 @@ class PTupleType < PAnyType
 
   # Returns Enumerator for the types if no block is given, otherwise, calls the given
   # block with each of the types in this tuple
-  def each
+  def each(&block)
     if block_given?
-      types.each { |x| yield x }
+      types.each(&block)
     else
       types.to_enum
     end
@@ -2926,9 +2926,9 @@ class PVariantType < PAnyType
     @types.each { |t| t.accept(visitor, guard) }
   end
 
-  def each
+  def each(&block)
     if block_given?
-      types.each { |t| yield t }
+      types.each(&block)
     else
       types.to_enum
     end

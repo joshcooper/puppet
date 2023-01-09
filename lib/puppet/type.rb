@@ -708,11 +708,9 @@ class Type
   # Iterates over the properties that were set on this resource.
   # @yieldparam property [Puppet::Property] each property
   # @return [void]
-  def eachproperty
+  def eachproperty(&block)
     # properties is a private method
-    properties.each { |property|
-      yield property
-    }
+    properties.each(&block)
   end
 
   # Return the parameters, metaparams, and properties that have a value or were set by a default. Properties are
@@ -725,8 +723,8 @@ class Type
   # Iterates over all parameters with value currently set.
   # @yieldparam parameter [Puppet::Parameter] or a subclass thereof
   # @return [void]
-  def eachparameter
-    parameters_with_value.each { |parameter| yield parameter }
+  def eachparameter(&block)
+    parameters_with_value.each(&block)
   end
 
   # Creates a transaction event.
@@ -2063,11 +2061,9 @@ class Type
   # @yieldparam block [Proc] a block producing one or several dependencies to auto require (see {autorequire}).
   # @yieldreturn [void]
   # @return [void]
-  def self.eachautorequire
+  def self.eachautorequire(&block)
     @autorequires ||= {}
-    @autorequires.each { |type, block|
-      yield(type, block)
-    }
+    @autorequires.each(&block)
   end
 
   # Provides iteration over added auto-requirements (see {autobefore}).
@@ -2075,11 +2071,9 @@ class Type
   # @yieldparam block [Proc] a block producing one or several dependencies to auto require (see {autobefore}).
   # @yieldreturn [void]
   # @return [void]
-  def self.eachautobefore
+  def self.eachautobefore(&block)
     @autobefores ||= {}
-    @autobefores.each { |type,block|
-      yield(type, block)
-    }
+    @autobefores.each(&block)
   end
 
   # Provides iteration over added auto-requirements (see {autosubscribe}).
@@ -2087,11 +2081,9 @@ class Type
   # @yieldparam block [Proc] a block producing one or several dependencies to auto require (see {autosubscribe}).
   # @yieldreturn [void]
   # @return [void]
-  def self.eachautosubscribe
+  def self.eachautosubscribe(&block)
     @autosubscribes ||= {}
-    @autosubscribes.each { |type,block|
-      yield(type, block)
-    }
+    @autosubscribes.each(&block)
   end
 
   # Provides iteration over added auto-requirements (see {autonotify}).
@@ -2099,11 +2091,9 @@ class Type
   # @yieldparam block [Proc] a block producing one or several dependencies to auto require (see {autonotify}).
   # @yieldreturn [void]
   # @return [void]
-  def self.eachautonotify
+  def self.eachautonotify(&block)
     @autonotifies ||= {}
-    @autonotifies.each { |type,block|
-      yield(type, block)
-    }
+    @autonotifies.each(&block)
   end
 
   # Adds dependencies to the catalog from added autorelations.

@@ -76,16 +76,16 @@ module RDoc
       cls
     end
 
-    def each_fact
-      @facts.each {|c| yield c}
+    def each_fact(&block)
+      @facts.each(&block)
     end
 
-    def each_plugin
-      @plugins.each {|c| yield c}
+    def each_plugin(&block)
+      @plugins.each(&block)
     end
 
-    def each_node
-      @nodes.each {|c| yield c}
+    def each_node(&block)
+      @nodes.each(&block)
     end
 
     def nodes

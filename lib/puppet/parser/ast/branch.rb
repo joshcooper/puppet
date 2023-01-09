@@ -9,8 +9,8 @@ class Puppet::Parser::AST::Branch < Puppet::Parser::AST
   attr_accessor :pin
   attr_accessor :children
 
-  def each
-    @children.each { |child| yield child }
+  def each(&block)
+    @children.each(&block)
   end
 
   def initialize(children: [], **args)

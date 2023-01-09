@@ -85,16 +85,16 @@ Puppet::Functions.create_function(:any) do
     block_param 'Callable[1,1]', :block
   end
 
-  def any_Hash_1(hash)
-    hash.each_pair.any? { |x| yield(x) }
+  def any_Hash_1(hash, &block)
+    hash.each_pair.any?(&block)
   end
 
-  def any_Hash_2(hash)
-    hash.each_pair.any? { |x,y| yield(x, y) }
+  def any_Hash_2(hash, &block)
+    hash.each_pair.any?(&block)
   end
 
-  def any_Enumerable_1(enumerable)
-    Puppet::Pops::Types::Iterable.asserted_iterable(self, enumerable).any? { |e| yield(e) }
+  def any_Enumerable_1(enumerable, &block)
+    Puppet::Pops::Types::Iterable.asserted_iterable(self, enumerable).any?(&block)
   end
 
   def any_Enumerable_2(enumerable)
