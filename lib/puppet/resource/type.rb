@@ -31,8 +31,17 @@ class Puppet::Resource::Type
   DOUBLE_COLON = '::'.freeze
   EMPTY_ARRAY = [].freeze
 
-  attr_accessor :file, :line, :doc, :code, :parent, :resource_type_collection, :override
-  attr_reader :namespace, :arguments, :behaves_like, :module_name
+  attr_accessor :file
+  attr_accessor :line
+  attr_accessor :doc
+  attr_accessor :code
+  attr_accessor :parent
+  attr_accessor :resource_type_collection
+  attr_accessor :override
+  attr_reader :namespace
+  attr_reader :arguments
+  attr_reader :behaves_like
+  attr_reader :module_name
 
   # Map from argument (aka parameter) names to Puppet Type
   # @return [Hash<Symbol, Puppet::Pops::Types::PAnyType] map from name to type

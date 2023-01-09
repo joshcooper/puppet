@@ -9,7 +9,8 @@ class Puppet::Provider::Package::Windows
     include Puppet::Util::Windows::Registry
     extend Puppet::Util::Windows::Registry
 
-    attr_reader :name, :version
+    attr_reader :name
+    attr_reader :version
 
     REG_DISPLAY_VALUE_NAMES = [ 'DisplayName', 'QuietDisplayName' ]
 

@@ -11,11 +11,20 @@ class Puppet::Parser::Resource < Puppet::Resource
   include Puppet::Util::Errors
   include Puppet::Util::Logging
 
-  attr_accessor :source, :scope, :collector_id
-  attr_accessor :virtual, :override, :translated, :catalog, :evaluated
-  attr_accessor :file, :line, :kind
+  attr_accessor :source
+  attr_accessor :scope
+  attr_accessor :collector_id
+  attr_accessor :virtual
+  attr_accessor :override
+  attr_accessor :translated
+  attr_accessor :catalog
+  attr_accessor :evaluated
+  attr_accessor :file
+  attr_accessor :line
+  attr_accessor :kind
 
-  attr_reader :exported, :parameters
+  attr_reader :exported
+  attr_reader :parameters
 
   # Determine whether the provided parameter name is a relationship parameter.
   def self.relationship_parameter?(name)

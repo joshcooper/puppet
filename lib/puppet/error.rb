@@ -55,8 +55,11 @@ module Puppet
 
   # Contains an issue code and can be annotated with an environment and a node
   class ParseErrorWithIssue < Puppet::ParseError
-    attr_reader :issue_code, :basic_message, :arguments
-    attr_accessor :environment, :node
+    attr_reader :issue_code
+    attr_reader :basic_message
+    attr_reader :arguments
+    attr_accessor :environment
+    attr_accessor :node
 
     # @param message [String] The error message
     # @param file [String] The path to the file where the error was found

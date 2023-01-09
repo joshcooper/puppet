@@ -1,5 +1,6 @@
 class Puppet::Settings::AliasSetting
-  attr_reader :name, :alias_name
+  attr_reader :name
+  attr_reader :alias_name
 
   def initialize(args = {})
     @name = args[:name]

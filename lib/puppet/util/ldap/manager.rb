@@ -5,7 +5,10 @@ require_relative '../../../puppet/util/ldap/generator'
 # The configuration class for LDAP providers, plus
 # connection handling for actually interacting with ldap.
 class Puppet::Util::Ldap::Manager
-  attr_reader :objectclasses, :puppet2ldap, :location, :rdn
+  attr_reader :objectclasses
+  attr_reader :puppet2ldap
+  attr_reader :location
+  attr_reader :rdn
 
   # A null-op that just returns the config.
   def and

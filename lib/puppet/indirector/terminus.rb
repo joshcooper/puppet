@@ -11,8 +11,10 @@ class Puppet::Indirector::Terminus
   class << self
     include Puppet::Util::InstanceLoader
 
-    attr_accessor :name, :terminus_type
-    attr_reader :abstract_terminus, :indirection
+    attr_accessor :name
+    attr_accessor :terminus_type
+    attr_reader :abstract_terminus
+    attr_reader :indirection
 
     # Are we an abstract terminus type, rather than an instance with an
     # associated indirection?

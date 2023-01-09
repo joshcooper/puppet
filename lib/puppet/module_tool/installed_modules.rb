@@ -5,7 +5,8 @@ require_relative '../../puppet/module_tool'
 
 module Puppet::ModuleTool
   class InstalledModules < SemanticPuppet::Dependency::Source
-    attr_reader :modules, :by_name
+    attr_reader :modules
+    attr_reader :by_name
 
     def priority
       10
@@ -53,7 +54,8 @@ module Puppet::ModuleTool
     end
 
     class ModuleRelease < SemanticPuppet::Dependency::ModuleRelease
-      attr_reader :mod, :metadata
+      attr_reader :mod
+      attr_reader :metadata
 
       def initialize(source, mod)
         @mod = mod

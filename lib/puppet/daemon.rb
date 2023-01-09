@@ -20,7 +20,8 @@ class Puppet::Daemon
   SIGNAL_CHECK_INTERVAL = 5
 
   attr_accessor :argv
-  attr_reader :signals, :agent
+  attr_reader :signals
+  attr_reader :agent
 
   def initialize(agent, pidfile, scheduler = Puppet::Scheduler::Scheduler.new())
     raise Puppet::DevError, _("Daemons must have an agent") unless agent

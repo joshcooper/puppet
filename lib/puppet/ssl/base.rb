@@ -31,7 +31,8 @@ class Puppet::SSL::Base
     raise _("Certname %{name} must not contain unprintable or non-ASCII characters") % { name: name.inspect } unless name =~ VALID_CERTNAME
   end
 
-  attr_accessor :name, :content
+  attr_accessor :name
+  attr_accessor :content
 
   def generate
     raise Puppet::DevError, _("%{class_name} did not override 'generate'") % { class_name: self.class }

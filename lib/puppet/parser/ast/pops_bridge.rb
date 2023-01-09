@@ -72,7 +72,8 @@ class Puppet::Parser::AST::PopsBridge
   # by a resource expression (which is also used to instantiate a host class).
   #
   class Program < Puppet::Parser::AST::TopLevelConstruct
-    attr_reader :program_model, :context
+    attr_reader :program_model
+    attr_reader :context
 
     def initialize(program_model, context = {})
       super()

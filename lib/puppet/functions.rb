@@ -603,7 +603,9 @@ module Puppet::Functions
   # type aliases given by the function's author.
   #
   class LocalTypeAliasesBuilder
-    attr_reader :local_types, :parser, :loader
+    attr_reader :local_types
+    attr_reader :parser
+    attr_reader :loader
 
     def initialize(loader, name)
       @loader = Puppet::Pops::Loader::PredefinedLoader.new(loader, :"local_function_#{name}", loader.environment)

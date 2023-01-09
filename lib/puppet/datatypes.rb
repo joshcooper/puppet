@@ -144,7 +144,9 @@ module Puppet::DataTypes
 
   # @api private
   class TypeBuilder
-    attr_accessor :interface, :implementation, :implementation_class
+    attr_accessor :interface
+    attr_accessor :implementation
+    attr_accessor :implementation_class
 
     def initialize(type_name)
       @type_name = type_name

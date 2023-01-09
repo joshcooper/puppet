@@ -39,7 +39,8 @@ class Factory
     end
   end
 
-  attr_reader :model_class, :unfolded
+  attr_reader :model_class
+  attr_reader :unfolded
 
   def [](key)
     @init_hash[key]
@@ -993,7 +994,8 @@ class Factory
   end
 
   class ArgsToNonCallError < RuntimeError
-    attr_reader :args, :name_expr
+    attr_reader :args
+    attr_reader :name_expr
 
     def initialize(args, name_expr)
       super()

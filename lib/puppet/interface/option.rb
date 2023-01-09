@@ -132,7 +132,11 @@ class Puppet::Interface::Option
     @default and @default.call
   end
 
-  attr_reader   :parent, :name, :aliases, :optparse, :required
+  attr_reader :parent
+  attr_reader :name
+  attr_reader :aliases
+  attr_reader :optparse
+  attr_reader :required
 
   def required=(value)
     if has_default?

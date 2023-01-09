@@ -10,7 +10,8 @@ module RDoc
 
   # PuppetTopLevel is a top level (usually a .pp/.rb file)
   module PuppetTopLevel
-    attr_accessor :module_name, :global
+    attr_accessor :module_name
+    attr_accessor :global
   end
 
   # Add top level comments to a class or module
@@ -27,7 +28,8 @@ module RDoc
   class PuppetModule < NormalModule
     include AddClassModuleComment
 
-    attr_accessor :facts, :plugins
+    attr_accessor :facts
+    attr_accessor :plugins
 
     def initialize(name,superclass=nil)
       @facts = []
@@ -97,7 +99,10 @@ module RDoc
   class PuppetClass < ClassModule
     include AddClassModuleComment
 
-    attr_accessor :resource_list, :requires, :childs, :realizes
+    attr_accessor :resource_list
+    attr_accessor :requires
+    attr_accessor :childs
+    attr_accessor :realizes
 
     def initialize(name, superclass)
       super(name,superclass)
@@ -192,7 +197,8 @@ module RDoc
   # Plugin holds a native puppet plugin (function,type...)
   # It is mapped to a HTMLPuppetPlugin for display
   class Plugin < Context
-    attr_accessor :name, :type
+    attr_accessor :name
+    attr_accessor :type
 
     def initialize(name, type)
       super()
@@ -228,7 +234,8 @@ module RDoc
   # Fact holds a custom fact
   # It is mapped to a HTMLPuppetPlugin for display
   class Fact < Context
-    attr_accessor :name, :confine
+    attr_accessor :name
+    attr_accessor :confine
 
     def initialize(name, confine)
       super()
@@ -260,7 +267,9 @@ module RDoc
   # It is mapped to a HTMLPuppetResource for display
   # A resource is defined by its "normal" form Type[title]
   class PuppetResource < CodeObject
-    attr_accessor :type, :title, :params
+    attr_accessor :type
+    attr_accessor :title
+    attr_accessor :params
 
     def initialize(type, title, comment, params)
       super()

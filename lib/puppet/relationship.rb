@@ -10,7 +10,9 @@ class Puppet::Relationship
   include Puppet::Network::FormatSupport
   include Puppet::Util::PsychSupport
 
-  attr_accessor :source, :target, :callback
+  attr_accessor :source
+  attr_accessor :target
+  attr_accessor :callback
 
   attr_reader :event
 

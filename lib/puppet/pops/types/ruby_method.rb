@@ -20,7 +20,8 @@ module Types
       new(init_hash['body'], init_hash['parameters'])
     end
 
-    attr_reader :body, :parameters
+    attr_reader :body
+    attr_reader :parameters
 
     def initialize(body, parameters = nil)
       super()

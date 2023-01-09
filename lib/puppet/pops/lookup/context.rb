@@ -63,7 +63,8 @@ end
 class FunctionContext
   include Interpolation
 
-  attr_reader :module_name, :function
+  attr_reader :module_name
+  attr_reader :function
   attr_accessor :data_hash
 
   def initialize(environment_context, module_name, function)

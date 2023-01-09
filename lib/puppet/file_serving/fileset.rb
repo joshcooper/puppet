@@ -4,8 +4,13 @@ require_relative '../../puppet/file_serving/metadata'
 
 # Operate recursively on a path, returning a set of file paths.
 class Puppet::FileServing::Fileset
-  attr_reader :path, :ignore, :links
-  attr_accessor :recurse, :recurselimit, :max_files, :checksum_type
+  attr_reader :path
+  attr_reader :ignore
+  attr_reader :links
+  attr_accessor :recurse
+  attr_accessor :recurselimit
+  attr_accessor :max_files
+  attr_accessor :checksum_type
 
   # Produce a hash of files, with merged so that earlier files
   # with the same postfix win.  E.g., /dir1/subfile beats /dir2/subfile.

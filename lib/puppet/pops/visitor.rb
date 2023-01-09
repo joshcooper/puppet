@@ -11,7 +11,11 @@ module Puppet::Pops
 # configured to handle a given visiting object.
 #
 class Visitor
-  attr_reader :receiver, :message, :min_args, :max_args, :cache
+  attr_reader :receiver
+  attr_reader :message
+  attr_reader :min_args
+  attr_reader :max_args
+  attr_reader :cache
 
   def initialize(receiver, message, min_args=0, max_args=nil)
     raise ArgumentError.new("min_args must be >= 0") if min_args < 0

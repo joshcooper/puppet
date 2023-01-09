@@ -242,7 +242,8 @@ module Types
 
   # @api private
   class ExpectedActualMismatch < Mismatch
-    attr_reader :expected, :actual
+    attr_reader :expected
+    attr_reader :actual
 
     def initialize(path, expected, actual)
       super(path)

@@ -10,7 +10,10 @@ module Puppet::Util::Package::Version
 
     class ValidationFailure < ArgumentError; end
 
-    attr_reader :epoch, :version, :release, :arch
+    attr_reader :epoch
+    attr_reader :version
+    attr_reader :release
+    attr_reader :arch
 
     def self.parse(ver)
       raise ValidationFailure unless ver.is_a?(String)

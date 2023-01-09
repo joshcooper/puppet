@@ -63,10 +63,19 @@ class Puppet::Module
   end
 
   attr_accessor :environment
-  attr_reader :name, :path, :metadata
+  attr_reader :name
+  attr_reader :path
+  attr_reader :metadata
 
-  attr_accessor :dependencies, :forge_name
-  attr_accessor :source, :author, :version, :license, :summary, :description, :project_page
+  attr_accessor :dependencies
+  attr_accessor :forge_name
+  attr_accessor :source
+  attr_accessor :author
+  attr_accessor :version
+  attr_accessor :license
+  attr_accessor :summary
+  attr_accessor :description
+  attr_accessor :project_page
 
   def initialize(name, path, environment)
     @name = name

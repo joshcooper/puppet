@@ -11,7 +11,9 @@ class Puppet::Util::Windows::SecurityDescriptor
   require_relative '../../../puppet/util/windows/security'
   include Puppet::Util::Windows::SID
 
-  attr_reader :owner, :group, :dacl
+  attr_reader :owner
+  attr_reader :group
+  attr_reader :dacl
   attr_accessor :protect
 
   # Construct a security descriptor

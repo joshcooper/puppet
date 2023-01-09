@@ -2,7 +2,11 @@ module Puppet::Network # :nodoc:
   # A struct-like class for passing around a client request.  It's mostly
   # just used for validation and authorization.
   class ClientRequest
-    attr_accessor :name, :ip, :authenticated, :handler, :method
+    attr_accessor :name
+    attr_accessor :ip
+    attr_accessor :authenticated
+    attr_accessor :handler
+    attr_accessor :method
 
     def authenticated?
       self.authenticated

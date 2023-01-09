@@ -61,7 +61,11 @@ class Puppet::Util::Reference
     loaded_instances(:reference).sort_by(&:to_s)
   end
 
-  attr_accessor :page, :depth, :header, :title, :dynamic
+  attr_accessor :page
+  attr_accessor :depth
+  attr_accessor :header
+  attr_accessor :title
+  attr_accessor :dynamic
   attr_writer :doc
 
   def doc

@@ -8,7 +8,9 @@ module Lookup
 class FunctionProvider
   include DataProvider
 
-  attr_reader :parent_data_provider, :function_name, :locations
+  attr_reader :parent_data_provider
+  attr_reader :function_name
+  attr_reader :locations
 
   # Returns the type that all the return type of all functions must be assignable to.
   # For `lookup_key` and `data_dig`, that will be the `Puppet::LookupValue` type. For

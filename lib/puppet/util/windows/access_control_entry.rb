@@ -10,7 +10,9 @@ class Puppet::Util::Windows::AccessControlEntry
   include Puppet::Util::Windows::SID
 
   attr_accessor :sid
-  attr_reader :mask, :flags, :type
+  attr_reader :mask
+  attr_reader :flags
+  attr_reader :type
 
   OBJECT_INHERIT_ACE                      = 0x1
   CONTAINER_INHERIT_ACE                   = 0x2

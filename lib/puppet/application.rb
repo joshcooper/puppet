@@ -321,7 +321,8 @@ class Application
     end
   end
 
-  attr_reader :options, :command_line
+  attr_reader :options
+  attr_reader :command_line
 
   # Every app responds to --version
   # See also `lib/puppet/util/command_line.rb` for some special case early

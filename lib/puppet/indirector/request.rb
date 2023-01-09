@@ -11,9 +11,21 @@ class Puppet::Indirector::Request
   include Puppet::Util::PsychSupport
   include Puppet::Util::Warnings
 
-  attr_accessor :key, :method, :options, :instance, :node, :ip, :authenticated, :ignore_cache, :ignore_cache_save, :ignore_terminus
+  attr_accessor :key
+  attr_accessor :method
+  attr_accessor :options
+  attr_accessor :instance
+  attr_accessor :node
+  attr_accessor :ip
+  attr_accessor :authenticated
+  attr_accessor :ignore_cache
+  attr_accessor :ignore_cache_save
+  attr_accessor :ignore_terminus
 
-  attr_accessor :server, :port, :uri, :protocol
+  attr_accessor :server
+  attr_accessor :port
+  attr_accessor :uri
+  attr_accessor :protocol
 
   attr_reader :indirection_name
 

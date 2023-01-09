@@ -3,7 +3,10 @@
 #
 class Puppet::Parser::AST::Resource < Puppet::Parser::AST::Branch
 
-  attr_accessor :type, :instances, :exported, :virtual
+  attr_accessor :type
+  attr_accessor :instances
+  attr_accessor :exported
+  attr_accessor :virtual
 
   def initialize(argshash)
     Puppet.warn_once('deprecations', 'AST::Resource', _('Use of Puppet::Parser::AST::Resource is deprecated and not fully functional'))

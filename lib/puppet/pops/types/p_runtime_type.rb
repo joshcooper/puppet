@@ -18,7 +18,8 @@ class PRuntimeType < PAnyType
     )
   end
 
-  attr_reader :runtime, :name_or_pattern
+  attr_reader :runtime
+  attr_reader :name_or_pattern
 
   # Creates a new instance of a Runtime type
   #

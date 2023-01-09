@@ -24,7 +24,9 @@ class Puppet::Node::Facts
 
   indirects :facts, :terminus_setting => :facts_terminus, :extend => NodeExpirer
 
-  attr_accessor :name, :values, :timestamp
+  attr_accessor :name
+  attr_accessor :values
+  attr_accessor :timestamp
 
   def add_local_facts
     values["clientcert"] = Puppet.settings[:certname]

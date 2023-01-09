@@ -6,7 +6,8 @@
 # @api private
 class Puppet::Parser::AST::Branch < Puppet::Parser::AST
   include Enumerable
-  attr_accessor :pin, :children
+  attr_accessor :pin
+  attr_accessor :children
 
   def each
     @children.each { |child| yield child }

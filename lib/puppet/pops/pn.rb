@@ -81,7 +81,8 @@ module PN
 
   class Call
     include PN
-    attr_reader :name, :elements
+    attr_reader :name
+    attr_reader :elements
 
     def initialize(name, *elements)
       @name = name
@@ -119,7 +120,8 @@ module PN
   end
 
   class Entry
-    attr_reader :key, :value
+    attr_reader :key
+    attr_reader :value
 
     def initialize(key, value)
       @key = key

@@ -6,7 +6,9 @@ require 'tempfile'
 require 'fileutils'
 
 class Puppet::Util::FileType
-  attr_accessor :loaded, :path, :synced
+  attr_accessor :loaded
+  attr_accessor :path
+  attr_accessor :synced
 
   class FileReadError < Puppet::Error; end
 

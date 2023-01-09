@@ -20,7 +20,9 @@ class Puppet::Provider::ParsedFile < Puppet::Provider
   extend Puppet::Util::FileParsing
 
   class << self
-    attr_accessor :default_target, :target, :raise_prefetch_errors
+    attr_accessor :default_target
+    attr_accessor :target
+    attr_accessor :raise_prefetch_errors
   end
 
   attr_accessor :property_hash

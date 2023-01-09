@@ -49,7 +49,9 @@ module Lookup
   end
 
   class ExplainTreeNode < ExplainNode
-    attr_reader :parent, :event, :value
+    attr_reader :parent
+    attr_reader :event
+    attr_reader :value
     attr_accessor :key
 
     def initialize(parent)

@@ -20,7 +20,8 @@ class PObjectTypeExtension < PAnyType
     )
   end
 
-  attr_reader :base_type, :parameters
+  attr_reader :base_type
+  attr_reader :parameters
 
   # @api private
   def self.create(base_type, init_parameters)

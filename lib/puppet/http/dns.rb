@@ -4,7 +4,9 @@ module Puppet::HTTP
   class DNS
 
     class CacheEntry
-      attr_reader :records, :ttl, :resolution_time
+      attr_reader :records
+      attr_reader :ttl
+      attr_reader :resolution_time
 
       def initialize(records)
         @records = records

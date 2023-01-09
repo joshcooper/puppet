@@ -13,7 +13,9 @@ module Puppet::Util::ProviderFeatures
   class ProviderFeature
     include Puppet::Util
     include Puppet::Util::Docs
-    attr_accessor :name, :docs, :methods
+    attr_accessor :name
+    attr_accessor :docs
+    attr_accessor :methods
 
     # Are all of the requirements met?
     # Requirements are checked by checking if feature predicate methods have been generated - see {#methods_available?}.

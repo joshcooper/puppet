@@ -5,7 +5,9 @@
 #
 # @api private
 class Puppet::HTTP::Site
-  attr_reader :scheme, :host, :port
+  attr_reader :scheme
+  attr_reader :host
+  attr_reader :port
 
   def self.from_uri(uri)
     self.new(uri.scheme, uri.host, uri.port)

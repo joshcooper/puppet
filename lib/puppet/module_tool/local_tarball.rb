@@ -42,7 +42,9 @@ module Puppet::ModuleTool
     end
 
     class ModuleRelease < SemanticPuppet::Dependency::ModuleRelease
-      attr_reader :mod, :install_dir, :metadata
+      attr_reader :mod
+      attr_reader :install_dir
+      attr_reader :metadata
 
       def initialize(source, mod)
         @mod = mod

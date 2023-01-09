@@ -2,7 +2,10 @@ require_relative '../../puppet/configurer'
 require_relative '../../puppet/resource/catalog'
 
 class Puppet::Configurer::Downloader
-  attr_reader :name, :path, :source, :ignore
+  attr_reader :name
+  attr_reader :path
+  attr_reader :source
+  attr_reader :ignore
 
   # Evaluate our download, returning the list of changed values.
   def evaluate

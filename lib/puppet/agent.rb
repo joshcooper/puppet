@@ -20,7 +20,9 @@ class Puppet::Agent
   class RunTimeoutError < Exception
   end
 
-  attr_reader :client_class, :client, :should_fork
+  attr_reader :client_class
+  attr_reader :client
+  attr_reader :should_fork
 
   def initialize(client_class, should_fork=true)
     @should_fork = can_fork? && should_fork

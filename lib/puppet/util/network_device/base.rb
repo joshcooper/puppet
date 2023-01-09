@@ -5,7 +5,8 @@ require_relative '../../../puppet/util/network_device/transport/base'
 
 class Puppet::Util::NetworkDevice::Base
 
-  attr_accessor :url, :transport
+  attr_accessor :url
+  attr_accessor :transport
 
   def initialize(url, options = {})
     @url = URI.parse(url)

@@ -17,7 +17,9 @@ class Puppet::Transaction
   require_relative '../puppet/resource/status'
   require_relative 'transaction/persistence'
 
-  attr_accessor :catalog, :ignoreschedules, :for_network_device
+  attr_accessor :catalog
+  attr_accessor :ignoreschedules
+  attr_accessor :for_network_device
 
   # The report, once generated.
   attr_reader :report
@@ -28,7 +30,8 @@ class Puppet::Transaction
   # Handles most of the actual interacting with resources
   attr_reader :resource_harness
 
-  attr_reader :prefetched_providers, :prefetch_failed_providers
+  attr_reader :prefetched_providers
+  attr_reader :prefetch_failed_providers
 
   # @!attribute [r] persistence
   #   @return [Puppet::Transaction::Persistence] persistence object for cross

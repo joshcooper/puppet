@@ -1,7 +1,8 @@
 require_relative '../../../puppet/parser/ast/top_level_construct'
 
 class Puppet::Parser::AST::Hostclass < Puppet::Parser::AST::TopLevelConstruct
-  attr_accessor :name, :context
+  attr_accessor :name
+  attr_accessor :context
 
   def initialize(name, context = {})
     super()

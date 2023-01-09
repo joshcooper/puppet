@@ -740,3 +740,9 @@ Naming/VariableNumber:
 Style/RedundantFetchBlock:
   Exclude:
     - 'lib/puppet/pops/model/ast.rb'
+
+# Configuration parameters: EnforcedStyle.
+# SupportedStyles: separated, grouped
+Style/AccessorGrouping:
+  Enabled: true
+  EnforcedStyle: separated

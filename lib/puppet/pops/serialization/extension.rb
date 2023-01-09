@@ -99,7 +99,8 @@ module Extension
   # and the number of attributes in the instance.
   class PcoreObjectStart
     include SequenceStart
-    attr_reader :type_name, :attribute_count
+    attr_reader :type_name
+    attr_reader :attribute_count
 
     def initialize(type_name, attribute_count)
       @type_name = type_name

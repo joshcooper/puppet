@@ -3,7 +3,8 @@ require_relative '../../puppet/application'
 class Puppet::Application::Doc < Puppet::Application
   run_mode :server
 
-  attr_accessor :unknown_args, :manifest
+  attr_accessor :unknown_args
+  attr_accessor :manifest
 
   def preinit
     {:references => [], :mode => :text, :format => :to_markdown }.each do |name,value|

@@ -3,7 +3,8 @@
 #
 # @api private
 class Puppet::HTTP::PoolEntry
-  attr_reader :connection, :verifier
+  attr_reader :connection
+  attr_reader :verifier
 
   def initialize(connection, verifier, expiration_time)
     @connection = connection

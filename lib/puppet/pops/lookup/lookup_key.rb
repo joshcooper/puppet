@@ -6,7 +6,9 @@ module Lookup
 class LookupKey
   include SubLookup
 
-  attr_reader :module_name, :root_key, :segments
+  attr_reader :module_name
+  attr_reader :root_key
+  attr_reader :segments
 
   def initialize(key)
     segments = split_key(key) { |problem| Puppet::DataBinding::LookupError.new(_("%{problem} in key: '%{key}'") % { problem: problem, key: key }) }

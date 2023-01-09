@@ -26,7 +26,8 @@ ENVIRONMENT = 'environment'.freeze
 ENVIRONMENT_PRIVATE = 'environment private'.freeze
 
 class Loader
-  attr_reader :environment, :loader_name
+  attr_reader :environment
+  attr_reader :loader_name
 
   # Describes the kinds of things that loaders can load
   LOADABLE_KINDS = [:func_4x, :func_4xpp, :func_3x, :datatype, :type_pp, :resource_type_pp, :plan, :task].freeze

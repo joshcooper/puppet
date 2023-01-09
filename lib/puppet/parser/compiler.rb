@@ -42,7 +42,13 @@ class Puppet::Parser::Compiler
     raise Puppet::Error, message, detail.backtrace
   end
 
-  attr_reader :node, :facts, :collections, :catalog, :resources, :relationships, :topscope
+  attr_reader :node
+  attr_reader :facts
+  attr_reader :collections
+  attr_reader :catalog
+  attr_reader :resources
+  attr_reader :relationships
+  attr_reader :topscope
   attr_reader :qualified_variables
 
   # Access to the configured loaders for 4x

@@ -2,7 +2,8 @@
 # title and a set of parameters.
 #
 class Puppet::Parser::AST::ResourceInstance < Puppet::Parser::AST::Branch
-  attr_accessor :title, :parameters
+  attr_accessor :title
+  attr_accessor :parameters
 
   def initialize(argshash)
     Puppet.warn_once('deprecations', 'AST::ResourceInstance', _('Use of Puppet::Parser::AST::ResourceInstance is deprecated'))

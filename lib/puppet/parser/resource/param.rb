@@ -3,7 +3,12 @@ class Puppet::Parser::Resource::Param
   include Puppet::Util
   include Puppet::Util::Errors
 
-  attr_accessor :name, :value, :source, :add, :file, :line
+  attr_accessor :name
+  attr_accessor :value
+  attr_accessor :source
+  attr_accessor :add
+  attr_accessor :file
+  attr_accessor :line
 
   def initialize(name: nil, value: nil, source: nil, line: nil, file: nil, add: nil)
     @value = value

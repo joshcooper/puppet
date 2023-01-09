@@ -3,7 +3,12 @@ require_relative '../../../puppet/util/windows'
 module Puppet::Util::Windows::SID
   class Principal
     extend FFI::Library
-    attr_reader :account, :sid_bytes, :sid, :domain, :domain_account, :account_type
+    attr_reader :account
+    attr_reader :sid_bytes
+    attr_reader :sid
+    attr_reader :domain
+    attr_reader :domain_account
+    attr_reader :account_type
 
     def initialize(account, sid_bytes, sid, domain, account_type)
       # This is only ever called from lookup_account_sid which has already

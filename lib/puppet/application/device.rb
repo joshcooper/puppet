@@ -7,7 +7,9 @@ class Puppet::Application::Device < Puppet::Application
 
   run_mode :agent
 
-  attr_accessor :args, :agent, :host
+  attr_accessor :args
+  attr_accessor :agent
+  attr_accessor :host
 
   def app_defaults
     super.merge({

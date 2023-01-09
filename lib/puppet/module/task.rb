@@ -3,7 +3,8 @@ require_relative '../../puppet/util/logging'
 class Puppet::Module
   class Task
     class Error < Puppet::Error
-      attr_accessor :kind, :details
+      attr_accessor :kind
+      attr_accessor :details
 
       def initialize(message, kind, details = nil)
         super(message)
@@ -216,7 +217,9 @@ class Puppet::Module
       end
     end
 
-    attr_reader :name, :module, :metadata_file
+    attr_reader :name
+    attr_reader :module
+    attr_reader :metadata_file
 
     # file paths must be relative to the modules task directory
     def initialize(pup_module, task_name,  module_executables, metadata_file = nil)

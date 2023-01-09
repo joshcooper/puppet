@@ -3,9 +3,13 @@ require_relative '../../puppet/settings/errors'
 
 # The base setting type
 class Puppet::Settings::BaseSetting
-  attr_accessor :name, :desc, :section
+  attr_accessor :name
+  attr_accessor :desc
+  attr_accessor :section
   attr_writer :default
-  attr_reader :call_hook, :short, :deprecated
+  attr_reader :call_hook
+  attr_reader :short
+  attr_reader :deprecated
 
   # Hooks are called during different parts of the settings lifecycle:
   #

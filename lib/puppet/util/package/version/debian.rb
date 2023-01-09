@@ -52,7 +52,9 @@ module Puppet::Util::Package::Version
       cmp
     end
 
-    attr_reader :epoch, :upstream_version, :debian_revision
+    attr_reader :epoch
+    attr_reader :upstream_version
+    attr_reader :debian_revision
 
     private
 

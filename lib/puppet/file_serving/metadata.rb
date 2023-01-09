@@ -13,7 +13,16 @@ class Puppet::FileServing::Metadata < Puppet::FileServing::Base
   extend Puppet::Indirector
   indirects :file_metadata, :terminus_class => :selector
 
-  attr_reader :path, :owner, :group, :mode, :checksum_type, :checksum, :ftype, :destination, :source_permissions, :content_uri
+  attr_reader :path
+  attr_reader :owner
+  attr_reader :group
+  attr_reader :mode
+  attr_reader :checksum_type
+  attr_reader :checksum
+  attr_reader :ftype
+  attr_reader :destination
+  attr_reader :source_permissions
+  attr_reader :content_uri
 
   PARAM_ORDER = [:mode, :ftype, :owner, :group]
 

@@ -1,7 +1,8 @@
 # An in-memory file abstraction. Commonly used with Puppet::FileSystem::File#overlay
 # @api private
 class Puppet::FileSystem::MemoryFile
-  attr_reader :path, :children
+  attr_reader :path
+  attr_reader :children
 
   def self.a_missing_file(path)
     new(path, :exist? => false, :executable? => false)

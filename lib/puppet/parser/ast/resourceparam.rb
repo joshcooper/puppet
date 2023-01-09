@@ -1,7 +1,9 @@
 # The AST object for the parameters inside resource expressions
 #
 class Puppet::Parser::AST::ResourceParam < Puppet::Parser::AST::Branch
-  attr_accessor :value, :param, :add
+  attr_accessor :value
+  attr_accessor :param
+  attr_accessor :add
 
   def initialize(argshash)
     Puppet.warn_once('deprecations', 'AST::ResourceParam', _('Use of Puppet::Parser::AST::ResourceParam is deprecated and not fully functional'))

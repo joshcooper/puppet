@@ -43,7 +43,9 @@ class Puppet::Settings::EnvironmentConf
     Static.new(environment, environment_timeout, static_catalogs, nil, rich_data)
   end
 
-  attr_reader :section, :path_to_env, :global_modulepath
+  attr_reader :section
+  attr_reader :path_to_env
+  attr_reader :global_modulepath
 
   # Create through EnvironmentConf.load_from()
   def initialize(path_to_env, section, global_module_path)

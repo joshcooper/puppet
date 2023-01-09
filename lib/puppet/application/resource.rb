@@ -3,7 +3,8 @@ require_relative '../../puppet/application'
 class Puppet::Application::Resource < Puppet::Application
   environment_mode :not_required
 
-  attr_accessor :host, :extra_params
+  attr_accessor :host
+  attr_accessor :extra_params
 
   def preinit
     @extra_params = [:provider]

@@ -7,7 +7,10 @@ class Puppet::Util::Metric
   include Puppet::Util::PsychSupport
   include Puppet::Network::FormatSupport
 
-  attr_accessor :type, :name, :value, :label
+  attr_accessor :type
+  attr_accessor :name
+  attr_accessor :value
+  attr_accessor :label
   attr_writer :values
 
   def self.from_data_hash(data)

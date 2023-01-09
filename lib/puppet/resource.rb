@@ -11,8 +11,16 @@ class Puppet::Resource
   include Puppet::Util::PsychSupport
 
   include Enumerable
-  attr_accessor :file, :line, :catalog, :exported, :virtual, :strict, :kind
-  attr_reader :type, :title, :parameters
+  attr_accessor :file
+  attr_accessor :line
+  attr_accessor :catalog
+  attr_accessor :exported
+  attr_accessor :virtual
+  attr_accessor :strict
+  attr_accessor :kind
+  attr_reader :type
+  attr_reader :title
+  attr_reader :parameters
 
   # @!attribute [rw] sensitive_parameters
   #   @api private

@@ -6,7 +6,13 @@ module Puppet::Pops
 module Lookup
 # @api private
 class Invocation
-  attr_reader :scope, :override_values, :default_values, :explainer, :module_name, :top_key, :adapter_class
+  attr_reader :scope
+  attr_reader :override_values
+  attr_reader :default_values
+  attr_reader :explainer
+  attr_reader :module_name
+  attr_reader :top_key
+  attr_reader :adapter_class
 
   def self.current
     (@current ||= Puppet::ThreadLocal.new(nil)).value

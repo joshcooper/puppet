@@ -1501,7 +1501,10 @@ class Type
   #
   class RelationshipMetaparam < Puppet::Parameter
     class << self
-      attr_accessor :direction, :events, :callback, :subclasses
+      attr_accessor :direction
+      attr_accessor :events
+      attr_accessor :callback
+      attr_accessor :subclasses
     end
 
     @subclasses = []

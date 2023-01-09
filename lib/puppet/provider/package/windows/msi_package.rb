@@ -2,7 +2,8 @@ require_relative '../../../../puppet/provider/package/windows/package'
 
 class Puppet::Provider::Package::Windows
   class MsiPackage < Puppet::Provider::Package::Windows::Package
-    attr_reader :productcode, :packagecode
+    attr_reader :productcode
+    attr_reader :packagecode
 
     # From msi.h
     INSTALLSTATE_DEFAULT = 5 # product is installed for the current user

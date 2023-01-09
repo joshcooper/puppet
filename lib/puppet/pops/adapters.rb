@@ -99,7 +99,8 @@ module Adapters
     end
 
     class PathsAndNameCacheAdapter < Puppet::Pops::Adaptable::Adapter
-      attr_accessor :cache, :paths
+      attr_accessor :cache
+      attr_accessor :paths
 
       def self.create_adapter(env)
         adapter = super(env)

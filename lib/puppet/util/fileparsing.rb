@@ -26,13 +26,23 @@
 
 module Puppet::Util::FileParsing
   include Puppet::Util
-  attr_writer :line_separator, :trailing_separator
+  attr_writer :line_separator
+  attr_writer :trailing_separator
 
   class FileRecord
     include Puppet::Util
-    attr_accessor :absent, :joiner, :rts, :separator, :rollup, :name, :match, :block_eval
+    attr_accessor :absent
+    attr_accessor :joiner
+    attr_accessor :rts
+    attr_accessor :separator
+    attr_accessor :rollup
+    attr_accessor :name
+    attr_accessor :match
+    attr_accessor :block_eval
 
-    attr_reader :fields, :optional, :type
+    attr_reader :fields
+    attr_reader :optional
+    attr_reader :type
 
     INVALID_FIELDS = [:record_type, :target, :on_disk]
 

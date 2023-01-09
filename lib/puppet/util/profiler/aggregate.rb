@@ -50,7 +50,8 @@ class Puppet::Util::Profiler::Aggregate < Puppet::Util::Profiler::WallClock
       @count = 0
       @time = 0
     end
-    attr_reader :count, :time
+    attr_reader :count
+    attr_reader :time
 
     def [](key)
       if !has_key?(key)

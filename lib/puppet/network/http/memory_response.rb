@@ -1,5 +1,7 @@
 class Puppet::Network::HTTP::MemoryResponse
-  attr_reader :code, :type, :body
+  attr_reader :code
+  attr_reader :type
+  attr_reader :body
 
   def initialize
     @body = ""

@@ -16,8 +16,16 @@ class Puppet::Node
   indirects :node, :terminus_setting => :node_terminus, :doc => "Where to find node information.
     A node is composed of its name, its facts, and its environment."
 
-  attr_accessor :name, :classes, :source, :ipaddress, :parameters, :environment_name
-  attr_reader :time, :facts, :server_facts, :trusted_data
+  attr_accessor :name
+  attr_accessor :classes
+  attr_accessor :source
+  attr_accessor :ipaddress
+  attr_accessor :parameters
+  attr_accessor :environment_name
+  attr_reader :time
+  attr_reader :facts
+  attr_reader :server_facts
+  attr_reader :trusted_data
 
   ENVIRONMENT = 'environment'.freeze
 

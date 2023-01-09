@@ -10,7 +10,8 @@ require_relative '../../puppet/thread_local'
 class Puppet::Indirector::Indirection
   include Puppet::Util::Docs
 
-  attr_accessor :name, :model
+  attr_accessor :name
+  attr_accessor :model
   attr_reader :termini
 
   @@indirections = []

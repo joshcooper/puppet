@@ -20,7 +20,8 @@ class Puppet::Forge < SemanticPuppet::Dependency::Source
   # From https://forgeapi.puppet.com/#!/release/getReleases
   MODULE_RELEASE_EXCLUSIONS=%w[readme changelog license uri module tags supported file_size downloads created_at updated_at deleted_at].join(',').freeze
 
-  attr_reader :host, :repository
+  attr_reader :host
+  attr_reader :repository
 
   def initialize(host = Puppet[:module_repository])
     super()
@@ -121,7 +122,8 @@ class Puppet::Forge < SemanticPuppet::Dependency::Source
   end
 
   class ModuleRelease < SemanticPuppet::Dependency::ModuleRelease
-    attr_reader :install_dir, :metadata
+    attr_reader :install_dir
+    attr_reader :metadata
 
     def initialize(source, data)
       @data = data

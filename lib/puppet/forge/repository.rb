@@ -12,7 +12,8 @@ class Puppet::Forge
   class Repository
     include Puppet::Forge::Errors
 
-    attr_reader :uri, :cache
+    attr_reader :uri
+    attr_reader :cache
 
     # Instantiate a new repository instance rooted at the +url+.
     # The library will report +for_agent+ in the User-Agent to the repository.

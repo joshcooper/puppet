@@ -4,7 +4,8 @@ module Puppet::Network::HTTP::Error
   Issues = Puppet::Network::HTTP::Issues
 
   class HTTPError < Exception
-    attr_reader :status, :issue_kind
+    attr_reader :status
+    attr_reader :issue_kind
 
     def initialize(message, status, issue_kind)
       super(message)

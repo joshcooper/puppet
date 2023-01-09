@@ -1,7 +1,8 @@
 module Puppet::Util
   module Json
     class ParseError < StandardError
-      attr_reader :cause, :data
+      attr_reader :cause
+      attr_reader :data
 
       def self.build(original_exception, data)
         new(original_exception.message).tap do |exception|

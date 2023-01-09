@@ -8,7 +8,11 @@ class Puppet::Parser::AST
 
   include Puppet::Util::Errors
 
-  attr_accessor :parent, :scope, :file, :line, :pos
+  attr_accessor :parent
+  attr_accessor :scope
+  attr_accessor :file
+  attr_accessor :line
+  attr_accessor :pos
 
   def inspect
     "( #{self.class} #{self} #{@children.inspect} )"

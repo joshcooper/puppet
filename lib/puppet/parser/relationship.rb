@@ -1,5 +1,7 @@
 class Puppet::Parser::Relationship
-  attr_accessor :source, :target, :type
+  attr_accessor :source
+  attr_accessor :target
+  attr_accessor :type
 
   PARAM_MAP = {:relationship => :before, :subscription => :notify}
 

@@ -1,5 +1,6 @@
 class Puppet::Parser::AST::Node < Puppet::Parser::AST::TopLevelConstruct
-  attr_accessor :names, :context
+  attr_accessor :names
+  attr_accessor :context
 
   def initialize(names, context = {})
     super()

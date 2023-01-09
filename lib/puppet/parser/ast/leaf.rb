@@ -3,7 +3,8 @@
 # are simple values, not AST objects.
 #
 class Puppet::Parser::AST::Leaf < Puppet::Parser::AST
-  attr_accessor :value, :type
+  attr_accessor :value
+  attr_accessor :type
 
   # Return our value.
   def evaluate(scope)

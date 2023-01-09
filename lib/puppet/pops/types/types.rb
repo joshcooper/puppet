@@ -763,7 +763,8 @@ class PEnumType < PScalarDataType
       'case_insensitive' => { 'type' => PBooleanType::DEFAULT, 'value' => false })
   end
 
-  attr_reader :values, :case_insensitive
+  attr_reader :values
+  attr_reader :case_insensitive
 
   def initialize(values, case_insensitive = false)
     super()
@@ -1932,7 +1933,8 @@ class PStructElement < TypedModelObject
       'value_type' => PTypeType::DEFAULT)
   end
 
-  attr_accessor :key_type, :value_type
+  attr_accessor :key_type
+  attr_accessor :value_type
 
   def accept(visitor, guard)
     @key_type.accept(visitor, guard)
@@ -2681,7 +2683,8 @@ class PHashType < PCollectionType
     )
   end
 
-  attr_accessor :key_type, :value_type
+  attr_accessor :key_type
+  attr_accessor :value_type
 
   def initialize(key_type, value_type, size_type = nil)
     super(size_type)
@@ -3224,7 +3227,9 @@ class PResourceType < PCatalogEntryType
     )
   end
 
-  attr_reader :type_name, :title, :downcased_name
+  attr_reader :type_name
+  attr_reader :title
+  attr_reader :downcased_name
 
   def initialize(type_name, title = nil)
     super()
@@ -3378,7 +3383,8 @@ class PTypeAliasType < PAnyType
     )
   end
 
-  attr_reader :loader, :name
+  attr_reader :loader
+  attr_reader :name
 
   # @param name [String] The name of the type
   # @param type_expr [Model::PopsObject] The expression that describes the aliased type

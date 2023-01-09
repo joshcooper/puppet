@@ -1,5 +1,8 @@
 class Puppet::DataTypes::Error
-  attr_reader :msg, :kind, :issue_code, :details
+  attr_reader :msg
+  attr_reader :kind
+  attr_reader :issue_code
+  attr_reader :details
   alias message msg
 
   def self.from_asserted_hash(hash)

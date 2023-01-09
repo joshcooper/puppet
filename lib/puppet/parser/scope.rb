@@ -22,7 +22,8 @@ class Puppet::Parser::Scope
   Puppet::Util.logmethods(self)
 
   include Puppet::Util::Errors
-  attr_accessor :source, :resource
+  attr_accessor :source
+  attr_accessor :resource
   attr_reader :compiler
   attr_accessor :parent
 

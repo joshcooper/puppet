@@ -8,7 +8,8 @@ module Lookup
   #
   # @api private
   class ResolvedLocation
-    attr_reader :original_location, :location
+    attr_reader :original_location
+    attr_reader :location
 
     # @param original_location [String] location as found in declaration. May contain interpolation expressions
     # @param location [Pathname,URI] the expanded location

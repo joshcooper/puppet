@@ -170,7 +170,8 @@ class Puppet::Util::Autoload
     end
   end
 
-  attr_accessor :object, :path
+  attr_accessor :object
+  attr_accessor :path
 
   def initialize(obj, path)
     @path = path.to_s

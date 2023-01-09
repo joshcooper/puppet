@@ -339,7 +339,8 @@ class Puppet::SSL::StateMachine
   # We cannot make progress due to an error.
   #
   class Error < SSLState
-    attr_reader :message, :error
+    attr_reader :message
+    attr_reader :error
 
     def initialize(machine, message, error)
       super(machine, nil)
@@ -358,7 +359,14 @@ class Puppet::SSL::StateMachine
   #
   class Done < SSLState; end
 
-  attr_reader :waitforcert, :wait_deadline, :waitforlock, :waitlock_deadline, :cert_provider, :ssl_provider, :ca_fingerprint, :digest
+  attr_reader :waitforcert
+  attr_reader :wait_deadline
+  attr_reader :waitforlock
+  attr_reader :waitlock_deadline
+  attr_reader :cert_provider
+  attr_reader :ssl_provider
+  attr_reader :ca_fingerprint
+  attr_reader :digest
   attr_accessor :session
 
   # Construct a state machine to manage the SSL initialization process. By

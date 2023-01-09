@@ -5,8 +5,16 @@ require_relative '../../puppet/confiner'
 class Puppet::Network::Format
   include Puppet::Confiner
 
-  attr_reader :name, :mime
-  attr_accessor :intern_method, :render_method, :intern_multiple_method, :render_multiple_method, :weight, :required_methods, :extension, :charset
+  attr_reader :name
+  attr_reader :mime
+  attr_accessor :intern_method
+  attr_accessor :render_method
+  attr_accessor :intern_multiple_method
+  attr_accessor :render_multiple_method
+  attr_accessor :weight
+  attr_accessor :required_methods
+  attr_accessor :extension
+  attr_accessor :charset
 
   def init_attribute(name, default)
     value = @options.delete(name)

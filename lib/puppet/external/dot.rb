@@ -292,7 +292,8 @@ module DOT
 
   class DOTEdge < DOTElement
 
-    attr_accessor :from, :to
+    attr_accessor :from
+    attr_accessor :to
 
     def initialize(params = {}, option_list = EDGE_OPTS)
       super(params, option_list)

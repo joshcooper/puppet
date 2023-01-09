@@ -14,7 +14,9 @@ require_relative '../../puppet/error'
 module Puppet::Util::IniConfig
   # A section in a .ini file
   class Section
-    attr_reader :name, :file, :entries
+    attr_reader :name
+    attr_reader :file
+    attr_reader :entries
     attr_writer :destroy
 
     def initialize(name, file)

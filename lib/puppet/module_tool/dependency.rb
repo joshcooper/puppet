@@ -6,7 +6,11 @@ module Puppet::ModuleTool
   class Dependency
     include Puppet::Network::FormatSupport
 
-    attr_reader :full_module_name, :username, :name, :version_requirement, :repository
+    attr_reader :full_module_name
+    attr_reader :username
+    attr_reader :name
+    attr_reader :version_requirement
+    attr_reader :repository
 
     # Instantiates a new module dependency with a +full_module_name+ (e.g.
     # "myuser-mymodule"), and optional +version_requirement+ (e.g. "0.0.1") and
