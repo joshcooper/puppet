@@ -289,10 +289,6 @@ Style/CaseEquality:
     - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
-Style/CaseLikeIf:
-  Enabled: false
-
-# This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: nested, compact
 Style/ClassAndModuleChildren:
@@ -345,15 +341,6 @@ Style/CommandLiteral:
 # Keywords: TODO, FIXME, OPTIMIZE, HACK, REVIEW, NOTE
 Style/CommentAnnotation:
   Enabled: false
-
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/CommentedKeyword:
-  Exclude:
-    - 'lib/puppet/util/command_line/trollop.rb'
-    - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
-    - 'lib/puppet/util/rdoc/generators/template/puppet/puppet.rb'
-    - 'lib/puppet/util/rpm_compare.rb'
-    - 'lib/puppet/util/windows/service.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle, SingleLineConditionsOnly, IncludeTernaryExpressions.
@@ -477,17 +464,6 @@ Style/FormatStringToken:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/GlobalStdStream:
-  Exclude:
-    - 'lib/puppet/application/apply.rb'
-    - 'lib/puppet/application/script.rb'
-    - 'lib/puppet/face/epp.rb'
-    - 'lib/puppet/face/parser.rb'
-    - 'lib/puppet/util.rb'
-    - 'lib/puppet/util/command_line.rb'
-    - 'lib/puppet/util/windows/daemon.rb'
-
 # Configuration parameters: AllowedVariables.
 Style/GlobalVars:
   Exclude:
@@ -503,11 +479,6 @@ Style/GuardClause:
 # Configuration parameters: AllowedReceivers.
 Style/HashEachMethods:
   Enabled: false
-
-# Configuration parameters: MinBranchesCount.
-Style/HashLikeCase:
-  Exclude:
-    - 'lib/puppet/util/command_line/trollop.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle, EnforcedShorthandSyntax, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
