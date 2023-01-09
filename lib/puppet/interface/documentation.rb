@@ -303,7 +303,7 @@ class Puppet::Interface
     def munge_copyright_year(input)
       case input
       when Range then input
-      when Integer then
+      when Integer
         if input < 1970 then
           fault = "before 1970"
         elsif input > (future = Time.now.year + 2) then
@@ -317,7 +317,7 @@ class Puppet::Interface
 
         input
 
-      when String then
+      when String
         input.strip.split(/,/).map do |part|
           part = part.strip
           if part =~ /^\d+$/
@@ -337,7 +337,7 @@ class Puppet::Interface
           end
         end
 
-      when Array then
+      when Array
         result = []
         input.each do |item|
           item = munge_copyright_year item
