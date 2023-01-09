@@ -1127,10 +1127,6 @@ Style/VariableInterpolation:
     - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
-Style/WhenThen:
-  Enabled: false
-
-# This cop supports safe autocorrection (--autocorrect).
 Style/WhileUntilDo:
   Enabled: false
 

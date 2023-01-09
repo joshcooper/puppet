@@ -109,7 +109,7 @@ class Puppet::Graph::SimpleGraph
       vertex = frame[:node]
 
       case frame[:step]
-      when nil then
+      when nil
         s[:index][vertex]   = s[:number]
         s[:lowlink][vertex] = s[:number]
         s[:number]          = s[:number] + 1
@@ -120,7 +120,7 @@ class Puppet::Graph::SimpleGraph
         frame[:children] = adjacent(vertex)
         frame[:step]     = :children
 
-      when :children then
+      when :children
         if frame[:children].length > 0 then
           child = frame[:children].shift
           if ! s[:index][child] then
@@ -145,7 +145,7 @@ class Puppet::Graph::SimpleGraph
           recur.pop               # done with this node, finally.
         end
 
-      when :after_recursion then
+      when :after_recursion
         s[:lowlink][vertex] = [s[:lowlink][vertex], s[:lowlink][frame[:child]]].min
         frame[:step] = :children
 
