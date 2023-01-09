@@ -172,7 +172,7 @@ class Checker4_0 < Evaluator::LiteralEvaluator
   end
 
   def assign_LiteralList(o, via_index)
-    o.values.each {|x| assign(x) }
+    o.each_value {|x| assign(x) }
   end
 
   def assign_Object(o, via_index)
@@ -320,7 +320,7 @@ class Checker4_0 < Evaluator::LiteralEvaluator
     # There can only be one LiteralDefault case option value
     found_default = false
     o.options.each do |option|
-      option.values.each do |value|
+      option.each_value do |value|
         if value.is_a?(Model::LiteralDefault)
           # Flag the second default as 'unreachable'
           acceptor.accept(Issues::DUPLICATE_DEFAULT, value, :container => o) if found_default
@@ -331,7 +331,7 @@ class Checker4_0 < Evaluator::LiteralEvaluator
   end
 
   def check_CaseOption(o)
-    o.values.each { |v| rvalue(v) }
+    o.each_value { |v| rvalue(v) }
   end
 
   def check_CollectExpression(o)
@@ -697,7 +697,7 @@ class Checker4_0 < Evaluator::LiteralEvaluator
   end
 
   def check_LiteralList(o)
-    o.values.each {|v| rvalue(v) }
+    o.each_value {|v| rvalue(v) }
   end
 
   def check_LiteralInteger(o)

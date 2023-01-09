@@ -382,7 +382,7 @@ class Puppet::Graph::SimpleGraph
   def downstream_from_vertex(v)
     return @downstream_from[v] if @downstream_from[v]
     result = @downstream_from[v] = {}
-    @out_from[v].keys.each do |node|
+    @out_from[v].each_key do |node|
       result[node] = 1
       result.update(downstream_from_vertex(node))
     end
@@ -396,7 +396,7 @@ class Puppet::Graph::SimpleGraph
   def upstream_from_vertex(v)
     return @upstream_from[v] if @upstream_from[v]
     result = @upstream_from[v] = {}
-    @in_to[v].keys.each do |node|
+    @in_to[v].each_key do |node|
       result[node] = 1
       result.update(upstream_from_vertex(node))
     end

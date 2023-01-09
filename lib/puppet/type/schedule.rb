@@ -407,7 +407,7 @@ module Puppet
       )
 
       # And then one for every period
-      @parameters.find { |p| p.name == :period }.value_collection.values.each { |value|
+      @parameters.find { |p| p.name == :period }.value_collection.each_value { |value|
 
               result << self.new(
           :name => value.to_s,

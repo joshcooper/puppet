@@ -816,9 +816,9 @@ class PObjectType < PMetaType
     guarded_recursion(guard, nil) do |g|
       super(visitor, g)
       @parent.accept(visitor, g) unless parent.nil?
-      @type_parameters.values.each { |p| p.accept(visitor, g) }
-      @attributes.values.each { |a| a.accept(visitor, g) }
-      @functions.values.each { |f| f.accept(visitor, g) }
+      @type_parameters.each_value { |p| p.accept(visitor, g) }
+      @attributes.each_value { |a| a.accept(visitor, g) }
+      @functions.each_value { |f| f.accept(visitor, g) }
     end
   end
 
@@ -852,7 +852,7 @@ class PObjectType < PMetaType
   # @api private
   def create_init_hash_type
     struct_elems = {}
-    attributes(true).values.each do |attr|
+    attributes(true).each_value do |attr|
       unless attr.kind == ATTRIBUTE_KIND_CONSTANT || attr.kind == ATTRIBUTE_KIND_DERIVED
         if attr.value?
           struct_elems[TypeFactory.optional(attr.name)] = attr.type

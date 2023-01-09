@@ -274,13 +274,13 @@ module Puppet::Util::IniConfig
     end
 
     def store
-      @files.values.each do |file|
+      @files.each_value do |file|
         file.store
       end
     end
 
     def each_section(&block)
-      @files.values.each do |file|
+      @files.each_value do |file|
         file.sections.each do |section|
           yield section
         end
@@ -288,14 +288,14 @@ module Puppet::Util::IniConfig
     end
 
     def each_file(&block)
-      @files.keys.each do |path|
+      @files.each_key do |path|
         yield path
       end
     end
 
     def get_section(name)
       sect = nil
-      @files.values.each do |file|
+      @files.each_value do |file|
         if (current = file.get_section(name))
           sect = current
         end

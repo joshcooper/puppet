@@ -59,7 +59,7 @@ class Puppet::Util::Log
   end
 
   def self.close_all
-    @destinations.keys.each { |dest|
+    @destinations.each_key { |dest|
       close(dest)
     }
     #TRANSLATORS "Log.close_all" is a method name and should not be translated

@@ -1244,7 +1244,7 @@ Generated on #{Time.now}.
   }.freeze
 
   def screen_non_puppet_conf_settings(puppet_conf)
-    puppet_conf.sections.values.each do |section|
+    puppet_conf.sections.each_value do |section|
       forbidden = section.settings.select { |setting| Puppet::Settings::EnvironmentConf::ENVIRONMENT_CONF_ONLY_SETTINGS.include?(setting.name) }
       raise(SettingsError, "Cannot set #{forbidden.map { |s| s.name }.join(", ")} settings in puppet.conf") if !forbidden.empty?
     end
@@ -1257,7 +1257,7 @@ Generated on #{Time.now}.
   # We are only recording warnings applicable to settings set in puppet.conf
   # itself.
   def record_deprecations_from_puppet_conf(puppet_conf)
-    puppet_conf.sections.values.each do |section|
+    puppet_conf.sections.each_value do |section|
       section.settings.each do |conf_setting|
         setting = self.setting(conf_setting.name)
         if setting

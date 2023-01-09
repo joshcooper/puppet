@@ -3077,7 +3077,7 @@ class PVariantType < PAnyType
       if enums.size > 1
         others = parts[1]
         values = []
-        enums.each { |enum| enum.values.each { |value| values << value.downcase }}
+        enums.each { |enum| enum.each_value { |value| values << value.downcase }}
         values.uniq!
         others <<  PEnumType.new(values, true)
         array = others

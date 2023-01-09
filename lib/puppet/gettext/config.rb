@@ -151,7 +151,7 @@ module Puppet::GettextConfig
   def self.delete_environment_text_domains
     return if @gettext_disabled || !gettext_loaded?
 
-    FastGettext.translation_repositories.keys.each do |key|
+    FastGettext.translation_repositories.each_key do |key|
       # do not clear default translations
       next if key == DEFAULT_TEXT_DOMAIN
 

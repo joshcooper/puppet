@@ -269,7 +269,7 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
   def clear(remove_resources = true)
     super()
     # We have to do this so that the resources clean themselves up.
-    @resource_table.values.each { |resource| resource.remove } if remove_resources
+    @resource_table.each_value { |resource| resource.remove } if remove_resources
     @resource_table.clear
     @resources = []
 
@@ -300,7 +300,7 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
   def finalize
     make_default_resources
 
-    @resource_table.values.each { |resource| resource.finish }
+    @resource_table.each_value { |resource| resource.finish }
 
     write_graph(:resources)
   end

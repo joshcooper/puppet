@@ -203,7 +203,7 @@ class AbstractWriter
       end
     end
 
-    URI.scheme_list.values.each do |uri_class|
+    URI.scheme_list.each_value do |uri_class|
       register_type(Extension::URI, uri_class) do |o|
         build_payload { |ep| ep.write(o.to_s) }
       end
