@@ -746,3 +746,36 @@ Style/RedundantFetchBlock:
 Style/AccessorGrouping:
   Enabled: true
   EnforcedStyle: separated
+
+# Offense count: 52
+# This cop supports unsafe autocorrection (--autocorrect-all).
+Style/CaseLikeIf:
+  Enabled: false
+
+# Offense count: 10
+# This cop supports unsafe autocorrection (--autocorrect-all).
+Style/CommentedKeyword:
+  Exclude:
+    - 'lib/puppet/util/command_line/trollop.rb'
+    - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
+    - 'lib/puppet/util/rdoc/generators/template/puppet/puppet.rb'
+    - 'lib/puppet/util/rpm_compare.rb'
+    - 'lib/puppet/util/windows/service.rb'
+
+# Offense count: 22
+# This cop supports unsafe autocorrection (--autocorrect-all).
+Style/GlobalStdStream:
+  Exclude:
+    - 'lib/puppet/application/apply.rb'
+    - 'lib/puppet/application/script.rb'
+    - 'lib/puppet/face/epp.rb'
+    - 'lib/puppet/face/parser.rb'
+    - 'lib/puppet/util.rb'
+    - 'lib/puppet/util/command_line.rb'
+    - 'lib/puppet/util/windows/daemon.rb'
+
+# Offense count: 1
+# Configuration parameters: MinBranchesCount.
+Style/HashLikeCase:
+  Exclude:
+    - 'lib/puppet/util/command_line/trollop.rb'
