@@ -19,7 +19,15 @@ describe "the epp function" do
     end
 
     it "get nil accessing a variable that does not exist" do
+      Puppet[:strict_variables] = false
+
       expect(eval_template("<%= $kryptonite == undef %>")).to eq("true")
+    end
+
+    it "raises if the variable doesn't exist" do
+      expect {
+        eval_template("<%= $kryptonite == undef %>")
+      }.to raise_error(Puppet::PreformattedError, /Unknown variable: 'kryptonite'/)
     end
 
     it "gets error accessing a variable that is malformed" do

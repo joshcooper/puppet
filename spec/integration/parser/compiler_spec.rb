@@ -158,7 +158,7 @@ describe Puppet::Parser::Compiler do
     it 'makes $settings::strict available as string' do
       node = Puppet::Node.new("testing")
       catalog = compile_to_catalog(<<-MANIFEST, node)
-          notify { 'test': message => $settings::strict == 'warning' }
+          notify { 'test': message => $settings::strict == 'error' }
       MANIFEST
       expect(catalog).to have_resource("Notify[test]").with_parameter(:message, true)
     end
@@ -174,7 +174,7 @@ describe Puppet::Parser::Compiler do
     it 'makes all server settings available as $settings::all_local hash' do
       node = Puppet::Node.new("testing")
       catalog = compile_to_catalog(<<-MANIFEST, node)
-          notify { 'test': message => $settings::all_local['strict'] == 'warning' }
+          notify { 'test': message => $settings::all_local['strict'] == 'error' }
       MANIFEST
       expect(catalog).to have_resource("Notify[test]").with_parameter(:message, true)
     end
@@ -694,7 +694,9 @@ describe Puppet::Parser::Compiler do
       end
 
       it 'a missing variable as default value becomes undef' do
-        # strict variables not on
+        Puppet[:strict_variables] = false
+        Puppet[:strict] = :warning # this defines what is done if strict variables are detected
+
         catalog = compile_to_catalog(<<-MANIFEST)
         class a ($b=$x) { notify {test: message=>"yes ${undef == $b}" } }
           include a

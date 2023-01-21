@@ -970,18 +970,33 @@ describe Puppet::Resource::Catalog, "when converting a resource catalog to json"
 
       let(:catalog_w_regexp)  { compile_to_catalog("notify {'foo': message => /[a-z]+/ }") }
 
-      it 'should not generate rich value hash for parameter values that are not Data' do
+      it 'warns when failing to generate rich value hash for parameter values that are not Data' do
+        Puppet[:strict] = :warning
         expect(catalog_w_regexp.to_json).not_to include('"__ptype"')
       end
 
-      it 'should convert parameter containing Regexp into strings' do
+      it 'warns when failing to generate rich value hash for parameter values that are not Data' do
+        expect {
+          catalog_w_regexp.to_json
+        }.to raise_error(Puppet::PreformattedError, /contains a Regexp value. It will be converted to the String '#{Regexp.escape("/[a-z]+/")}'/)
+      end
+
+      it 'warns when converting parameter containing Regexp into strings' do
+        Puppet[:strict] = :warning
         catalog2 = Puppet::Resource::Catalog.from_data_hash(JSON.parse(catalog_w_regexp.to_json))
         message = catalog2.resource('notify', 'foo')['message']
         expect(message).to be_a(String)
         expect(message).to eql('/[a-z]+/')
       end
 
-      it 'should convert parameter containing Version into string' do
+      it 'raises when converting parameter containing Regexp into strings' do
+        expect {
+          catalog_w_regexp.to_json
+        }.to raise_error(Puppet::PreformattedError, /contains a Regexp value. It will be converted to the String '#{Regexp.escape("/[a-z]+/")}'/)
+      end
+
+      it 'warns when converting parameter containing Version into string' do
+        Puppet[:strict] = :warning
         catalog = compile_to_catalog("notify {'foo': message => SemVer('1.0.0') }")
         catalog2 = Puppet::Resource::Catalog.from_data_hash(JSON.parse(catalog.to_json))
         message = catalog2.resource('notify', 'foo')['message']
@@ -989,7 +1004,19 @@ describe Puppet::Resource::Catalog, "when converting a resource catalog to json"
         expect(message).to eql('1.0.0')
       end
 
-      it 'should convert parameter containing VersionRange into string' do
+      it 'raises when converting parameter containing Version into strings' do
+        catalog = compile_to_catalog("notify {'foo': message => SemVer('1.0.0') }")
+        expect {
+          catalog.to_json
+        }.to raise_error(Puppet::PreformattedError, /contains a SemanticPuppet::Version value. It will be converted to the String '1.0.0'/)
+      end
+
+      it 'should convert parameter containing Version into string' do
+        catalog = compile_to_catalog("notify {'foo': message => SemVer('1.0.0') }")
+      end
+
+      it 'warns when converting parameter containing VersionRange into string' do
+        Puppet[:strict] = :warning
         catalog = compile_to_catalog("notify {'foo': message => SemVerRange('>=1.0.0') }")
         catalog2 = Puppet::Resource::Catalog.from_data_hash(JSON.parse(catalog.to_json))
         message = catalog2.resource('notify', 'foo')['message']
@@ -997,7 +1024,15 @@ describe Puppet::Resource::Catalog, "when converting a resource catalog to json"
         expect(message).to eql('>=1.0.0')
       end
 
-      it 'should convert parameter containing Timespan into string' do
+      it 'raises when converting parameter containing VersionRange into string' do
+        catalog = compile_to_catalog("notify {'foo': message => SemVerRange('>=1.0.0') }")
+        expect {
+          catalog.to_json
+        }.to raise_error(Puppet::PreformattedError, /contains a SemanticPuppet::VersionRange value. It will be converted to the String '>=1.0.0'/)
+      end
+
+      it 'warns when converting parameter containing Timespan into string' do
+        Puppet[:strict] = :warning
         catalog = compile_to_catalog("notify {'foo': message => Timespan(1234) }")
         catalog2 = Puppet::Resource::Catalog.from_data_hash(JSON.parse(catalog.to_json))
         message = catalog2.resource('notify', 'foo')['message']
@@ -1005,12 +1040,27 @@ describe Puppet::Resource::Catalog, "when converting a resource catalog to json"
         expect(message).to eql('0-00:20:34.0')
       end
 
-      it 'should convert parameter containing Timestamp into string' do
+      it 'raises when converting parameter containing Timespan into string' do
+        catalog = compile_to_catalog("notify {'foo': message => Timespan(1234) }")
+        expect {
+          catalog.to_json
+        }.to raise_error(Puppet::PreformattedError, /contains a Puppet::Pops::Time::Timespan value. It will be converted to the String '0-00:20:34.0'/)
+      end
+
+      it 'warns when converting parameter containing Timestamp into string' do
+        Puppet[:strict] = :warning
         catalog = compile_to_catalog("notify {'foo': message => Timestamp('2016-09-15T08:32:16.123 UTC') }")
         catalog2 = Puppet::Resource::Catalog.from_data_hash(JSON.parse(catalog.to_json))
         message = catalog2.resource('notify', 'foo')['message']
         expect(message).to be_a(String)
         expect(message).to eql('2016-09-15T08:32:16.123000000 UTC')
+      end
+
+      it 'raises when converting parameter containing Timestamp into string' do
+        catalog = compile_to_catalog("notify {'foo': message => Timestamp('2016-09-15T08:32:16.123 UTC') }")
+        expect {
+          catalog.to_json
+        }.to raise_error(Puppet::PreformattedError, /contains a Puppet::Pops::Time::Timestamp value. It will be converted to the String '2016-09-15T08:32:16.\d* UTC'/)
       end
 
       it 'should convert param containing array with :undef entries' do

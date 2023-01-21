@@ -498,6 +498,8 @@ module Serialization
     let(:warnings) { logs.select { |log| log.level == :warning }.map { |log| log.message } }
 
     it 'A Hash with Symbol keys is converted to hash with String keys with warning' do
+      Puppet[:strict] = :warning
+
       val = { :one => 'one', :two => 'two' }
       Puppet::Util::Log.with_destination(Puppet::Test::LogCollector.new(logs)) do
         write(val)
@@ -510,7 +512,15 @@ module Serialization
         "Test Hash contains a hash with a Symbol key. It will be converted to the String 'two'"])
     end
 
+    it 'A Hash with Symbol keys raises' do
+      expect {
+        write({ one: 'one' })
+      }.to raise_error(Puppet::PreformattedError, /Test Hash contains a hash with a Symbol key. It will be converted to the String 'one'/)
+    end
+
     it 'A Hash with Version keys is converted to hash with String keys with warning' do
+      Puppet[:strict] = :warning
+
       val = { SemanticPuppet::Version.parse('1.0.0') => 'one', SemanticPuppet::Version.parse('2.0.0') => 'two' }
       Puppet::Util::Log.with_destination(Puppet::Test::LogCollector.new(logs)) do
         write(val)
@@ -521,6 +531,12 @@ module Serialization
       expect(warnings).to eql([
         "Test Hash contains a hash with a SemanticPuppet::Version key. It will be converted to the String '1.0.0'",
         "Test Hash contains a hash with a SemanticPuppet::Version key. It will be converted to the String '2.0.0'"])
+    end
+
+    it 'A Hash with Version keys raises' do
+      expect {
+        write(SemanticPuppet::Version.parse('1.0.0') => 'one')
+      }.to raise_error(Puppet::PreformattedError, /Test Hash contains a hash with a SemanticPuppet::Version key. It will be converted to the String '1.0.0'/)
     end
 
     context 'and symbol_as_string is set to true' do
@@ -549,6 +565,8 @@ module Serialization
       end
 
       it 'A Hash with default values will have the values converted to string with a warning' do
+        Puppet[:strict] = :warning
+
         val = { 'key' => :default  }
         Puppet::Util::Log.with_destination(Puppet::Test::LogCollector.new(logs)) do
           write(val)
@@ -557,6 +575,12 @@ module Serialization
           expect(val2).to eql({ 'key' => 'default' })
         end
         expect(warnings).to eql(["['key'] contains the special value default. It will be converted to the String 'default'"])
+      end
+
+      it 'A Hash with default values raises by default' do
+        expect {
+          write({ 'key' => :default })
+        }.to raise_error(Puppet::PreformattedError, /\['key'\] contains the special value default. It will be converted to the String 'default'/)
       end
     end
   end

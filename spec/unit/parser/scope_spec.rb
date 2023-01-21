@@ -173,7 +173,16 @@ describe Puppet::Parser::Scope do
     end
 
     it "should return nil for unset variables when --strict variables is not in effect" do
+      Puppet[:strict_variables] = false
+      Puppet[:strict] = :warning
+
       expect(@scope["var"]).to be_nil
+    end
+
+    it "should raise for unset variables by default" do
+      expect {
+        @scope["var"]
+      }.to raise_error(ArgumentError, /Undefined variable 'var'/)
     end
 
     it "answers exist? with boolean false for non existing variables" do
@@ -222,17 +231,18 @@ describe Puppet::Parser::Scope do
       expect(@scope).not_to be_include("var")
     end
 
-    it "warns and return nil for non found unqualified variable" do
-      expect(Puppet).to receive(:warn_once)
-      expect(@scope["santa_clause"]).to be_nil
-    end
-
     it "warns once for a non found variable" do
+      Puppet[:strict_variables] = false
+      Puppet[:strict] = :warning
+
       expect(Puppet).to receive(:send_log).with(:warning, be_a(String)).once
       expect([@scope["santa_claus"],@scope["santa_claus"]]).to eq([nil, nil])
     end
 
     it "warns and return nil for non found qualified variable" do
+      Puppet[:strict_variables] = false
+      Puppet[:strict] = :warning
+
       expect(Puppet).to receive(:warn_once)
       expect(@scope["north_pole::santa_clause"]).to be_nil
     end
@@ -292,31 +302,39 @@ describe Puppet::Parser::Scope do
         expect(@scope["other::deep::klass::var"]).to eq("otherval")
       end
 
-      it "should return nil for qualified variables that cannot be found in other classes" do
+      it "should raise for qualified variables that cannot be found in other classes" do
         create_class_scope("other::deep::klass")
 
-        expect(@scope["other::deep::klass::var"]).to be_nil
+        expect {
+          @scope["other::deep::klass::var"]
+        }.to raise_error(ArgumentError, /Undefined variable '::other::deep::klass::var'/)
       end
 
-      it "should warn and return nil for qualified variables whose classes have not been evaluated" do
+      it "should raise for qualified variables whose classes have not been evaluated" do
         newclass("other::deep::klass")
-        expect(Puppet).to receive(:warn_once)
-        expect(@scope["other::deep::klass::var"]).to be_nil
+
+        expect {
+          @scope["other::deep::klass::var"]
+        }.to raise_error(ArgumentError, /Undefined variable 'other::deep::klass::var'/)
       end
 
-      it "should warn and return nil for qualified variables whose classes do not exist" do
-        expect(Puppet).to receive(:warn_once)
-        expect(@scope["other::deep::klass::var"]).to be_nil
+      it "should raise for qualified variables whose classes do not exist" do
+        expect {
+          @scope["other::deep::klass::var"]
+        }.to raise_error(ArgumentError, /Undefined variable 'other::deep::klass::var'/)
       end
 
-      it "should return nil when asked for a non-string qualified variable from a class that does not exist" do
-        expect(@scope["other::deep::klass::var"]).to be_nil
+      it "should raise when asked for a non-string qualified variable from a class that does not exist" do
+        expect {
+          @scope["other::deep::klass::var"]
+        }.to raise_error(ArgumentError, /Undefined variable 'other::deep::klass::var'/)
       end
 
       it "should return nil when asked for a non-string qualified variable from a class that has not been evaluated" do
-        allow(@scope).to receive(:warning)
         newclass("other::deep::klass")
-        expect(@scope["other::deep::klass::var"]).to be_nil
+        expect {
+          @scope["other::deep::klass::var"]
+        }.to raise_error(ArgumentError, /Undefined variable 'other::deep::klass::var'/)
       end
     end
 
