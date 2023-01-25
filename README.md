@@ -4,6 +4,7 @@
 [![Gem Version](https://badge.fury.io/rb/puppet.svg)](https://badge.fury.io/rb/puppet)
 [![Inline docs](https://inch-ci.org/github/puppetlabs/puppet.svg)](https://inch-ci.org/github/puppetlabs/puppet)
 
+
 Puppet, an automated administrative engine for your Linux, Unix, and Windows systems, performs
 administrative tasks (such as adding users, installing packages, and updating server
 configurations) based on a centralized specification.
