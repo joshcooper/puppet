@@ -937,12 +937,6 @@ Style/RedundantException:
     - 'lib/puppet/pops/types/class_loader.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: SafeForConstants.
-Style/RedundantFetchBlock:
-  Exclude:
-    - 'lib/puppet/pops/types/p_sem_ver_range_type.rb'
-
-# This cop supports unsafe autocorrection (--autocorrect-all).
 Style/RedundantInterpolation:
   Enabled: false
 
