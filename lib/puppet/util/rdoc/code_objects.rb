@@ -184,10 +184,6 @@ module RDoc
   class PuppetNode < PuppetClass
     include AddClassModuleComment
 
-    def initialize(name, superclass)
-      super(name,superclass)
-    end
-
     def is_module?
       false
     end

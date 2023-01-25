@@ -1,9 +1,5 @@
 class Puppet::Settings::FileOrDirectorySetting < Puppet::Settings::FileSetting
 
-  def initialize(args)
-    super
-  end
-
   def type
     if Puppet::FileSystem.directory?(self.value) || @path_ends_with_slash
       :directory
