@@ -660,6 +660,10 @@ Lint/UnreachableLoop:
   Exclude:
     - 'lib/puppet/util/at_fork.rb'
 
+# This cop generates false positives
+Lint/UnusedBlockArgument:
+  Enabled: false
+
 Metrics/AbcSize:
   Enabled: false
 
