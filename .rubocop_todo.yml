@@ -335,13 +335,6 @@ Style/ClassVars:
 Style/ColonMethodCall:
   Enabled: false
 
-Style/CombinableLoops:
-  Exclude:
-    - 'lib/puppet/graph/relationship_graph.rb'
-    - 'lib/puppet/pops/types/ruby_generator.rb'
-    - 'lib/puppet/provider/service/init.rb'
-    - 'lib/puppet/util/rdoc/generators/puppet_generator.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle, AllowInnerBackticks.
 # SupportedStyles: backticks, percent_x, mixed
