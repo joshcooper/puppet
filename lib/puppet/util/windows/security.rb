@@ -237,7 +237,9 @@ module Puppet::Util::Windows::Security
           mode |= S_ISVTX
         end
       when well_known_app_packages_sid
+        # ignore
       when well_known_system_sid
+        # ignore
       else
         #puts "Warning, unable to map SID into POSIX mode: #{ace.sid}"
         mode |= S_IEXTRA

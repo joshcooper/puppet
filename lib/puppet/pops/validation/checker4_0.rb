@@ -235,7 +235,9 @@ class Checker4_0 < Evaluator::LiteralEvaluator
     p = container
     case p
     when Model::AbstractResource
+      # ok
     when Model::CollectExpression
+      # ok
     else
       # protect against just testing a snippet that has no parent, error message will be a bit strange
       # but it is not for a real program.

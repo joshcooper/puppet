@@ -25,8 +25,10 @@ module Puppet::Util::Backups
       return true if self[:recurse]
       info _("Recursively backing up to filebucket")
       Find.find(self[:path]) { |f| backup_file_with_filebucket(f) if File.file?(f) }
-    when "file"; backup_file_with_filebucket(file)
-    when "link";
+    when "file"
+      backup_file_with_filebucket(file)
+    when "link"
+      # ignore
     end
     true
   end
