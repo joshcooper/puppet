@@ -281,16 +281,12 @@ module Puppet::Util::IniConfig
 
     def each_section(&block)
       @files.each_value do |file|
-        file.sections.each do |section|
-          yield section
-        end
+        file.sections.each(&block)
       end
     end
 
     def each_file(&block)
-      @files.each_key do |path|
-        yield path
-      end
+      @files.each_key(&block)
     end
 
     def get_section(name)

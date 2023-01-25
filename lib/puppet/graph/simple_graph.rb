@@ -329,8 +329,8 @@ class Puppet::Graph::SimpleGraph
     @in_to.values.collect { |x| x.values }.flatten
   end
 
-  def each_edge
-    @in_to.each { |t,ns| ns.each { |s,es| es.each { |e| yield e }}}
+  def each_edge(&block)
+    @in_to.each { |t,ns| ns.each { |s,es| es.each(&block)}}
   end
 
   # Remove an edge from our graph.

@@ -8,8 +8,8 @@ class Puppet::Parser::AST::Branch < Puppet::Parser::AST
   include Enumerable
   attr_accessor :pin, :children
 
-  def each
-    @children.each { |child| yield child }
+  def each(&block)
+    @children.each(&block)
   end
 
   def initialize(children: [], **args)

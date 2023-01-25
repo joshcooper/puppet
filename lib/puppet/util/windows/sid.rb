@@ -190,9 +190,7 @@ module Puppet::Util::Windows
             raise Puppet::Util::Windows::Error.new(_("Failed to convert string SID: %{string_sid}") % { string_sid: string_sid })
           end
 
-          sid_ptr_ptr.read_win32_local_pointer do |sid_ptr|
-            yield sid_ptr
-          end
+          sid_ptr_ptr.read_win32_local_pointer(&block)
         end
       end
 

@@ -16,8 +16,8 @@ class Puppet::Util::Windows::RootCerts
   # Enumerates each root certificate.
   # @yieldparam cert [OpenSSL::X509::Certificate] each root certificate
   # @api public
-  def each
-    @roots.each {|cert| yield cert}
+  def each(&block)
+    @roots.each(&block)
   end
 
   # Returns a new instance.

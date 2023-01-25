@@ -98,8 +98,8 @@ Puppet::Functions.create_function(:filter) do
     result
   end
 
-  def filter_Hash_2(hash)
-    result = hash.select {|x, y| yield(x, y) }
+  def filter_Hash_2(hash, &block)
+    result = hash.select(&block)
     # Ruby 1.8.7 returns Array
     result = Hash[result] unless result.is_a? Hash
     result

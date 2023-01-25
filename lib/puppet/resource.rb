@@ -211,8 +211,8 @@ class Puppet::Resource
   end
 
   # Iterate over each param/value pair, as required for Enumerable.
-  def each
-    parameters.each { |p,v| yield p, v }
+  def each(&block)
+    parameters.each(&block)
   end
 
   def include?(parameter)

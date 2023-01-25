@@ -219,7 +219,7 @@ module Util
   #                     other percent signs '%' need to be escaped
   # @param level [Symbol] the logging level for this message
   # @param object [Object] The object use for logging the message
-  def benchmark(*args)
+  def benchmark(*args, &block)
     msg = args.pop
     level = args.pop
     object = if args.empty?
@@ -241,9 +241,7 @@ module Util
 
     # Only benchmark if our log level is high enough
     if level != :none and Puppet::Util::Log.sendlevel?(level)
-      seconds = Benchmark.realtime {
-        yield
-      }
+      seconds = Benchmark.realtime(&block)
       object.send(level, msg % { seconds: "%0.2f" % seconds })
       return seconds
     else
@@ -561,10 +559,8 @@ module Util
   module_function :symbolizehash
 
   # Just benchmark, with no logging.
-  def thinmark
-    Benchmark.realtime {
-      yield
-    }
+  def thinmark(&block)
+    Benchmark.realtime(&block)
   end
 
   module_function :thinmark

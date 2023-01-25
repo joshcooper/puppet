@@ -59,15 +59,13 @@ module Puppet::Network::HTTP::Handler
     )
   end
 
-  def with_request_profiling(request)
+  def with_request_profiling(request, &block)
     profiler = configure_profiler(request.headers, request.params)
 
     Puppet::Util::Profiler.profile(
       _("Processed request %{request_method} %{request_path}") % { request_method: request.method, request_path: request.path },
-      [:http, request.method, request.path]
-    ) do
-      yield
-    end
+      [:http, request.method, request.path], &block
+    )
   ensure
     remove_profiler(profiler) if profiler
   end

@@ -135,7 +135,7 @@ class Puppet::Util::Windows::EventLog
   # @api private
   def from_string_to_wide_string(str, &block)
     str = wide_string(str)
-    FFI::MemoryPointer.from_wide_string(str) { |ptr| yield ptr }
+    FFI::MemoryPointer.from_wide_string(str, &block)
 
     # ptr has already had free called, so nothing to return
     nil

@@ -55,7 +55,7 @@ module Puppet::Util::Execution
   #
   # @see Kernel#open for `mode` values
   # @api public
-  def self.execpipe(command, failonfail = true)
+  def self.execpipe(command, failonfail = true, &block)
     # Paste together an array with spaces.  We used to paste directly
     # together, no spaces, which made for odd invocations; the user had to
     # include whitespace between arguments.
@@ -78,9 +78,7 @@ module Puppet::Util::Execution
     english_env = ENV.to_hash.merge( {'LANG' => 'C', 'LC_ALL' => 'C'} )
     output = Puppet::Util.withenv(english_env) do
       # We are intentionally using 'pipe' with open to launch a process
-      open("| #{command_str} 2>&1") do |pipe| # rubocop:disable Security/Open
-        yield pipe
-      end
+      open("| #{command_str} 2>&1", &block)
     end
 
     if failonfail && exitstatus != 0

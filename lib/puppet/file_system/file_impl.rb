@@ -73,9 +73,7 @@ class Puppet::FileSystem::FileImpl
 
   def each_line(path, &block)
     ::File.open(path) do |f|
-      f.each_line do |line|
-        yield line
-      end
+      f.each_line(&block)
     end
   end
 

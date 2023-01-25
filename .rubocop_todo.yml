@@ -433,10 +433,6 @@ Style/EvenOdd:
     - 'lib/puppet/pops/serialization/json.rb'
     - 'lib/puppet/pops/types/types.rb'
 
-# This cop supports safe autocorrection (--autocorrect).
-Style/ExplicitBlockArgument:
-  Enabled: false
-
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: each, for
