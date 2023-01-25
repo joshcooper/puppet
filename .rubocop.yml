@@ -623,6 +623,10 @@ Lint/IdentityComparison:
     - 'lib/puppet/ssl/verifier.rb'
     - 'lib/puppet/type.rb'
 
+Lint/StructNewOverride:
+  Exclude:
+    - 'lib/puppet/network/http/request.rb'
+
 # This code is very fragile, just exclude this one
 Lint/UnreachableLoop:
   Exclude:
