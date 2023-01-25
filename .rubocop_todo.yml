@@ -29,12 +29,6 @@ Lint/EnsureReturn:
   Exclude:
     - 'lib/puppet/configurer.rb'
 
-# This cop supports safe autocorrection (--autocorrect).
-Lint/LiteralInInterpolation:
-  Exclude:
-    - 'lib/puppet/provider/package/yum.rb'
-    - 'lib/puppet/type/component.rb'
-
 Lint/MissingSuper:
   Enabled: false
 
