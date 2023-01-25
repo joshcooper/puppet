@@ -30,8 +30,8 @@ module Puppet
       end
 
       # @api private
-      def load_entry(entry)
-        Puppet.debug("Loading vendored #{$1}")
+      def load_entry(entry, name)
+        Puppet.debug("Loading vendored #{name}")
         load "#{vendor_dir}/#{entry}"
       end
 
@@ -46,7 +46,7 @@ module Puppet
       def load_vendored
         Dir.entries(vendor_dir).each do |entry|
           if entry =~ /load_(\w+?)\.rb$/
-            load_entry entry
+            load_entry(entry, $1)
           end
         end
 
