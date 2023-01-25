@@ -9,7 +9,7 @@ class Formatter
   def wrap(txt, opts)
     return "" unless txt && !txt.empty?
     work = (opts[:scrub] ? scrub(txt) : txt)
-    indent = (opts[:indent] ? opts[:indent] : 0)
+    indent = (opts[:indent] || 0)
     textLen = @width - indent
     patt = Regexp.new("\\A(.{0,#{textLen}})[ \n]")
     prefix = " " * indent

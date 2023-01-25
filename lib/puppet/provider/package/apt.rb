@@ -153,11 +153,7 @@ Puppet::Type.type(:package).provide :apt, :parent => :dpkg, :source => :dpkg do
     cmd += install_options if @resource[:install_options]
     cmd << :install
 
-    if source
-      cmd << source
-    else
-      cmd << str
-    end
+    cmd << (source || str)
 
     self.unhold if self.properties[:mark] == :hold
     begin

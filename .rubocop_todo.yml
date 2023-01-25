@@ -963,23 +963,6 @@ Style/RedundantBegin:
   Enabled: false
 
 # This cop supports safe autocorrection (--autocorrect).
-Style/RedundantCondition:
-  Exclude:
-    - 'ext/windows/service/daemon.rb'
-    - 'lib/puppet/application/describe.rb'
-    - 'lib/puppet/environments.rb'
-    - 'lib/puppet/graph/simple_graph.rb'
-    - 'lib/puppet/indirector/request.rb'
-    - 'lib/puppet/parser/templatewrapper.rb'
-    - 'lib/puppet/provider/package/apt.rb'
-    - 'lib/puppet/provider/package/blastwave.rb'
-    - 'lib/puppet/provider/package/pkgutil.rb'
-    - 'lib/puppet/provider/package/portage.rb'
-    - 'lib/puppet/type.rb'
-    - 'lib/puppet/util/command_line/trollop.rb'
-    - 'lib/puppet/util/inifile.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
 Style/RedundantException:
   Exclude:
     - 'lib/puppet/file_bucket/dipper.rb'
