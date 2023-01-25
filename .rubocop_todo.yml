@@ -29,11 +29,6 @@ Lint/EnsureReturn:
   Exclude:
     - 'lib/puppet/configurer.rb'
 
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Lint/InterpolationCheck:
-  Exclude:
-    - 'lib/puppet/util/package/version/pip.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 Lint/LiteralInInterpolation:
   Exclude:
