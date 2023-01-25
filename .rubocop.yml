@@ -637,6 +637,17 @@ Lint/IdentityComparison:
     - 'lib/puppet/ssl/verifier.rb'
     - 'lib/puppet/type.rb'
 
+# This cop supports unsafe autocorrection (--autocorrect-all).
+# Configuration parameters: EnforcedStyle.
+# SupportedStyles: standard_error, runtime_error
+Lint/InheritException:
+  Exclude:
+    - 'lib/puppet/agent.rb'
+    - 'lib/puppet/network/http/error.rb'
+    - 'lib/puppet/pops/evaluator/closure.rb'
+    - 'lib/puppet/util/logging.rb'
+    - 'lib/puppet/util/retry_action.rb'
+
 Metrics/AbcSize:
   Enabled: false
 
