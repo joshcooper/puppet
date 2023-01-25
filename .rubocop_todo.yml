@@ -267,44 +267,6 @@ Lint/Void:
     - 'lib/puppet/ssl/certificate_signer.rb'
     - 'lib/puppet/type.rb'
 
-# Configuration parameters: AllowedMethods, AllowedPatterns, IgnoredMethods, CountRepeatedAttributes.
-Metrics/AbcSize:
-  Max: 386
-
-# Configuration parameters: CountComments, CountAsOne, ExcludedMethods, AllowedMethods, AllowedPatterns, IgnoredMethods.
-# AllowedMethods: refine
-Metrics/BlockLength:
-  Max: 756
-
-# Configuration parameters: CountBlocks.
-Metrics/BlockNesting:
-  Max: 6
-
-# Configuration parameters: CountComments, CountAsOne.
-Metrics/ClassLength:
-  Max: 1272
-
-# Configuration parameters: AllowedMethods, AllowedPatterns, IgnoredMethods.
-Metrics/CyclomaticComplexity:
-  Max: 115
-
-# Configuration parameters: CountComments, CountAsOne, ExcludedMethods, AllowedMethods, AllowedPatterns, IgnoredMethods.
-Metrics/MethodLength:
-  Max: 2022
-
-# Configuration parameters: CountComments, CountAsOne.
-Metrics/ModuleLength:
-  Max: 2089
-
-# Configuration parameters: CountKeywordArgs.
-Metrics/ParameterLists:
-  MaxOptionalParameters: 6
-  Max: 16
-
-# Configuration parameters: AllowedMethods, AllowedPatterns, IgnoredMethods.
-Metrics/PerceivedComplexity:
-  Max: 96
-
 Naming/AccessorMethodName:
   Enabled: false
 
