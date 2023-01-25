@@ -604,6 +604,11 @@ Lint/DuplicateMethods:
     - 'lib/puppet/interface/documentation.rb'
     - 'lib/puppet/interface/option.rb'
 
+# This cop supports safe autocorrection (--autocorrect).
+Lint/ElseLayout:
+  Exclude:
+    - 'lib/puppet/resource.rb'
+
 Metrics/AbcSize:
   Enabled: false
 
