@@ -596,6 +596,14 @@ Lint/BooleanSymbol:
     - 'lib/puppet/type.rb'
     - 'lib/puppet/type/**/*'
 
+# faces code is fragile, just leave it
+Lint/DuplicateMethods:
+  Exclude:
+    - 'lib/puppet/application/face_base.rb'
+    - 'lib/puppet/interface/action.rb'
+    - 'lib/puppet/interface/documentation.rb'
+    - 'lib/puppet/interface/option.rb'
+
 Metrics/AbcSize:
   Enabled: false
 
