@@ -582,6 +582,20 @@ Layout/TrailingEmptyLines:
 Layout/TrailingWhitespace:
   Enabled: false
 
+# puppet has a long standing bug with parameter/properties whose values are
+# falsey. To workaround that some type/providers use `:false`. Allow those
+# usages, but not others.
+Lint/BooleanSymbol:
+  Exclude:
+    - 'lib/puppet/coercion.rb'
+    - 'lib/puppet/configurer.rb'
+    - 'lib/puppet/http/service/file_server.rb'
+    - 'lib/puppet/parameter/value.rb'
+    - 'lib/puppet/provider/**/*'
+    - 'lib/puppet/reference/providers.rb'
+    - 'lib/puppet/type.rb'
+    - 'lib/puppet/type/**/*'
+
 Metrics/AbcSize:
   Enabled: false
 

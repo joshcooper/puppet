@@ -19,10 +19,6 @@ I18n/GetText/DecorateStringFormattingUsingPercent:
     - 'lib/puppet/provider/user/windows_adsi.rb'
     - 'lib/puppet/transaction/resource_harness.rb'
 
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Lint/BooleanSymbol:
-  Enabled: false
-
 # Configuration parameters: AllowedMethods.
 # AllowedMethods: enums
 Lint/ConstantDefinitionInBlock:
