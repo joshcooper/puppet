@@ -81,11 +81,6 @@ Lint/SuppressedException:
     - 'util/rspec_grouper'
 
 # This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods, IgnoreNotImplementedMethods.
-Lint/UnusedMethodArgument:
-  Enabled: false
-
-# This cop supports safe autocorrection (--autocorrect).
 Lint/UriRegexp:
   Exclude:
     - 'lib/puppet/pops/pcore.rb'
