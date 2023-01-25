@@ -145,7 +145,7 @@ class Puppet::Interface::ActionBuilder
       # when we use the define_method/block version.  The later warns on older
       # Ruby versions if you pass the wrong number of arguments, but carries
       # on, which is totally not what we want. --daniel 2011-04-18
-      eval <<-METHOD
+      eval <<-METHOD # rubocop:disable Security/Eval
         def #{property}(value)
           @action.#{property} = value
         end

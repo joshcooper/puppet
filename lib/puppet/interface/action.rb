@@ -265,11 +265,11 @@ end
 WRAPPER
 
     if @face.is_a?(Class)
-      @face.class_eval do eval wrapper, nil, file, line end
+      @face.class_eval do eval wrapper, nil, file, line end # rubocop:disable Security/Eval
       @face.send(:define_method, internal_name, &block)
       @when_invoked = @face.instance_method(name)
     else
-      @face.instance_eval do eval wrapper, nil, file, line end
+      @face.instance_eval do eval wrapper, nil, file, line end # rubocop:disable Security/Eval
       @face.meta_def(internal_name, &block)
       @when_invoked = @face.method(name).unbind
     end
