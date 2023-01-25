@@ -11,8 +11,6 @@ module Puppet::Pops
 class Loaders
   class LoaderError < Puppet::Error; end
 
-  attr_reader :static_loader
-  attr_reader :puppet_system_loader
   attr_reader :puppet_cache_loader
   attr_reader :public_environment_loader
   attr_reader :private_environment_loader
