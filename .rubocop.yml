@@ -658,3 +658,9 @@ Metrics/ParameterLists:
 
 Metrics/PerceivedComplexity:
   Enabled: false
+
+# This cop supports safe autocorrection (--autocorrect).
+# Configuration parameters: AllowedMethods, AllowedPatterns, IgnoredMethods.
+# AllowedMethods: ==, equal?, eql?
+Style/ClassEqualityComparison:
+  Enabled: false
