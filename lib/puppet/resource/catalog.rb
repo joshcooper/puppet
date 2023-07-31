@@ -13,6 +13,8 @@ require 'securerandom'
 # @api public
 
 class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
+  include Puppet::Util::PsychSupport
+
   class DuplicateResourceError < Puppet::Error
     include Puppet::ExternalFileError
   end
@@ -406,54 +408,66 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
   end
 
   def self.from_data_hash(data)
-    result = new(data['name'], Puppet::Node::Environment::NONE)
+    catalog = self.allocate
+    catalog.initialize_from_hash(data)
+    catalog
+  end
 
-    result.tag(*data['tags']) if data['tags'] 
-    result.version = data['version'] if data['version']
-    result.code_id = data['code_id'] if data['code_id']
-    result.catalog_uuid = data['catalog_uuid'] if data['catalog_uuid']
-    result.catalog_format = data['catalog_format'] || 0
+  def initialize_from_hash(data)
+    initialize(data['name'])
+
+    name = data['name']
+    raise ArgumentError, _('No catalog name provided in serialized data') unless name
+
+    self.tag(*data['tags']) if data['tags']
+    self.version = data['version'] if data['version']
+    self.code_id = data['code_id'] if data['code_id']
+    self.catalog_uuid = data['catalog_uuid'] if data['catalog_uuid']
+    self.catalog_format = data['catalog_format'] || 0
 
     environment = data['environment']
     if environment
-      result.environment = environment
-      result.environment_instance = Puppet::Node::Environment.remote(environment.to_sym)
+      self.environment = environment
+      self.environment_instance = Puppet::Node::Environment.remote(environment.to_sym)
     end
 
-    result.add_resource(
-      *data['resources'].collect do |res|
-        Puppet::Resource.from_data_hash(res)
+    if data['resources']
+      resources = data['resources'].collect do |res|
+        newres = Puppet::Resource.from_data_hash(res)
+        require 'byebug'; byebug if newres == nil
+        newres
       end
-    ) if data['resources']
+      self.add_resource(*resources)
+    end
 
     if data['edges']
       data['edges'].each do |edge_hash|
         edge = Puppet::Relationship.from_data_hash(edge_hash)
-        source = result.resource(edge.source)
+        source = self.resource(edge.source)
         unless source
           raise ArgumentError, _("Could not intern from data: Could not find relationship source %{source} for %{target}") %
               { source: edge.source.inspect, target: edge.target.to_s }
         end
         edge.source = source
 
-        target = result.resource(edge.target)
+        target = self.resource(edge.target)
         unless target
           raise ArgumentError, _("Could not intern from data: Could not find relationship target %{target} for %{source}") %
               { target: edge.target.inspect, source: edge.source.to_s }
         end
         edge.target = target
 
-        result.add_edge(edge)
+        self.add_edge(edge)
       end
     end
 
-    result.add_class(*data['classes']) if data['classes']
+    self.add_class(*data['classes']) if data['classes']
 
-    result.metadata = data['metadata'].inject({}) { |h, (k, v)| h[k] = Puppet::FileServing::Metadata.from_data_hash(v); h } if data['metadata']
+    self.metadata = data['metadata'].inject({}) { |h, (k, v)| h[k] = Puppet::FileServing::Metadata.from_data_hash(v); h } if data['metadata']
 
     recursive_metadata = data['recursive_metadata']
     if recursive_metadata
-      result.recursive_metadata = recursive_metadata.inject({}) do |h, (title, source_to_meta_hash)|
+      self.recursive_metadata = recursive_metadata.inject({}) do |h, (title, source_to_meta_hash)|
         h[title] = source_to_meta_hash.inject({}) do |inner_h, (source, metas)|
           inner_h[source] = metas.map {|meta| Puppet::FileServing::Metadata.from_data_hash(meta)}
           inner_h
@@ -462,7 +476,7 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
       end
     end
 
-    result
+    self
   end
 
   def to_data_hash

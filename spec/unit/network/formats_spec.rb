@@ -156,7 +156,7 @@ describe "Puppet Network Format" do
         Puppet::Node.new('foo'),
         Puppet::Resource.new('File', '/foo'),
         Puppet::Transaction::Report.new('foo'),
-        Puppet::Resource::Catalog.new
+        Puppet::Resource::Catalog.new('foo')
       ].each { |obj| yaml.intern(obj.class, YAML.dump(obj.to_data_hash)) }
     end
 

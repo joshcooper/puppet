@@ -2,9 +2,11 @@ require 'spec_helper'
 require 'puppet_spec/compiler'
 
 require 'matchers/json'
+require 'matchers/resource'
 
 describe Puppet::Resource::Catalog, "when compiling" do
   include JSONMatchers
+  include Matchers::Resource
   include PuppetSpec::Files
 
   before do
@@ -810,7 +812,11 @@ describe Puppet::Resource::Catalog, "when compiling" do
   describe "when converting from yaml" do
     before do
       @catalog = Puppet::Resource::Catalog.new("me")
-      @catalog.add_edge("one", "two")
+      @one = Puppet::Resource.new(:notify, "one")
+      @two = Puppet::Resource.new(:notify, "two")
+      @catalog.add_resource(@one)
+      @catalog.add_resource(@two)
+      @catalog.add_edge(@one, @two)
 
       text = YAML.dump(@catalog)
       @newcatalog = Puppet::Util::Yaml.safe_load(text, [Puppet::Resource::Catalog])
@@ -821,12 +827,19 @@ describe Puppet::Resource::Catalog, "when compiling" do
     end
 
     it "should have all vertices" do
-      expect(@newcatalog.vertex?("one")).to be_truthy
-      expect(@newcatalog.vertex?("two")).to be_truthy
+      expect(@newcatalog).to have_resource("Notify[one]")
+      expect(@newcatalog).to have_resource("Notify[two]")
     end
 
     it "should have all edges" do
-      expect(@newcatalog.edge?("one", "two")).to be_truthy
+      expect(@newcatalog.edge?(@newcatalog.resource("Notify[one]"), @newcatalog.resource("Notify[two]"))).to be_truthy
+    end
+
+    it "preserves a catalog specific instance variable" do
+      @catalog.tags = ['a']
+      text = YAML.dump(@catalog)
+      @newcatalog = Puppet::Util::Yaml.safe_load(text, [Puppet::Resource::Catalog])
+      expect(@newcatalog.tags.to_a).to eq(['a'])
     end
   end
 end
