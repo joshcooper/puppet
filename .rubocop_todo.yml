@@ -178,13 +178,6 @@ Lint/SymbolConversion: # new in 1.9
 Lint/ToEnumArguments: # new in 1.1
   Enabled: false
 
-# This cop supports safe auto-correction (--auto-correct).
-Lint/ToJSON:
-  Exclude:
-    - 'lib/puppet/module_tool/metadata.rb'
-    - 'lib/puppet/network/http/error.rb'
-    - 'lib/puppet/pops/serialization/json.rb'
-
 Lint/TripleQuotes: # new in 1.9
   Enabled: false
 
