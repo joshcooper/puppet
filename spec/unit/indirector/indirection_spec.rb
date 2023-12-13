@@ -132,26 +132,52 @@ describe Puppet::Indirector::Indirection do
         expect(Puppet::Indirector::Terminus).to receive(:terminus_class).with(:test, :alternate_cache).and_return(@alt_cache)
       end
 
-      it 'does not change the original value when modified in new thread' do
-        Thread.new do
-          @indirection.terminus_class = :alternate_terminus
-          @indirection.terminus_setting = :alternate_terminus_setting
-          @indirection.cache_class = :alternate_cache
-        end.join
-        expect(@indirection.terminus_class).to eq(:test_terminus)
-        expect(@indirection.terminus_setting).to eq(nil)
-        expect(@indirection.cache_class).to eq(nil)
+      context 'when multithreaded in enabled', if: ENV['PUPPET_MT'] do
+        it 'does not change the original value when modified in new thread' do
+          Thread.new do
+            @indirection.terminus_class = :alternate_terminus
+            @indirection.terminus_setting = :alternate_terminus_setting
+            @indirection.cache_class = :alternate_cache
+          end.join
+          expect(@indirection.terminus_class).to eq(:test_terminus)
+          expect(@indirection.terminus_setting).to eq(nil)
+          expect(@indirection.cache_class).to eq(nil)
+        end
+
+        it 'can modify indirection settings globally for all threads using the global setter' do
+          Thread.new do
+            @indirection.set_global_setting(:terminus_class, :alternate_terminus)
+            @indirection.set_global_setting(:terminus_setting, :alternate_terminus_setting)
+            @indirection.set_global_setting(:cache_class, :alternate_cache)
+          end.join
+          expect(@indirection.terminus_class).to eq(:alternate_terminus)
+          expect(@indirection.terminus_setting).to eq(:alternate_terminus_setting)
+          expect(@indirection.cache_class).to eq(:alternate_cache)
+        end
       end
 
-      it 'can modify indirection settings globally for all threads using the global setter' do
-        Thread.new do
-          @indirection.set_global_setting(:terminus_class, :alternate_terminus)
-          @indirection.set_global_setting(:terminus_setting, :alternate_terminus_setting)
-          @indirection.set_global_setting(:cache_class, :alternate_cache)
-        end.join
-        expect(@indirection.terminus_class).to eq(:alternate_terminus)
-        expect(@indirection.terminus_setting).to eq(:alternate_terminus_setting)
-        expect(@indirection.cache_class).to eq(:alternate_cache)
+      context 'when multithreading is disabled', unless: ENV['PUPPET_MT'] do
+        it 'changes the original value when modified in new thread' do
+          Thread.new do
+            @indirection.terminus_class = :alternate_terminus
+            @indirection.terminus_setting = :alternate_terminus_setting
+            @indirection.cache_class = :alternate_cache
+          end.join
+          expect(@indirection.terminus_class).to eq(:alternate_terminus)
+          expect(@indirection.terminus_setting).to eq(:alternate_terminus_setting)
+          expect(@indirection.cache_class).to eq(:alternate_cache)
+        end
+
+        it 'can modify indirection settings globally for all threads using the global setter' do
+          Thread.new do
+            @indirection.set_global_setting(:terminus_class, :alternate_terminus)
+            @indirection.set_global_setting(:terminus_setting, :alternate_terminus_setting)
+            @indirection.set_global_setting(:cache_class, :alternate_cache)
+          end.join
+          expect(@indirection.terminus_class).to eq(:alternate_terminus)
+          expect(@indirection.terminus_setting).to eq(:alternate_terminus_setting)
+          expect(@indirection.cache_class).to eq(:alternate_cache)
+        end
       end
     end
 

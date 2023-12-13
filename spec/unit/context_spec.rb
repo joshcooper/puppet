@@ -87,7 +87,7 @@ describe Puppet::Context do
     end
   end
 
-  context "with multiple threads" do
+  context "with multiple threads and multithreaded", if: ENV['PUPPET_MT'] do
     it "a value pushed in another thread is not seen in the original thread" do
       context.push(a: 1)
       t = Thread.new do
@@ -120,8 +120,42 @@ describe Puppet::Context do
       expect { context.rollback('point b') }.to raise_error(Puppet::Context::UnknownRollbackMarkError)
     end
   end
-end
 
+  context "with multiple threads and multithreaded disabled", unless: ENV['PUPPET_MT'] do
+    it "a value pushed in another thread is seen in the original thread" do
+      context.push(a: 1)
+      t = Thread.new do
+        context.push(a: 2, b: 5)
+      end
+      t.join
+
+      expect(context.lookup(:a)).to eq(2)
+      expect(context.lookup(:b)).to eq(5)
+    end
+
+    it "pops on a different thread do interfere" do
+      context.push(a: 1)
+      t = Thread.new do
+        context.pop
+      end
+      t.join
+
+      # Raises exception if the binding we pushed has already been popped
+      context.pop
+    end
+
+    it "a mark in one thread is seen in another thread" do
+      t = Thread.new do
+        context.push(b: 2)
+        context.mark('point b')
+      end
+      t.join
+
+      context.rollback('point b')
+      expect(context.lookup(:b)).to eq(2)
+    end
+  end
+end
 
 describe Puppet::Context::EmptyStack do
   let(:empty_stack) { Puppet::Context::EmptyStack.new }

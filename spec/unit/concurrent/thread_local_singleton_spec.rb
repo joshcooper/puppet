@@ -11,29 +11,59 @@ describe Puppet::Concurrent::ThreadLocalSingleton do
     expect(PuppetSpec::Singleton.singleton).to equal(PuppetSpec::Singleton.singleton)
   end
 
-  it 'is not inherited for a newly created thread' do
-    main_thread_local = PuppetSpec::Singleton.singleton
-    Thread.new do
-      expect(main_thread_local).to_not equal(PuppetSpec::Singleton.singleton)
-    end.join
+  context 'when multithreading is enabled', if: ENV['PUPPET_MT'] do
+    it 'is not inherited for a newly created thread' do
+      main_thread_local = PuppetSpec::Singleton.singleton
+      Thread.new do
+        expect(main_thread_local).to_not equal(PuppetSpec::Singleton.singleton)
+      end.join
+    end
+
+    it 'does not leak outside a thread' do
+      thread_local = nil
+      Thread.new do
+        thread_local = PuppetSpec::Singleton.singleton
+      end.join
+      expect(thread_local).to_not equal(PuppetSpec::Singleton.singleton)
+    end
+
+    it 'is different for each thread' do
+      locals = []
+      Thread.new do
+        locals << PuppetSpec::Singleton.singleton
+      end.join
+      Thread.new do
+        locals << PuppetSpec::Singleton.singleton
+      end.join
+      expect(locals.first).to_not equal(locals.last)
+    end
   end
 
-  it 'does not leak outside a thread' do
-    thread_local = nil
-    Thread.new do
-      thread_local = PuppetSpec::Singleton.singleton
-    end.join
-    expect(thread_local).to_not equal(PuppetSpec::Singleton.singleton)
-  end
+  context 'when multithreading is disabled', unless: ENV['PUPPET_MT'] do
+    it 'is inherited for a newly created thread' do
+      main_thread_local = PuppetSpec::Singleton.singleton
+      Thread.new do
+        expect(main_thread_local).to equal(PuppetSpec::Singleton.singleton)
+      end.join
+    end
 
-  it 'is different for each thread' do
-    locals = []
-    Thread.new do
-      locals << PuppetSpec::Singleton.singleton
-    end.join
-    Thread.new do
-      locals << PuppetSpec::Singleton.singleton
-    end.join
-    expect(locals.first).to_not equal(locals.last)
+    it 'leak outside a thread' do
+      thread_local = nil
+      Thread.new do
+        thread_local = PuppetSpec::Singleton.singleton
+      end.join
+      expect(thread_local).to equal(PuppetSpec::Singleton.singleton)
+    end
+
+    it 'is the same for each thread' do
+      locals = []
+      Thread.new do
+        locals << PuppetSpec::Singleton.singleton
+      end.join
+      Thread.new do
+        locals << PuppetSpec::Singleton.singleton
+      end.join
+      expect(locals.first).to equal(locals.last)
+    end
   end
 end

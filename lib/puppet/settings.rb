@@ -5,7 +5,7 @@ require_relative '../puppet/util/watched_file'
 require_relative '../puppet/util/command_line/puppet_option_parser'
 require 'forwardable'
 require 'fileutils'
-require 'concurrent'
+require 'concurrent' if ENV['PUPPET_MT']
 require_relative 'concurrent/lock'
 
 # The class for handling configuration files.
@@ -148,22 +148,26 @@ class Puppet::Settings
     @configuration_file = nil
 
     # And keep a per-environment cache
-    # We can't use Concurrent::Map because we want to preserve insertion order
-    @cache_lock = Puppet::Concurrent::Lock.new
-    @cache = Concurrent::Hash.new do |hash, key|
-      @cache_lock.synchronize do
-        break hash[key] if hash.key?(key)
-        hash[key] = Concurrent::Hash.new
+    if ENV['PUPPET_MT']
+      # We can't use Concurrent::Map because we want to preserve insertion order
+      @cache_lock = Puppet::Concurrent::Lock.new
+      @cache = Concurrent::Hash.new do |hash, key|
+        @cache_lock.synchronize do
+          break hash[key] if hash.key?(key)
+          hash[key] = Concurrent::Hash.new
+        end
       end
-    end
-    @values_lock = Puppet::Concurrent::Lock.new
-    @values = Concurrent::Hash.new do |hash, key|
-      @values_lock.synchronize do
-        break hash[key] if hash.key?(key)
-        hash[key] = Concurrent::Hash.new
+      @values_lock = Puppet::Concurrent::Lock.new
+      @values = Concurrent::Hash.new do |hash, key|
+        @values_lock.synchronize do
+          break hash[key] if hash.key?(key)
+          hash[key] = Concurrent::Hash.new
+        end
       end
+    else
+      @cache = Hash.new { |hash, key| hash[key] = {} }
+      @values = Hash.new { |hash, key| hash[key] = {} }
     end
-
     # The list of sections we've used.
     @used = []
 
