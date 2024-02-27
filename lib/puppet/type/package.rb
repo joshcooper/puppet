@@ -442,6 +442,21 @@ module Puppet
       end
     end
 
+    newparam(:environment) do
+      desc "An array of any additional environment variables you want to set for a
+        command, such as `[ 'SUDO_FORCE_REMOVE=yes']`.
+        Multiple environment variables should be specified as an array."
+
+      validate do |values|
+        values = [values] unless values.is_a? Array
+        values.each do |value|
+          unless value =~ /\w+=/
+            raise ArgumentError, _("Invalid environment setting '%{value}'") % { value: value }
+          end
+        end
+      end
+    end
+
     newparam(:instance) do
       desc "A read-only parameter set by the package."
     end

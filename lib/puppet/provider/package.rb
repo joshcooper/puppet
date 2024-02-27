@@ -58,4 +58,36 @@ class Puppet::Provider::Package < Puppet::Provider
       end
     end.flatten
   end
+
+  def environment
+    env = {}
+
+    envlist = resource[:environment]
+    return env unless envlist
+
+    # REMIND: some package providers are targetable, what if env contains PATH?
+
+    envlist = [envlist] unless envlist.is_a? Array
+    envlist.each do |setting|
+      unless (match = /^(\w+)=((.|\n)*)$/.match(setting))
+        warning _("Cannot understand environment setting %{setting}") % { setting: setting.inspect }
+        next
+      end
+      var = match[1]
+      value = match[2]
+
+      if env.include?(var) || env.include?(var.to_sym)
+        warning _("Overriding environment setting '%{var}' with '%{value}'") % { var: var, value: value }
+      end
+
+      if value.nil? || value.empty?
+        msg = _("Empty environment setting '%{var}'") % { var: var }
+        Puppet.warn_once('undefined_variables', "empty_env_var_#{var}", msg, resource.file, resource.line)
+      end
+
+      env[var] = value
+    end
+
+    env
+  end
 end
