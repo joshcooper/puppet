@@ -82,12 +82,16 @@ module Util
   # @param hash [Hash{String,Symbol => String}] Environment variables to override the current environment.
   # @param mode [Symbol] ignored
   def withenv(hash, mode = :posix)
-    saved = ENV.to_hash
-    begin
-      ENV.merge!(hash.transform_keys(&:to_s))
+    if hash.empty?
       yield
-    ensure
-      ENV.replace(saved)
+    else
+      saved = ENV.to_hash
+      begin
+        ENV.merge!(hash.transform_keys(&:to_s))
+        yield
+      ensure
+        ENV.replace(saved)
+      end
     end
   end
   module_function :withenv
