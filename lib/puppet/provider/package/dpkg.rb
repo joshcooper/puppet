@@ -103,7 +103,9 @@ Puppet::Type.type(:package).provide :dpkg, :parent => Puppet::Provider::Package 
 
     self.unhold if self.properties[:mark] == :hold
     begin
-      dpkg(*args)
+      withenv(environment) do
+        dpkg(*args)
+      end
     ensure
       self.hold if @resource[:mark] == :hold
     end
@@ -119,7 +121,9 @@ Puppet::Type.type(:package).provide :dpkg, :parent => Puppet::Provider::Package 
     unless source
       @resource.fail _("Could not update: You cannot install dpkg packages without a source")
     end
-    output = dpkg_deb "--show", source
+    output = withenv(environment) do
+      dpkg_deb "--show", source
+    end
     matches = /^(\S+)\t(\S+)$/.match(output).captures
     warning _("source doesn't contain named package, but %{name}") % { name: matches[0] } unless matches[0].match(Regexp.escape(@resource[:name]))
     matches[1]
@@ -130,27 +134,29 @@ Puppet::Type.type(:package).provide :dpkg, :parent => Puppet::Provider::Package 
 
     # list out our specific package
     begin
-      if @resource.allow_virtual?
+      withenv(environment) do
+        if @resource.allow_virtual?
+          output = dpkgquery(
+            "-W",
+            "--showformat",
+            self.class::DPKG_QUERY_PROVIDES_FORMAT_STRING
+            # the regex searches for the resource[:name] in the dpkquery result in which the Provides field is also available
+            # it will search for the packages only in the brackets ex: [rubygems]
+          ).lines.find { |package| package.match(/[\[ ](#{Regexp.escape(@resource[:name])})[\],]/) }
+          if output
+            hash = self.class.parse_line(output, self.class::FIELDS_REGEX_WITH_PROVIDES)
+            Puppet.info("Package #{@resource[:name]} is virtual, defaulting to #{hash[:name]}")
+            @resource[:name] = hash[:name]
+          end
+        end
         output = dpkgquery(
           "-W",
           "--showformat",
-          self.class::DPKG_QUERY_PROVIDES_FORMAT_STRING
-          # the regex searches for the resource[:name] in the dpkquery result in which the Provides field is also available
-          # it will search for the packages only in the brackets ex: [rubygems]
-        ).lines.find { |package| package.match(/[\[ ](#{Regexp.escape(@resource[:name])})[\],]/) }
-        if output
-          hash = self.class.parse_line(output, self.class::FIELDS_REGEX_WITH_PROVIDES)
-          Puppet.info("Package #{@resource[:name]} is virtual, defaulting to #{hash[:name]}")
-          @resource[:name] = hash[:name]
-        end
+          self.class::DPKG_QUERY_FORMAT_STRING,
+          @resource[:name]
+        )
+        hash = self.class.parse_line(output)
       end
-      output = dpkgquery(
-        "-W",
-        "--showformat",
-        self.class::DPKG_QUERY_FORMAT_STRING,
-        @resource[:name]
-      )
-      hash = self.class.parse_line(output)
     rescue Puppet::ExecutionFailure
       # dpkg-query exits 1 if the package is not found.
       return { :ensure => :purged, :status => 'missing', :name => @resource[:name], :error => 'ok' }
@@ -168,18 +174,24 @@ Puppet::Type.type(:package).provide :dpkg, :parent => Puppet::Provider::Package 
   end
 
   def uninstall
-    dpkg "-r", @resource[:name]
+    withenv(environment) do
+      dpkg "-r", @resource[:name]
+    end
   end
 
   def purge
-    dpkg "--purge", @resource[:name]
+    withenv(environment) do
+      dpkg "--purge", @resource[:name]
+    end
   end
 
   def hold
     Tempfile.open('puppet_dpkg_set_selection') do |tmpfile|
       tmpfile.write("#{@resource[:name]} hold\n")
       tmpfile.flush
-      execute([:dpkg, "--set-selections"], :failonfail => false, :combine => false, :stdinfile => tmpfile.path.to_s)
+      withenv(environment) do
+        execute([:dpkg, "--set-selections"], :failonfail => false, :combine => false, :stdinfile => tmpfile.path.to_s)
+      end
     end
   end
 
@@ -187,7 +199,9 @@ Puppet::Type.type(:package).provide :dpkg, :parent => Puppet::Provider::Package 
     Tempfile.open('puppet_dpkg_set_selection') do |tmpfile|
       tmpfile.write("#{@resource[:name]} install\n")
       tmpfile.flush
-      execute([:dpkg, "--set-selections"], :failonfail => false, :combine => false, :stdinfile => tmpfile.path.to_s)
+      withenv(environment) do
+        execute([:dpkg, "--set-selections"], :failonfail => false, :combine => false, :stdinfile => tmpfile.path.to_s)
+      end
     end
   end
 end
