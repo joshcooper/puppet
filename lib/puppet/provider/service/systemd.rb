@@ -165,6 +165,23 @@ Puppet::Type.type(:service).provide :systemd, :parent => :base do
     end
   end
 
+  # override base#status
+  def status
+    if exist?
+      status = service_command(:status, false)
+      if status.exitstatus == 0
+        :running
+      else
+        :stopped
+      end
+    elsif Puppet[:allow_absent_service]
+      :absent
+    else
+      Puppet.deprecation_warning("The service '#{@resource[:name]}' does not exist; set 'allow_absent_service' to remove this warning")
+      :stopped
+    end
+  end
+
   def enable
     unmask
     systemctl_change_enable(:enable)

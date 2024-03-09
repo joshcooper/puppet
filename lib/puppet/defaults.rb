@@ -1992,6 +1992,11 @@ EOT
       already running puppet agent to finish before starting a new one. This is set by default to 1 minute.
       A value of `unlimited` will cause puppet agent to wait indefinitely.
       #{AS_DURATION}",
+    },
+    :allow_absent_service => {
+      :default => false,
+      :type    => :boolean,
+      :desc    => "Whether services should be reported as absent or stopped."
     }
   )
 
