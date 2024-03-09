@@ -90,7 +90,14 @@ Puppet::Type.type(:service).provide :windows, :parent => :service do
   end
 
   def status
-    return :stopped unless Puppet::Util::Windows::Service.exists?(@resource[:name])
+    unless Puppet::Util::Windows::Service.exists?(@resource[:name])
+      if Puppet[:allow_absent_service]
+        :absent
+      else
+        Puppet.deprecation_warning("The service '#{@resource[:name]} does not exist; set 'allow_absent_service' to remove this warning")
+        :stopped
+      end
+    end
 
     current_state = Puppet::Util::Windows::Service.service_state(@resource[:name])
     state = case current_state

@@ -87,6 +87,13 @@ describe 'Puppet::Type::Service::Provider::Windows',
       expect(provider.status).to eql(:stopped)
     end
 
+    it "should report a nonexistent service as absent" do
+      Puppet[:allow_absent_service] = true
+      allow(service_util).to receive(:exists?).with(resource[:name]).and_return(false)
+
+      expect(provider.status).to eql(:absent)
+    end
+
     it "should report service as stopped when status cannot be retrieved" do
       allow(service_util).to receive(:exists?).with(resource[:name]).and_return(true)
       allow(service_util).to receive(:service_state).with(name).and_raise(Puppet::Error.new('Service query failed: The specified path is invalid.'))
