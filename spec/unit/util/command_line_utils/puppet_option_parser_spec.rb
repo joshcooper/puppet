@@ -7,11 +7,21 @@ describe Puppet::Util::CommandLine::PuppetOptionParser do
   describe "an option with a value" do
     it "parses a 'long' option with a value" do
       parses(
-        :option => ["--angry", "Angry", :REQUIRED],
-        :from_arguments => ["--angry", "foo"],
+        :option => ["--an-gry", "Angry", :REQUIRED],
+        :from_arguments => ["--an_gry", "foo"],
         :expects => "foo"
       )
     end
+
+    # normal
+    :option => ["--an_gry", "Angry", :REQUIRED],
+    :from_arguments => ["--an-gry", "foo"],
+
+    :option => ["--[no-]an_gry", "Angry", :NON
+    :from_arguments => ["--no-an-gry"],
+
+    :option => ["--[no-]an-gry", "Angry", :NON
+    :from_arguments => ["--no-an_gry"],
 
     it "parses a 'short' option with a value" do
       parses(

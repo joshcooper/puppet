@@ -335,9 +335,12 @@ class CommandLine
               when /^-([^-])$/
                 @short[::Regexp.last_match(1)]
               when /^--no-([^-]\S*)$/
-                @long["[no-]#{::Regexp.last_match(1)}"]
+                last_match = ::Regexp.last_match(1)
+                require 'byebug'; byebug
+                @long["[no-]#{last_match}"] || @long["[no-]#{last_match.tr('-', '_')}"]
               when /^--([^-]\S*)$/
-                @long[::Regexp.last_match(1)] || @long["[no-]#{::Regexp.last_match(1)}"]
+                last_match = ::Regexp.last_match(1)
+                @long[last_match] || @long["[no-]#{last_match}"] || @long[last_match.tr('-', '_')] || @long["[no-]#{last_match.tr('-', '_')}"]
               else
                 raise CommandlineError, _("invalid argument syntax: '%{arg}'") % { arg: arg }
               end
