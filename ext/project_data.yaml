@@ -27,6 +27,7 @@ gem_runtime_dependencies:
   concurrent-ruby: "~> 1.0"
   deep_merge: '~> 1.0'
   scanf: '~> 1.0'
+  racc: '1.6.2'
 gem_rdoc_options:
   - --title
   - "Puppet - Configuration Management"

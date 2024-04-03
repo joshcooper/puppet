@@ -57,7 +57,6 @@ end
 group(:development, optional: true) do
   gem 'memory_profiler', require: false, platforms: [:mri]
   gem 'pry', require: false, platforms: [:ruby]
-  gem "racc", "1.5.2", require: false, platforms: [:ruby]
   if RUBY_PLATFORM != 'java'
     gem 'ruby-prof', '>= 0.16.0', require: false
   end
