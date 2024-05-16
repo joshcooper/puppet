@@ -373,6 +373,7 @@ module Puppet::Pops
       dm_options = { :preserve_unmergeables => false }
       options.each_pair { |k, v| dm_options[k.to_sym] = v unless k == 'strategy' }
       # e2 (the destination) is deep cloned to avoid that the passed in object mutates
+      #puts "Merging #{e1.inspect} with #{e2.inspect} result #{rval.inspect}"
       DeepMerge.deep_merge!(e1, deep_clone(e2), dm_options)
     end
 

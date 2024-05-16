@@ -6,10 +6,10 @@ defaults:
 
 hierarchy:
   - name: 'Per Location'
-    path: "%{facts.location}.yaml"
+    path: 'dc1.yaml'
 
   - name: 'Per Environment'
-    path: "%{facts.environment}.yaml"
+    path: 'production.yaml' 
 
   - name: 'Common Data'
     path: 'common.yaml'

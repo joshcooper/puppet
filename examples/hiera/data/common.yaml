@@ -9,4 +9,6 @@ ntp::config::ntpservers:
 
 lookup_options:
   classes:
-    merge: unique
+    merge:
+      strategy: deep
+      knockout_prefix: --
