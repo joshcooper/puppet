@@ -14,6 +14,8 @@ require 'securerandom'
 # @api public
 
 class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
+  include Puppet::Util::PsychSupport
+
   class DuplicateResourceError < Puppet::Error
     include Puppet::ExternalFileError
   end
@@ -410,6 +412,12 @@ class Puppet::Resource::Catalog < Puppet::Graph::SimpleGraph
 
   def self.from_data_hash(data)
     result = new(data['name'], Puppet::Node::Environment::NONE)
+    result.initialize_from_hash(result)
+    result
+  end
+
+  def self.initialize_from_hash(result)
+    super(result)
 
     result.tag(*data['tags']) if data['tags']
     result.version = data['version'] if data['version']
