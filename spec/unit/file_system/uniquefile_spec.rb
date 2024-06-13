@@ -241,5 +241,20 @@ describe Puppet::FileSystem::Uniquefile do
       t.close
       expect(File.size(t.path)).to eq(5)
     end
+
+    it "ignores non-existent directories" do
+      nonexistent = tmpdir('nonexistent')
+      Dir.rmdir(nonexistent)
+      valid = tmpdir('valid')
+      # assuming directories are checked in this order: TMPDIR -> TMP -> TEMP
+      Puppet::Util.withenv('TMPDIR' => nonexistent, 'TMP' => '', 'TEMP' => valid) do
+        t = tempfile("foo")
+        expect(t.path).to start_with(valid)
+      end
+    end
+
+    it "strips invalid characters" do
+      expect(File.basename(tempfile("../../foo").path)).to start_with("....foo")
+    end
   end
 end

@@ -836,14 +836,12 @@ describe Puppet::Util::Execution, if: !Puppet::Util::Platform.jruby? do
         end
 
         it "should raise if it fails to create a Uniquefile for stdout" do
-          stdout = Puppet::FileSystem::Uniquefile.new('test')
           allow(Puppet::FileSystem::Uniquefile).to receive(:new)
-            .and_raise(
-              Errno::ENOENT,
-              'No such file or directory @ rb_file_s_stat - C:\Users\ADMINI~1\AppData\Local\Temp\doesnotexist')
+            .and_raise(ArgumentError, 'could not find a temporary directory')
+
           expect {
             Puppet::Util::Execution.execute('test command')
-          }.to raise_error(Errno::ENOENT, 'No such file or directory @ rb_file_s_stat - C:\Users\ADMINI~1\AppData\Local\Temp\doesnotexist')
+          }.to raise_error(ArgumentError, 'could not find a temporary directory')
         end
       end
 

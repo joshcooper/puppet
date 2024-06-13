@@ -27,24 +27,16 @@ class Puppet::FileSystem::Uniquefile < DelegateClass(File)
     end
   end
 
-  def initialize(basename, *rest)
-    create_tmpname(basename, *rest) do |tmpname, _n, opts|
-      mode = File::RDWR | File::CREAT | File::EXCL
-      perm = 0o600
-      if opts
-        mode |= opts.delete(:mode) || 0
-        opts[:perm] = perm
-        perm = nil
-      else
-        opts = perm
-      end
+  def initialize(basename, tmpdir = nil, mode: 0)
+    @mode = mode | File::RDWR | File::CREAT | File::EXCL
+
+    Dir::Tmpname.create(basename, tmpdir) do |tmpname, _n, opts|
+      opts[:perm] = 0o600
       self.class.locking(tmpname) do
-        @tmpfile = File.open(tmpname, mode, opts)
+        @tmpfile = File.open(tmpname, @mode, **opts)
         @tmpname = tmpname
       end
-      @mode = mode & ~(File::CREAT | File::EXCL)
-      perm or opts.freeze
-      @opts = opts
+      @opts = opts.freeze
     end
 
     super(@tmpfile)
@@ -52,9 +44,9 @@ class Puppet::FileSystem::Uniquefile < DelegateClass(File)
 
   # Opens or reopens the file with mode "r+".
   def open
-    @tmpfile.close if @tmpfile
-    @tmpfile = File.open(@tmpname, @mode, @opts)
-    __setobj__(@tmpfile)
+    _close
+    mode = @mode & ~(File::CREAT | File::EXCL)
+    @tmpfile = File.open(@tmpname, mode, **@opts)
   end
 
   def _close
@@ -97,72 +89,7 @@ class Puppet::FileSystem::Uniquefile < DelegateClass(File)
     @tmpname
   end
 
-  private
-
-  def make_tmpname(prefix_suffix, n)
-    case prefix_suffix
-    when String
-      prefix = prefix_suffix
-      suffix = ""
-    when Array
-      prefix = prefix_suffix[0]
-      suffix = prefix_suffix[1]
-    else
-      raise ArgumentError, _("unexpected prefix_suffix: %{value}") % { value: prefix_suffix.inspect }
-    end
-    t = Time.now.strftime("%Y%m%d")
-    path = "#{prefix}#{t}-#{$PROCESS_ID}-#{rand(0x100000000).to_s(36)}"
-    path << "-#{n}" if n
-    path << suffix
-  end
-
-  def create_tmpname(basename, *rest)
-    opts = try_convert_to_hash(rest[-1])
-    if opts
-      opts = opts.dup if rest.pop.equal?(opts)
-      max_try = opts.delete(:max_try)
-      opts = [opts]
-    else
-      opts = []
-    end
-    tmpdir, = *rest
-    tmpdir ||= tmpdir()
-    n = nil
-    begin
-      path = File.join(tmpdir, make_tmpname(basename, n))
-      yield(path, n, *opts)
-    rescue Errno::EEXIST
-      n ||= 0
-      n += 1
-      retry if !max_try or n < max_try
-      raise _("cannot generate temporary name using `%{basename}' under `%{tmpdir}'") % { basename: basename, tmpdir: tmpdir }
-    end
-    path
-  end
-
-  def try_convert_to_hash(h)
-    h.to_hash
-  rescue NoMethodError
-    nil
-  end
-
   @@systmpdir ||= defined?(Etc.systmpdir) ? Etc.systmpdir : '/tmp'
-
-  def tmpdir
-    tmp = '.'
-    [ENV.fetch('TMPDIR', nil), ENV.fetch('TMP', nil), ENV.fetch('TEMP', nil), @@systmpdir, '/tmp'].each do |dir|
-      stat = File.stat(dir) if dir
-      begin
-        if stat && stat.directory? && stat.writable?
-          tmp = dir
-          break
-        end
-      rescue
-        nil
-      end
-    end
-    File.expand_path(tmp)
-  end
 
   class << self
     # yields with locking for +tmpname+ and returns the result of the
