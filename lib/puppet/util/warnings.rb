@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'set'
+
 # Methods to help with handling warnings.
 module Puppet::Util::Warnings
   module_function
@@ -25,7 +27,7 @@ module Puppet::Util::Warnings
 
   def self.maybe_log(message, klass)
     @stampwarnings ||= {}
-    @stampwarnings[klass] ||= []
+    @stampwarnings[klass] ||= Set.new
     return nil if @stampwarnings[klass].include? message
 
     yield
