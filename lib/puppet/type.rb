@@ -787,7 +787,8 @@ class Type
 
     if provider and !provider.class.supports_parameter?(klass)
       missing = klass.required_features.find_all { |f| !provider.class.feature?(f) }
-      debug "Provider %s does not support features %s; not managing attribute %s" % [provider.class.name, missing.join(", "), name]
+      message = "Provider %s does not support features %s; not managing attribute %s" % [provider.class.name, missing.join(", "), name]
+      warn_once('providers', message, message, file || :default, line || :default, :debug)
       return nil
     end
 

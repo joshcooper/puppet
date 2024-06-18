@@ -1469,5 +1469,32 @@ describe Puppet::Type.metaparamclass(:audit) do
         end
       end
     end
+
+    it "logs unsupported features once per provider & feature combination" do
+      Puppet::Util::Log.level = :debug
+
+      type.feature :feature1, "one"
+      type.newproperty(:one, required_features: :feature1) {}
+      type.newproperty(:two, required_features: :feature2) {}
+
+      nope  = type.provide(:nope)  {}
+      type.new(provider: :nope, name: "test0", one: '1')
+      type.new(provider: :nope, name: "test1", one: '1', two: '2')
+
+      expect(@logs).to include(
+        an_object_having_attributes(
+          message: /not managing attribute one/,
+          source: "/Attributes[test0]"))
+
+      expect(@logs).to_not include(
+        an_object_having_attributes(
+          message: /not managing attribute one/,
+          source: "/Attributes[test1]"))
+
+      expect(@logs).to include(
+        an_object_having_attributes(
+          message: /not managing attribute two/,
+          source: "/Attributes[test1]"))
+    end
   end
 end
