@@ -161,10 +161,11 @@ module Puppet
 
         * `deprecations` --- disables deprecation warnings.
         * `undefined_variables` --- disables warnings about non existing variables.
-        * `undefined_resources` --- disables warnings about non existing resources.",
+        * `undefined_resources` --- disables warnings about non existing resources.
+        * `providers` --- disables warnings about providers.",
       :hook      => proc do |value|
         values = munge(value)
-        valid   = %w[deprecations undefined_variables undefined_resources]
+        valid   = %w[deprecations undefined_variables undefined_resources providers]
         invalid = values - (values & valid)
         unless invalid.empty?
           raise ArgumentError, _("Cannot disable unrecognized warning types '%{invalid}'.") % { invalid: invalid.join(',') } +
