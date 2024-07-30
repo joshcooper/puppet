@@ -49,4 +49,13 @@ namespace :ref do
 
     generate_reference('metaparameter', erb, body, output)
   end
+
+  desc "Generate report reference"
+  task :report do
+    erb = File.join(__dir__, 'references/report.erb')
+    body = puppet_doc('report')
+    output = File.join(OUTPUT_DIR, 'report.md')
+
+    generate_reference('report', erb, body, output)
+  end
 end
