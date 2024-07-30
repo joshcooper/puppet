@@ -101,4 +101,51 @@ namespace :ref do
     output = File.join(OUTPUT_DIR, 'function.md')
     generate_reference('function', erb, body, output)
   end
+
+  desc "Generate man as markdown references"
+  task :man do
+    mandir = File.join(OUTPUT_DIR, 'man')
+    FileUtils.mkdir_p(mandir)
+
+    begin
+      require 'pandoc-ruby'
+    rescue LoadError
+      abort("Run `bundle config set with documentation` and `bundle update` to install the `pandoc-ruby` gem.")
+    end
+
+    begin
+      puts %x{pandoc --version}
+    rescue Errno::ENOENT => e
+      abort("Please install the `pandoc` package.")
+    end
+
+    sha = %x{git rev-parse HEAD}.chomp
+
+    files = Pathname.glob(File.join(__dir__, '../man/man8/*.8'))
+    files.each do |f|
+      app = File.basename(f).delete_prefix('puppet-').delete_suffix(".8")
+
+      # REMIND: top-level puppet.8
+      puts "Generating #{app} markdown from #{sha}"
+      body =
+        PandocRuby.convert([f], from: :man, to: :markdown)
+        .gsub(/#(.*?)\n/, '##\1')
+        .gsub(/:\s\s\s\n\n```\{=html\}\n<!--\s-->\n```/, '')
+        .gsub(/\n:\s\s\s\s/, '')
+
+      variables = {
+        sha: sha,
+        now: Time.now,
+        title: "Man Page: puppet #{app}",
+        canonical: "/puppet/latest/man/#{app}.html",
+        body: body
+      }
+
+      erb = File.join(__dir__, 'references/man.erb')
+      content = render_erb(erb, variables)
+      output = File.join(mandir, "#{app}.md")
+      File.write(output, content)
+      puts "Generated #{output}"
+    end
+  end
 end
