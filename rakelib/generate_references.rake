@@ -40,4 +40,13 @@ namespace :ref do
 
     generate_reference('configuration', erb, body, output)
   end
+
+  desc "Generate metaparameter reference"
+  task :metaparameter do
+    erb = File.join(__dir__, 'references/metaparameter.erb')
+    body = puppet_doc('metaparameter')
+    output = File.join(OUTPUT_DIR, 'metaparameter.md')
+
+    generate_reference('metaparameter', erb, body, output)
+  end
 end
