@@ -58,4 +58,47 @@ namespace :ref do
 
     generate_reference('report', erb, body, output)
   end
+
+  desc "Generate function reference"
+  task :function do
+    # Locate puppet-strings
+    begin
+      require 'puppet-strings'
+    rescue LoadError
+      abort("Run `bundle config set with documentation` and `bundle update` to install the `puppet-strings` gem.")
+    end
+
+    strings_data = {}
+    Tempfile.create do |tmpfile|
+      # This doesn't really do anything, because strings uses yard, which uses `.yardoc` to determine which files to search
+      rubyfiles = Dir.glob(File.join(__dir__, "../lib/puppet/{functions,parser/functions}/**/*.rb"))
+      puts "Running puppet strings on #{rubyfiles.count} functions"
+      puts %x{bundle exec puppet strings generate --format json --out #{tmpfile.path} #{rubyfiles.join(' ')}}
+
+      strings_data = JSON.load_file(tmpfile.path)
+    end
+
+    functions = strings_data['puppet_functions']
+
+    # Deal with the duplicate 3.x and 4.x functions
+    # 1. Figure out which functions are duplicated.
+    names = functions.map { |func| func['name'] }
+    duplicates = names.uniq.select { |name| names.count(name) > 1 }
+    # 2. Reject the 3.x version of any dupes.
+    functions = functions.reject do |func|
+      duplicates.include?(func['name']) && func['type'] != 'ruby4x'
+    end
+
+    erb = File.join(__dir__, 'references/functions_template.erb')
+    body = render_erb(erb, functions: functions)
+
+    # This substitution could potentially make things a bit brittle, but it has to be done because the jump
+    # From H2s to H4s is causing issues with the DITA-OT, which sees this as a rule violation. If it
+    # Does become an issue, we should return to this and figure out a better way to generate the functions doc.
+    body.gsub!(/#####\s(.*?:)/,'**\1**').gsub!(/####\s/,'###\s')
+
+    erb = File.join(__dir__, 'references/function.erb')
+    output = File.join(OUTPUT_DIR, 'function.md')
+    generate_reference('function', erb, body, output)
+  end
 end
