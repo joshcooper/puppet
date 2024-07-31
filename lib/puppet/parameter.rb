@@ -416,7 +416,7 @@ class Puppet::Parameter
   # @return [Object] the unmunged value
   #
   def unmunge(value)
-    return value if value.is_a?(Puppet::Pops::Evaluator::DeferredValue)
+    return value if value.is_a?(Puppet::Pops::Evaluator::DeferredValue) || (value.is_a?(Array) && value.any? { |v| v.is_a?(Puppet::Pops::Evaluator::DeferredValue) })
 
     unsafe_unmunge(value)
   end
@@ -438,7 +438,7 @@ class Puppet::Parameter
   # @return [Object] the munged (internal) value
   #
   def munge(value)
-    return value if value.is_a?(Puppet::Pops::Evaluator::DeferredValue)
+    return value if value.is_a?(Puppet::Pops::Evaluator::DeferredValue) || (value.is_a?(Array) && value.any? { |v| v.is_a?(Puppet::Pops::Evaluator::DeferredValue) })
 
     begin
       ret = unsafe_munge(value)
@@ -473,7 +473,7 @@ class Puppet::Parameter
   # @api public
   #
   def validate(value)
-    return if value.is_a?(Puppet::Pops::Evaluator::DeferredValue)
+    return value if value.is_a?(Puppet::Pops::Evaluator::DeferredValue) || (value.is_a?(Array) && value.any? { |v| v.is_a?(Puppet::Pops::Evaluator::DeferredValue) })
 
     begin
       unsafe_validate(value)

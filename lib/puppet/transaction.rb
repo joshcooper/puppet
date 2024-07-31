@@ -473,12 +473,21 @@ class Puppet::Transaction
     deferred_validate = false
 
     resource.eachparameter do |param|
+      # Puppet::Parameter#value= triggers validation and munging. Puppet::Property#value=
+      # overrides the method, but also triggers validation and munging, since we're
+      # setting the desired/should value.
       if param.value.instance_of?(Puppet::Pops::Evaluator::DeferredValue)
-        # Puppet::Parameter#value= triggers validation and munging. Puppet::Property#value=
-        # overrides the method, but also triggers validation and munging, since we're
-        # setting the desired/should value.
         resolved = param.value.resolve
-        # resource.notice("Resolved deferred value to #{resolved}")
+        param.value = resolved
+        deferred_validate = true
+      elsif param.value.is_a?(Array) && param.value.any? { |v| v.instance_of?(Puppet::Pops::Evaluator::DeferredValue) }
+        resolved = param.value.map do |v|
+          if v.instance_of?(Puppet::Pops::Evaluator::DeferredValue)
+            v.resolve
+          else
+            v
+          end
+        end
         param.value = resolved
         deferred_validate = true
       end

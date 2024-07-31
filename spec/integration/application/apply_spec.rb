@@ -770,6 +770,23 @@ class amod::bad_type {
         .and output(/Validation of File.* failed: You cannot specify more than one of content, source, target/).to_stderr
     end
 
+    it "validates multi-valued parameters" do
+      manifest = <<~END
+      $password = Deferred('new', [Sensitive, 'opensesame'])
+      exec { '/usr/bin/echo \$ADMIN_PASSWORD':
+        logoutput => true,
+        environment => [
+          Deferred('inline_epp', ['ADMIN_PASSWORD=<%= $password %>', { 'password' => $password }]),
+        ],
+      }
+      END
+      apply.command_line.args = ['-e', manifest]
+      expect {
+        apply.run
+      }.to exit_with(0)
+        .and output(%r{Exec\[/usr/bin/echo \$ADMIN_PASSWORD\]/returns: opensesame}).to_stdout
+    end
+
     it "applies deferred sensitive file content" do
       manifest = <<~END
       file { '#{deferred_file}':
