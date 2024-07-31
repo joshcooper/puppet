@@ -20,6 +20,7 @@ TYPES_OVERVIEW_ERB = File.join(__dir__, 'references/types/overview.erb')
 TYPES_OVERVIEW_MD  = File.join(TYPES_DIR, 'overview.md')
 UNIFIED_TYPE_ERB = File.join(__dir__, 'references/unified_type.erb')
 UNIFIED_TYPE_MD  = File.join(OUTPUT_DIR, 'type.md')
+SINGLE_TYPE_ERB  = File.join(__dir__, 'references/types/single_type.erb')
 
 def render_erb(erb_file, variables)
   # Create a binding so only the variables we specify will be visible
@@ -379,6 +380,29 @@ namespace :ref do
       content = render_erb(UNIFIED_TYPE_ERB, variables)
       File.write(UNIFIED_TYPE_MD, content)
       puts "Generated #{UNIFIED_TYPE_MD}"
+
+      # per-page
+      #
+      # REMIND: this almost correct, except for resources and stage due to:
+      # <   <a href="#resources-attribute-name">name</a>               =&gt; <em># The name of the type to be...</em>
+      # ---
+      # >   <a href="#resources-attribute-name">name</a>               =&gt; <em># <strong>(namevar)</strong> The name of the type to be...</em>
+      # 36a37,38
+      types.each do |type|
+        variables = {
+          title: "Resource Type: #{type}",
+          type: type,
+          sha: sha,
+          now: now,
+          canonical: "/puppet/latest/types/#{type}.html",
+          body: render_resource_type(type, type_data[type])
+        }
+
+        content = render_erb(SINGLE_TYPE_ERB, variables)
+        output = File.join(TYPES_DIR, "#{type}.md")
+        File.write(output, content)
+        puts "Generated #{output}"
+      end
     end
   end
 end
