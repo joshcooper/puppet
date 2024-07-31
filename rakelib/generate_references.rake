@@ -28,6 +28,33 @@ def generate_reference(reference, erb, body, output)
   puts "Generated #{output}"
 end
 
+def render_resource_type(name, this_type)
+  sorted_attribute_list = this_type['attributes'].keys.sort {|a,b|
+    # Float namevar to top and ensure to second-top
+    if this_type['attributes'][a]['namevar']
+      -1
+    elsif this_type['attributes'][b]['namevar']
+      1
+    elsif a == 'ensure'
+      -1
+    elsif b == 'ensure'
+      1
+    else
+      a <=> b
+    end
+  }
+
+  variables = {
+    name: name,
+    this_type: this_type,
+    sorted_attribute_list: sorted_attribute_list,
+    sorted_feature_list: this_type['features'].keys.sort,
+    longest_attribute_name: sorted_attribute_list.collect{|attr| attr.length}.max
+  }
+  erb = File.join(__dir__, 'references/types/type.erb')
+  render_erb(erb, variables)
+end
+
 def extract_resource_types(strings_data)
   strings_data['resource_types'].reduce(Hash.new) do |memo, type|
     memo[ type['name'] ] = {
@@ -245,6 +272,7 @@ namespace :ref do
     end
 
     sha = %x{git rev-parse HEAD}.chomp
+    now = Time.now
 
     Tempfile.create do |tmpfile|
       # This doesn't really do anything, because strings uses yard, which uses `.yardoc` to determine which files to search
@@ -261,15 +289,32 @@ namespace :ref do
       end
 
       variables = {
-        sha: sha,
-        now: Time.now,
         title: 'Resource types overview',
+        sha: sha,
+        now: now,
         types: types
       }
 
       erb = File.join(__dir__, 'references/types/overview.erb')
       content = render_erb(erb, variables)
       output = File.join(typesdir, 'overview.md')
+      File.write(output, content)
+
+      # single page
+      types_content = types.sort.map do |name|
+        render_resource_type(name, type_data[name])
+      end
+
+      variables = {
+        title: 'Resource Type Reference (Single-Page)',
+        sha: sha,
+        now: now,
+        types: types_content
+      }
+
+      erb = File.join(__dir__, 'references/unified_type.erb')
+      content = render_erb(erb, variables)
+      output = File.join(OUTPUT_DIR, 'type.md')
       File.write(output, content)
     end
   end
