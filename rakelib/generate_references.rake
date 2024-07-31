@@ -316,6 +316,23 @@ namespace :ref do
       content = render_erb(erb, variables)
       output = File.join(OUTPUT_DIR, 'type.md')
       File.write(output, content)
+
+      # per-page
+      types.sort.each do |type|
+        variables = {
+          title: "Resource Type: #{type}",
+          type: type,
+          sha: sha,
+          now: now,
+          canonical: "/puppet/latest/types/#{type}.html",
+          body: render_resource_type(type, type_data[type])
+        }
+
+        erb = File.join(__dir__, 'references/types/single_type.erb')
+        content = render_erb(erb, variables)
+        output = File.join(OUTPUT_DIR, "types/#{type}.md")
+        File.write(output, content)
+      end
     end
   end
 end
