@@ -75,6 +75,8 @@ end
 group(:documentation, optional: true) do
   gem 'gettext-setup', '~> 1.0', require: false, platforms: [:ruby]
   gem 'ronn', '~> 0.7.3', require: false, platforms: [:ruby]
+  gem 'puppet-strings', require: false, platforms: [:ruby]
+  gem 'pandoc-ruby', require: false, platforms: [:ruby]
 end
 
 if File.exist? "#{__FILE__}.local"
