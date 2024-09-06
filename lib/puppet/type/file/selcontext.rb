@@ -41,14 +41,10 @@ module Puppet
 
     def retrieve_default_context(property)
       return nil if Puppet::Util::Platform.windows?
-      if @resource[:selinux_ignore_defaults] == :true
-        return nil
-      end
+      return nil if @resource[:selinux_ignore_defaults] == :true
 
-      unless context
-        return nil
-      end
       context = get_selinux_default_context_with_handle(@resource[:path], provider.class.selinux_handle, @resource[:ensure], provider.class.selinux_mounts)
+      return nil unless context
 
       property_default = parse_selinux_context(property, context)
       debug "Found #{property} default '#{property_default}' for #{@resource[:path]}" unless property_default.nil?

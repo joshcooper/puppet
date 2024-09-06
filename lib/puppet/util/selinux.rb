@@ -261,17 +261,11 @@ module Puppet::Util::SELinux
   def read_mounts
     mounts = ''.dup
     begin
-      if File.method_defined? "read_nonblock"
-        # If possible we use read_nonblock in a loop rather than read to work-
-        # a linux kernel bug.  See ticket #1963 for details.
-        mountfh = File.new("/proc/mounts")
-        loop do
-          mounts += mountfh.read_nonblock(1024)
-        end
-      else
-        # Otherwise we shell out and let cat do it for us
-        mountfh = IO.popen("/bin/cat /proc/mounts")
-        mounts = mountfh.read
+      # If possible we use read_nonblock in a loop rather than read to work-
+      # a linux kernel bug.  See ticket #1963 for details.
+      mountfh = File.new("/proc/mounts")
+      loop do
+        mounts += mountfh.read_nonblock(1024)
       end
     rescue EOFError
       # that's expected
