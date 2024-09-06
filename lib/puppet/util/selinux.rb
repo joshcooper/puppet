@@ -64,11 +64,11 @@ module Puppet::Util::SELinux
   # Retrieve and return the default context of the file using an selinux handle.
   # If we don't have SELinux support or if the SELinux call fails to file a
   # default then return nil.
-  def get_selinux_default_context_with_handle(file, handle, resource_ensure = nil)
+  def get_selinux_default_context_with_handle(file, handle, resource_ensure = nil, selinux_mounts = {})
     return nil unless selinux_support?
     # If the filesystem has no support for SELinux labels, return a default of nil
     # instead of what selabel_lookup would return
-    return nil unless selinux_label_support?(file)
+    return nil unless selinux_label_support?(file, selinux_mounts)
 
     # Handle is needed for selabel_lookup
     raise ArgumentError, _("Cannot get default context with nil handle") unless handle
@@ -115,8 +115,8 @@ module Puppet::Util::SELinux
   # just try to set components, even if all values are specified by the manifest.
   # I believe that the OS should always provide at least a fall-through context
   # though on any well-running system.
-  def set_selinux_context(file, value, component = false)
-    return nil unless selinux_support? && selinux_label_support?(file)
+  def set_selinux_context(file, value, component = false, selinux_context = {})
+    return nil unless selinux_support? && selinux_label_support?(file, selinux_context)
 
     if component
       # Must first get existing context to replace a single component
@@ -217,8 +217,8 @@ module Puppet::Util::SELinux
   # whitelist of known-good filesystems.
   # Returns true if the filesystem can support SELinux labels and
   # false if not.
-  def selinux_label_support?(file)
-    fstype = find_fs(file)
+  def selinux_label_support?(file, selinux_mounts = {})
+    fstype = find_fs(file, selinux_mounts)
     return false if fstype.nil?
 
     filesystems = %w[ext2 ext3 ext4 gfs gfs2 xfs jfs btrfs tmpfs zfs]
@@ -297,8 +297,27 @@ module Puppet::Util::SELinux
 
   # Internal helper function to return which type of filesystem a given file
   # path resides on
-  def find_fs(path)
-    mounts = read_mounts
+  def find_fs(path, selinux_mounts = {})
+    ctime = begin
+              File.stat('/proc/mounts').ctime
+            rescue => e
+              Puppet.debug { "Failed to read /etc/mounts: #{e.message}" }
+              nil
+            end
+
+    if selinux_mounts[:ctime] != ctime
+      Puppet.debug { "Reloading mounts" }
+      selinux_mounts[:ctime] = ctime
+      selinux_mounts[:mounts] = nil
+    end
+
+    mounts = selinux_mounts[:mounts]
+    unless mounts
+      Puppet.debug { "Reading /proc/mounts" }
+      mounts = read_mounts
+      selinux_mounts[:mounts] = mounts
+    end
+
     return nil unless mounts
 
     # cleanpath eliminates useless parts of the path (like '.', or '..', or

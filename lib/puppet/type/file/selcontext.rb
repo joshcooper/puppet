@@ -45,10 +45,10 @@ module Puppet
         return nil
       end
 
-      context = get_selinux_default_context_with_handle(@resource[:path], provider.class.selinux_handle, @resource[:ensure])
       unless context
         return nil
       end
+      context = get_selinux_default_context_with_handle(@resource[:path], provider.class.selinux_handle, @resource[:ensure], provider.class.selinux_mounts)
 
       property_default = parse_selinux_context(property, context)
       debug "Found #{property} default '#{property_default}' for #{@resource[:path]}" unless property_default.nil?
@@ -59,7 +59,7 @@ module Puppet
       if !selinux_support?
         debug("SELinux bindings not found. Ignoring parameter.")
         true
-      elsif !selinux_label_support?(@resource[:path])
+      elsif !selinux_label_support?(@resource[:path], provider.class.selinux_mounts)
         debug("SELinux not available for this filesystem. Ignoring parameter.")
         true
       else
@@ -80,7 +80,7 @@ module Puppet
     end
 
     def sync
-      set_selinux_context(@resource[:path], @should, name)
+      set_selinux_context(@resource[:path], @should, name, provider.class.selinux_mounts)
       :file_changed
     end
   end

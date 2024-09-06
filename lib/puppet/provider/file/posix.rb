@@ -13,6 +13,10 @@ Puppet::Type.type(:file).provide :posix do
   require_relative '../../../puppet/util/selinux'
 
   class << self
+    def selinux_mounts
+      @selinux_mounts ||= {}
+    end
+
     def selinux_handle
       return nil unless Puppet::Util::SELinux.selinux_support?
 
@@ -23,6 +27,8 @@ Puppet::Type.type(:file).provide :posix do
     end
 
     def post_resource_eval
+      @selinux_mounts = nil
+
       if @selinux_handle
         Selinux.selabel_close(@selinux_handle)
         @selinux_handle = nil
