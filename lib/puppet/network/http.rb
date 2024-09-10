@@ -23,6 +23,8 @@ module Puppet::Network::HTTP
   require_relative 'http/api'
   require_relative 'http/api/master'
   require_relative 'http/api/master/v3'
+  require_relative 'http/api/ca'
+  require_relative 'http/api/ca/v1'
   require_relative 'http/handler'
   require_relative 'http/response'
   require_relative 'http/request'

@@ -35,6 +35,14 @@ class Puppet::Network::HTTP::API
                                        Puppet::Network::HTTP::API.not_found)
   end
 
+  def self.ca_routes
+    ca_prefix = Regexp.new("^#{Puppet::Network::HTTP::CA_URL_PREFIX}/")
+    Puppet::Network::HTTP::Route.path(ca_prefix)
+                                .any
+                                .chain(Puppet::Network::HTTP::API::CA::V1.routes,
+                                       Puppet::Network::HTTP::API.not_found)
+  end
+
   def self.master_routes
     server_routes
   end
