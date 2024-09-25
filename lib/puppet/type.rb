@@ -2252,7 +2252,7 @@ class Type
     define_method(:unsafe_validate, &block)
 
     define_method(:validate) do
-      return if enum_for(:eachparameter).any? { |p| p.value.instance_of?(Puppet::Pops::Evaluator::DeferredValue) }
+      return if enum_for(:eachparameter).any? { |p| p.value.is_a?(Puppet::Pops::Evaluator::DeferredValue) }
 
       unsafe_validate
     end

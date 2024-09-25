@@ -476,13 +476,13 @@ class Puppet::Transaction
       # Puppet::Parameter#value= triggers validation and munging. Puppet::Property#value=
       # overrides the method, but also triggers validation and munging, since we're
       # setting the desired/should value.
-      if param.value.instance_of?(Puppet::Pops::Evaluator::DeferredValue)
+      if param.value.is_a?(Puppet::Pops::Evaluator::DeferredValue)
         resolved = param.value.resolve
         param.value = resolved
         deferred_validate = true
-      elsif param.value.is_a?(Array) && param.value.any? { |v| v.instance_of?(Puppet::Pops::Evaluator::DeferredValue) }
+      elsif param.value.is_a?(Array) && param.value.any? { |v| v.is_a?(Puppet::Pops::Evaluator::DeferredValue) }
         resolved = param.value.map do |v|
-          if v.instance_of?(Puppet::Pops::Evaluator::DeferredValue)
+          if v.is_a?(Puppet::Pops::Evaluator::DeferredValue)
             v.resolve
           else
             v
