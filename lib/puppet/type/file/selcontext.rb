@@ -30,6 +30,7 @@ module Puppet
     def retrieve
       return :absent unless @resource.stat
 
+      # NOTE: we're not passing in the selinux context here
       context = get_selinux_current_context(@resource[:path])
       is = parse_selinux_context(name, context)
       if name == :selrange and selinux_support?
@@ -43,7 +44,7 @@ module Puppet
       return nil if Puppet::Util::Platform.windows?
       return nil if @resource[:selinux_ignore_defaults] == :true
 
-      context = get_selinux_default_context_with_handle(@resource[:path], provider.class.selinux_handle, @resource[:ensure], provider.class.selinux_mounts)
+      context = get_selinux_default_context_with_handle(@resource[:path], provider.class.selinux_context, @resource[:ensure])
       return nil unless context
 
       property_default = parse_selinux_context(property, context)
@@ -55,7 +56,7 @@ module Puppet
       if !selinux_support?
         debug("SELinux bindings not found. Ignoring parameter.")
         true
-      elsif !selinux_label_support?(@resource[:path], provider.class.selinux_mounts)
+      elsif !selinux_label_support?(@resource[:path], provider.class.selinux_context)
         debug("SELinux not available for this filesystem. Ignoring parameter.")
         true
       else
@@ -76,7 +77,7 @@ module Puppet
     end
 
     def sync
-      set_selinux_context(@resource[:path], @should, name, provider.class.selinux_mounts)
+      set_selinux_context(@resource[:path], @should, name, provider.class.selinux_context)
       :file_changed
     end
   end
@@ -100,6 +101,7 @@ module Puppet
       enabled."
 
     @event = :file_changed
+    # REMIND: we still parse it mounts here I think...
     defaultto { retrieve_default_context(:seluser) }
   end
 

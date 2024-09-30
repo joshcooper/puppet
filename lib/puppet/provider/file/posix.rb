@@ -13,25 +13,14 @@ Puppet::Type.type(:file).provide :posix do
   require_relative '../../../puppet/util/selinux'
 
   class << self
-    def selinux_mounts
-      @selinux_mounts ||= {}
-    end
-
-    def selinux_handle
-      return nil unless Puppet::Util::SELinux.selinux_support?
-
-      # selabel_open takes 3 args: backend, options, and nopt. The backend param
-      # is a constant, SELABEL_CTX_FILE, which happens to be 0. Since options is
-      # nil, nopt can be 0 since nopt represents the # of options specified.
-      @selinux_handle ||= Selinux.selabel_open(Selinux::SELABEL_CTX_FILE, nil, 0)
+    def selinux_context
+      @selinux_context ||= Puppet::Util::SELinux.selinux_open
     end
 
     def post_resource_eval
-      @selinux_mounts = nil
-
-      if @selinux_handle
-        Selinux.selabel_close(@selinux_handle)
-        @selinux_handle = nil
+      if @selinux_context
+        @selinux_context.close
+        @selinux_context = nil
       end
     end
   end

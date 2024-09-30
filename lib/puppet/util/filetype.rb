@@ -123,10 +123,14 @@ class Puppet::Util::FileType
     def write(text)
       # this file is managed by the OS and should be using system encoding
       tf = Tempfile.new("puppet", :encoding => Encoding.default_external)
-      tf.print text; tf.flush
-      File.chmod(@default_mode, tf.path) if @default_mode
-      FileUtils.cp(tf.path, @path)
-      tf.close
+      begin
+        tf.print(text)
+        tf.flush
+        File.chmod(@default_mode, tf.path) if @default_mode
+        FileUtils.cp(tf.path, @path)
+      ensure
+        tf.close
+      end
       # If SELinux is present, we need to ensure the file has its expected context
       set_selinux_default_context(@path)
     end

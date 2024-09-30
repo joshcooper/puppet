@@ -14,6 +14,35 @@ Puppet.features.selinux? # check, but continue even if it's not
 require 'pathname'
 
 module Puppet::Util::SELinux
+  class Context
+    attr_reader :handle, :mounts
+
+    def initialize
+      # selabel_open takes 3 args: backend, options, and nopt. The backend param
+      # is a constant, SELABEL_CTX_FILE, which happens to be 0. Since options is
+      # nil, nopt can be 0 since nopt represents the # of options specified.
+      @handle = Selinux.selabel_open(Selinux::SELABEL_CTX_FILE, nil, 0)
+      @mounts = {}
+    end
+
+    def close
+      if @handle
+        Selinux.selabel_close(@handle)
+        @handle = nil
+      end
+
+      @mounts = nil
+    end
+  end
+
+  class NoopContext < Context
+    def initialize
+      @mounts = {}
+    end
+
+    def close; end
+  end
+
   S_IFREG = 0o100000
   S_IFDIR = 0o040000
   S_IFLNK = 0o120000
@@ -27,8 +56,16 @@ module Puppet::Util::SELinux
     false
   end
 
+  def selinux_open
+    selinux_support? ? Context.new : NoopContext.new
+  end
+
+  def selinux_close(context)
+    context&.close
+  end
+
   def selinux_support?
-    Puppet::Util::SELinux.selinux_support?
+    self.class.selinux_support?
   end
 
   # Retrieve and return the full context of the file.  If we don't have
@@ -46,12 +83,13 @@ module Puppet::Util::SELinux
 
   # Retrieve and return the default context of the file.  If we don't have
   # SELinux support or if the SELinux call fails to file a default then return nil.
+  #
   # @deprecated matchpathcon is a deprecated method, selabel_lookup is preferred
   def get_selinux_default_context(file, resource_ensure = nil)
     return nil unless selinux_support?
     # If the filesystem has no support for SELinux labels, return a default of nil
     # instead of what matchpathcon would return
-    return nil unless selinux_label_support?(file)
+    return nil unless selinux_label_support?(file, NoopContext.new)
 
     # If the file exists we should pass the mode to matchpathcon for the most specific
     # matching.  If not, we can pass a mode of 0.
@@ -64,14 +102,18 @@ module Puppet::Util::SELinux
   # Retrieve and return the default context of the file using an selinux handle.
   # If we don't have SELinux support or if the SELinux call fails to file a
   # default then return nil.
-  def get_selinux_default_context_with_handle(file, handle, resource_ensure = nil, selinux_mounts = {})
+  def get_selinux_default_context_with_handle(file, selinux_context, resource_ensure = nil)
     return nil unless selinux_support?
+
+    raise ArgumentError, _("Cannot get default context without selinux_context") unless selinux_context
+
     # If the filesystem has no support for SELinux labels, return a default of nil
     # instead of what selabel_lookup would return
-    return nil unless selinux_label_support?(file, selinux_mounts)
+    return nil unless selinux_label_support?(file, selinux_context)
 
     # Handle is needed for selabel_lookup
-    raise ArgumentError, _("Cannot get default context with nil handle") unless handle
+    handle = selinux_context.handle
+    raise ArgumentError, _("Cannot get default context with nil selinux handle") unless handle
 
     # If the file exists we should pass the mode to selabel_lookup for the most specific
     # matching.  If not, we can pass a mode of 0.
@@ -115,8 +157,9 @@ module Puppet::Util::SELinux
   # just try to set components, even if all values are specified by the manifest.
   # I believe that the OS should always provide at least a fall-through context
   # though on any well-running system.
-  def set_selinux_context(file, value, component = false, selinux_context = {})
-    return nil unless selinux_support? && selinux_label_support?(file, selinux_context)
+  def set_selinux_context(file, value, component = false, selinux_context = nil)
+    return nil unless selinux_support?
+    return nil unless selinux_label_support?(file, selinux_context || NoopContext.new)
 
     if component
       # Must first get existing context to replace a single component
@@ -161,6 +204,7 @@ module Puppet::Util::SELinux
   # default context (if any) if it differs from the context currently on
   # the file.
   def set_selinux_default_context(file, resource_ensure = nil)
+    # NOTE this code path doesn't cache anything
     new_context = get_selinux_default_context(file, resource_ensure)
     return nil unless new_context
 
@@ -217,8 +261,8 @@ module Puppet::Util::SELinux
   # whitelist of known-good filesystems.
   # Returns true if the filesystem can support SELinux labels and
   # false if not.
-  def selinux_label_support?(file, selinux_mounts = {})
-    fstype = find_fs(file, selinux_mounts)
+  def selinux_label_support?(file, selinux_context)
+    fstype = find_fs(file, selinux_context.mounts)
     return false if fstype.nil?
 
     filesystems = %w[ext2 ext3 ext4 gfs gfs2 xfs jfs btrfs tmpfs zfs]
@@ -291,7 +335,7 @@ module Puppet::Util::SELinux
 
   # Internal helper function to return which type of filesystem a given file
   # path resides on
-  def find_fs(path, selinux_mounts = {})
+  def find_fs(path, mounts_cache)
     ctime = begin
               File.stat('/proc/mounts').ctime
             rescue => e
@@ -299,17 +343,17 @@ module Puppet::Util::SELinux
               nil
             end
 
-    if selinux_mounts[:ctime] != ctime
+    if mounts_cache[:ctime] != ctime
       Puppet.debug { "Reloading mounts" }
-      selinux_mounts[:ctime] = ctime
-      selinux_mounts[:mounts] = nil
+      mounts_cache[:ctime] = ctime
+      mounts_cache[:mounts] = nil
     end
 
-    mounts = selinux_mounts[:mounts]
+    mounts = mounts_cache[:mounts]
     unless mounts
       Puppet.debug { "Reading /proc/mounts" }
       mounts = read_mounts
-      selinux_mounts[:mounts] = mounts
+      mounts_cache[:mounts] = mounts
     end
 
     return nil unless mounts

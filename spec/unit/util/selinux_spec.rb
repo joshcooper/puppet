@@ -7,7 +7,7 @@ describe Puppet::Util::SELinux do
   include Puppet::Util::SELinux
 
   let(:selinux) { double('selinux', is_selinux_enabled: 0) }
-  let(:selinux_mounts) { {} }
+  let(:selinux_context) { Puppet::Util::SELinux::NoopContext.new }
 
   before :each do
     stub_const('Selinux', selinux)
@@ -72,27 +72,27 @@ describe Puppet::Util::SELinux do
     end
 
     it "should match a path on / to ext3" do
-      expect(find_fs('/etc/puppetlabs/puppet/testfile', selinux_mounts)).to eq("ext3")
+      expect(find_fs('/etc/puppetlabs/puppet/testfile', selinux_context.mounts)).to eq("ext3")
     end
 
     it "should match a path on /mnt/nfs to nfs" do
-      expect(find_fs('/mnt/nfs/testfile/foobar', selinux_mounts)).to eq("nfs")
+      expect(find_fs('/mnt/nfs/testfile/foobar', selinux_context.mounts)).to eq("nfs")
     end
 
     it "should return true for a capable filesystem" do
-      expect(selinux_label_support?('/etc/puppetlabs/puppet/testfile')).to be_truthy
+      expect(selinux_label_support?('/etc/puppetlabs/puppet/testfile', selinux_context)).to be_truthy
     end
 
     it "should return true if tmpfs" do
-      expect(selinux_label_support?('/dev/shm/testfile')).to be_truthy
+      expect(selinux_label_support?('/dev/shm/testfile', selinux_context)).to be_truthy
     end
 
     it "should return true if zfs" do
-      expect(selinux_label_support?('/mnt/zfs/testfile')).to be_truthy
+      expect(selinux_label_support?('/mnt/zfs/testfile', selinux_context)).to be_truthy
     end
 
     it "should return false for a noncapable filesystem" do
-      expect(selinux_label_support?('/mnt/nfs/testfile')).to be_falsey
+      expect(selinux_label_support?('/mnt/nfs/testfile', selinux_context)).to be_falsey
     end
 
     it "(#8714) don't follow symlinks when determining file systems", :unless => Puppet::Util::Platform.windows? do
@@ -104,12 +104,12 @@ describe Puppet::Util::SELinux do
       })
 
       (scratch + 'foo').make_symlink('nfs/bar')
-      expect(selinux_label_support?(scratch + 'foo')).to be_truthy
+      expect(selinux_label_support?(scratch + 'foo', selinux_context)).to be_truthy
     end
 
     it "should handle files that don't exist" do
       scratch = Pathname(PuppetSpec::Files.tmpdir('selinux'))
-      expect(selinux_label_support?(scratch + 'nonesuch')).to be_truthy
+      expect(selinux_label_support?(scratch + 'nonesuch', selinux_context)).to be_truthy
     end
   end
 
@@ -147,7 +147,7 @@ describe Puppet::Util::SELinux do
         expect(self).to receive(:selinux_support?).and_return(true)
         fstat = double('File::Stat', :mode => 0)
         expect(Puppet::FileSystem).to receive(:lstat).with('/foo').and_return(fstat)
-        expect(self).to receive(:find_fs).with("/foo", selinux_mounts).and_return("ext3")
+        expect(self).to receive(:find_fs).with("/foo", selinux_context.mounts).and_return("ext3")
         expect(Selinux).to receive(:matchpathcon).with("/foo", 0).and_return([0, "user_u:role_r:type_t:s0"])
 
         expect(get_selinux_default_context("/foo")).to eq("user_u:role_r:type_t:s0")
@@ -226,7 +226,7 @@ describe Puppet::Util::SELinux do
         expect(self).to receive(:selinux_support?).and_return(true)
         fstat = double('File::Stat', :mode => 0)
         expect(Puppet::FileSystem).to receive(:lstat).with('/foo').and_return(fstat)
-        expect(self).to receive(:find_fs).with("/foo", selinux_mounts).and_return("ext3")
+        expect(self).to receive(:find_fs).with("/foo", selinux_context.mounts).and_return("ext3")
         expect(Selinux).to receive(:matchpathcon).with("/foo", 0).and_return(-1)
 
         expect(get_selinux_default_context("/foo")).to be_nil
@@ -236,7 +236,7 @@ describe Puppet::Util::SELinux do
     it "should return nil if selinux_label_support returns false" do
       without_partial_double_verification do
         expect(self).to receive(:selinux_support?).and_return(true)
-        expect(self).to receive(:find_fs).with("/foo", selinux_mounts).and_return("nfs")
+        expect(self).to receive(:find_fs).with("/foo", selinux_context.mounts).and_return("nfs")
         expect(get_selinux_default_context("/foo")).to be_nil
       end
     end
@@ -246,10 +246,22 @@ describe Puppet::Util::SELinux do
     it "should return a context if a default context exists" do
       without_partial_double_verification do
         expect(self).to receive(:selinux_support?).and_return(true)
-        expect(self).to receive(:find_fs).with("/foo", selinux_mounts).and_return("ext3")
+        expect(self).to receive(:find_fs).with("/foo", selinux_context.mounts).and_return("ext3")
+
+
         hnd = double("SWIG::TYPE_p_selabel_handle")
-        expect(Selinux).to receive(:selabel_lookup).with(hnd, '/foo', 0).and_return([0, "user_u:role_r:type_t:s0"])
-        expect(get_selinux_default_context_with_handle("/foo", hnd)).to eq("user_u:role_r:type_t:s0")
+        expect(self).to receive(:selabel_open).and_return(hnd)
+        expect(self).to receive(:selabel_lookup).with(hnd, '/foo', 0).and_return([0, "user_u:role_r:type_t:s0"])
+
+        selinux_context = Puppet::Util::SELinux::Context.new
+        allow(selinux_context).to receive(:handle).and_return(hnd)
+        require 'byebug'; byebug
+
+        begin
+          expect(get_selinux_default_context_with_handle("/foo", selinux_context)).to eq("user_u:role_r:type_t:s0")
+        ensure
+          selinux_context.close
+        end
       end
     end
 
@@ -258,6 +270,7 @@ describe Puppet::Util::SELinux do
         expect(self).to receive(:selinux_support?).and_return(true)
         expect(self).to receive(:selinux_label_support?).and_return(true)
         hnd = double("SWIG::TYPE_p_selabel_handle")
+
         expect(Selinux).to receive(:selabel_lookup).with(hnd, "/root/chuj", 0).and_return(-1)
         expect(self).to receive(:file_lstat).with("/root/chuj").and_raise(Errno::EACCES, "/root/chuj")
 
@@ -353,7 +366,7 @@ describe Puppet::Util::SELinux do
 
     it "should return nil if selinux_label_support returns false" do
       expect(self).to receive(:selinux_support?).and_return(true)
-      expect(self).to receive(:find_fs).with("/foo", selinux_mounts).and_return("nfs")
+      expect(self).to receive(:find_fs).with("/foo", selinux_context.mounts).and_return("nfs")
       expect(get_selinux_default_context_with_handle("/foo", nil)).to be_nil
     end
   end
@@ -440,7 +453,7 @@ describe Puppet::Util::SELinux do
 
     it "should return nil if selinux_label_support returns false" do
       expect(self).to receive(:selinux_support?).and_return(true)
-      expect(self).to receive(:selinux_label_support?).with("/foo", selinux_mounts).and_return(false)
+      expect(self).to receive(:selinux_label_support?).with("/foo", selinux_context).and_return(false)
       expect(set_selinux_context("/foo", "user_u:role_r:type_t:s0")).to be_nil
     end
 
