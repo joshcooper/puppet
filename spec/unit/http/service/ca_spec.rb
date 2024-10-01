@@ -48,6 +48,23 @@ describe Puppet::HTTP::Service::Ca do
 
       subject.get_certificate('ca')
     end
+
+    it 'rejects "puppet" by default' do
+      Puppet[:ca_server] = nil
+
+      expect {
+        subject.get_certificate('ca')
+      }.to raise_error(Puppet::HTTP::RouteError, /No Puppet Server configured for 'ca_server'/)
+    end
+
+    it 'allows "puppet" be used' do
+      Puppet[:ca_server] = nil
+      Puppet[:server] = 'puppet'
+
+      stub_request(:get, "https://puppet/puppet-ca/v1/certificate/ca").to_return(body: pem)
+
+      subject.get_certificate('ca')
+    end
   end
 
   context 'when getting certificates' do

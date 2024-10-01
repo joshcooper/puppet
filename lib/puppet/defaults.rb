@@ -1650,7 +1650,9 @@ EOT
       :desc     => "The root directory of devices' $confdir.",
     },
     :server => {
-      :default => "puppet",
+      # Intentionally using an empty string instead of nil. Otherwise calling Puppet[:ca_server]
+      # will raise an InterpolationError when trying to resolve its default `$server`
+      :default => '',
       :desc => "The primary Puppet server to which the Puppet agent should connect.",
     },
     :server_list => {

@@ -39,6 +39,22 @@ describe Puppet::HTTP::Service::FileServer do
 
       subject.get_file_content(path: '/:mount/:path', environment: environment) { |data| }
     end
+
+    it 'rejects "puppet" by default' do
+      Puppet[:server] = nil
+
+      expect {
+        subject.get_file_content(path: '/:mount/:path', environment: environment) { |data| }
+      }.to raise_error(Puppet::HTTP::RouteError, /No Puppet Server configured for 'server'/)
+    end
+
+    it 'allows "puppet" be used' do
+      Puppet[:server] = 'puppet'
+
+      stub_request(:get, "https://puppet/puppet/v3/file_content/:mount/:path?environment=testing")
+
+      subject.get_file_content(path: '/:mount/:path', environment: environment) { |data| }
+    end
   end
 
   context 'retrieving file metadata' do

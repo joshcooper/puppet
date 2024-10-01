@@ -22,7 +22,7 @@ class Puppet::HTTP::Service::Report < Puppet::HTTP::Service
   # @api private
   #
   def initialize(client, session, server, port)
-    url = build_url(API, server || Puppet[:report_server], port || Puppet[:report_port])
+    url = build_url(API, server || default_server_for(:report_server), port || Puppet[:report_port])
     super(client, session, url)
   end
 

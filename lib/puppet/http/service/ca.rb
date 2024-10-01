@@ -22,7 +22,7 @@ class Puppet::HTTP::Service::Ca < Puppet::HTTP::Service
   #   create the service.
   #
   def initialize(client, session, server, port)
-    url = build_url(API, server || Puppet[:ca_server], port || Puppet[:ca_port])
+    url = build_url(API, server || default_server_for(:ca_server), port || Puppet[:ca_port])
     super(client, session, url)
   end
 

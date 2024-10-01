@@ -49,6 +49,23 @@ describe Puppet::HTTP::Service::Report do
 
       subject.put_report('report', report, environment: environment)
     end
+
+    it 'rejects "puppet" by default' do
+      Puppet[:report_server] = nil
+
+      expect {
+        subject.put_report('report', report, environment: environment)
+      }.to raise_error(Puppet::HTTP::RouteError, /No Puppet Server configured for 'report_server' in/)
+    end
+
+    it 'allows "puppet" be used' do
+      Puppet[:report_server] = nil
+      Puppet[:server] = 'puppet'
+
+      stub_request(:put, "https://puppet/puppet/v3/report/report?environment=testing")
+
+      subject.put_report('report', report, environment: environment)
+    end
   end
 
   context 'when submitting a report' do

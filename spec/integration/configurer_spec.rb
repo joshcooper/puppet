@@ -105,6 +105,7 @@ describe Puppet::Configurer do
         let(:test_facts) { Puppet::Node::Facts.new('configurer.test', {test_fact: 'test value'}) }
 
         before(:each) do
+          Puppet[:server] = 'puppet'
           Puppet[:resubmit_facts] = true
 
           allow(@configurer).to receive(:find_facts).and_return(test_facts)

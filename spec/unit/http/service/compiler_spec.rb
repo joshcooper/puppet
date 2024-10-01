@@ -44,6 +44,23 @@ describe Puppet::HTTP::Service::Compiler do
 
       subject.post_catalog(certname, environment: environment, facts: facts)
     end
+
+    it 'rejects "puppet" by default' do
+      Puppet[:server] = nil
+
+      expect {
+        subject.post_catalog(certname, environment: environment, facts: facts)
+      }.to raise_error(Puppet::HTTP::RouteError, /No Puppet Server configured for 'server'/)
+    end
+
+    it 'allows "puppet" be used' do
+      Puppet[:server] = "puppet"
+
+      stub_request(:post, "https://puppet:8140/puppet/v3/catalog/ziggy?environment=testing")
+        .to_return(body: formatter.render(catalog), headers: {'Content-Type' => formatter.mime })
+
+      subject.post_catalog(certname, environment: environment, facts: facts)
+    end
   end
 
   context 'when posting for a catalog' do

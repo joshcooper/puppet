@@ -97,6 +97,13 @@ class Puppet::HTTP::Service
 
   protected
 
+  def default_server_for(setting)
+    server = Puppet[setting]
+    return server if server && !server.empty?
+
+    raise Puppet::HTTP::RouteError.new("No Puppet Server configured for '#{setting}' in '#{Puppet[:config]}', aborting agent run")
+  end
+
   def add_puppet_headers(headers)
     modified_headers = headers.dup
 

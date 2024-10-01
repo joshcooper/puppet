@@ -20,7 +20,7 @@ class Puppet::HTTP::Service::Compiler < Puppet::HTTP::Service
   #   create the service.
   #
   def initialize(client, session, server, port)
-    url = build_url(API, server || Puppet[:server], port || Puppet[:serverport])
+    url = build_url(API, server || default_server_for(:server), port || Puppet[:serverport])
     super(client, session, url)
   end
 
