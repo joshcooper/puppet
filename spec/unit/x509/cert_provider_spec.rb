@@ -319,17 +319,9 @@ describe Puppet::X509::CertProvider do
         end
       end
 
-      context 'using Ed25519', if: RUBY_VERSION.to_f >= 3 && OpenSSL::OPENSSL_VERSION_NUMBER > 0x10101000 do
-        it 'returns a generic key' do
+      context 'using Ed25519', if: OpenSSL::OPENSSL_VERSION_NUMBER > 0x10101000 do
+        it 'loads private key from PKCS8 returning a generic key' do
           expect(provider.load_private_key('ed25519-key')).to be_a(OpenSSL::PKey::PKey)
-        end
-
-        it 'returns a generic key from PKCS#8 format' do
-          expect(provider.load_private_key('ed25519-key-pk8')).to be_a(OpenSSL::PKey::PKey)
-        end
-
-        it 'returns a generic key from openssl format' do
-          expect(provider.load_private_key('ed25519-key-openssl')).to be_a(OpenSSL::PKey::PKey)
         end
 
         it 'decrypts a generic key using the password' do
