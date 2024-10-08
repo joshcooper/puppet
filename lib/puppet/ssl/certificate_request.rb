@@ -73,6 +73,8 @@ class Puppet::SSL::CertificateRequest < Puppet::SSL::Base
                        # EC#public_key doesn't follow the PKey API,
                        # see https://github.com/ruby/openssl/issues/29
                        key
+                     elsif key.oid == "ED25519"
+                       key
                      else
                        key.public_key
                      end
@@ -85,6 +87,7 @@ class Puppet::SSL::CertificateRequest < Puppet::SSL::Base
       csr.add_attribute(ext_req_attribute)
     end
 
+    # Can't sign certs with ed25519 keys, see https://github.com/ruby/ruby/commit/c735f4947ee0fd770f01a64e83faabefe005e9d4
     signer = Puppet::SSL::CertificateSigner.new
     signer.sign(csr, key)
 

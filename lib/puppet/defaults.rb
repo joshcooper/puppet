@@ -1070,8 +1070,8 @@ EOT
     :key_type => {
       :default => 'rsa',
       :type    => :enum,
-      :values  => %w[rsa ec],
-      :desc    => "The type of private key. Valid values are `rsa` and `ec`. Default is `rsa`."
+      :values  => %w[rsa ec ed25519],
+      :desc    => "The type of private key. Valid values are `rsa`, `ec` or `ed25519`. Default is `rsa`."
     },
     :named_curve => {
       :default => 'prime256v1',

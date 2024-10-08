@@ -270,9 +270,13 @@ class Puppet::SSL::StateMachine
           end
         end
       else
-        if Puppet[:key_type] == 'ec'
+        case Puppet[:key_type]
+        when 'ec'
           Puppet.info _("Creating a new EC SSL key for %{name} using curve %{curve}") % { name: Puppet[:certname], curve: Puppet[:named_curve] }
           key = OpenSSL::PKey::EC.generate(Puppet[:named_curve])
+        when 'ed25519'
+          Puppet.info _("Creating a new ED25519 SSL key for %{name}") % { name: Puppet[:certname] }
+          key = OpenSSL::PKey::generate_key("ED25519")
         else
           Puppet.info _("Creating a new RSA SSL key for %{name}") % { name: Puppet[:certname] }
           key = OpenSSL::PKey::RSA.new(Puppet[:keylength].to_i)
