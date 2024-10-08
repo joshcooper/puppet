@@ -187,6 +187,8 @@ class Puppet::X509::CertProvider
     pem = if password
             cipher = OpenSSL::Cipher.new('aes-128-cbc')
             key.export(cipher, password)
+          elsif key.oid == "ED25519"
+            key.private_to_pem
           else
             key.to_pem
           end

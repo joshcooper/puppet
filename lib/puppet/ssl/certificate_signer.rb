@@ -34,6 +34,7 @@ class Puppet::SSL::CertificateSigner
   #
   # @api private
   def sign(content, key)
-    content.sign(key, @digest.new)
+    digest = key.oid == "ED25519" ? nil : @digest.new
+    content.sign(key, digest)
   end
 end
