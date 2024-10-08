@@ -22,16 +22,39 @@ task(:gen_cert_fixtures) do
     end
   end
 
-  def generate(type, inter)
-    # Create an EC key and cert, issued by "Test CA Subauthority"
-    cert = ca.create_cert(type, inter[:cert], inter[:private_key], key_type: :type)
+  def generate(ca, dir, type, inter)
+    # Create an key of type +type+ and cert, issued by "Test CA Subauthority"
+    cert = ca.create_cert(type.to_s, inter[:cert], inter[:private_key], key_type: type)
     save(dir, "#{type}.pem", cert[:cert])
-    save(dir, "#{type}-key.pem", cert[:private_key])
+    save(dir, "#{type}-key.pem", cert[:private_key]) do |key|
+      if type == :ed25519
+        key.private_to_pem
+      else
+        key.to_pem
+      end
+    end
 
     # Create an encrypted version of the above private key.
-    save(dir, "encrypted-#{type}-key.pem", cert[:private_key]) do |x509|
+    save(dir, "encrypted-#{type}-key.pem", cert[:private_key]) do |key|
       # private key password was chosen at random
-      x509.to_pem(OpenSSL::Cipher::AES.new(128, :CBC), '74695716c8b6')
+      args = [OpenSSL::Cipher::AES.new(128, :CBC), '74695716c8b6']
+      if type == :ed25519
+        key.private_to_pem(*args)
+      else
+        key.to_pem(*args)
+      end
+    end
+
+    if type == :ec
+      # Export as pkcs#8
+      save(dir, "#{type}-key-pk8.pem", cert[:private_key]) do |key|
+        key.private_to_pem
+      end
+
+      # Export as openssl prefixed with ecparams
+      save(dir, "#{type}-key-openssl.pem", cert[:private_key]) do |key|
+        "#{key.group.to_pem}#{key.export}"
+      end
     end
   end
 
@@ -80,7 +103,7 @@ task(:gen_cert_fixtures) do
   # `request.pem` contains a valid CSR for /CN=pending, while `tampered_csr.pem`
   # is the same as `request.pem`, but it's public key has been replaced.
   #
-  dir = File.join(RAKE_ROOT, 'spec/fixtures/ssl')
+  dir = File.join(__dir__, '../spec/fixtures/ssl')
 
   # Create self-signed CA & key
   unknown_ca = Puppet::TestCa.new('Unknown CA')
@@ -139,8 +162,8 @@ task(:gen_cert_fixtures) do
   save(dir, 'revoked-key.pem', revoked[:private_key])
 
   # Generate certificate and key sets for various algorithms.
-  generate('ec', inter)
-  generate('ed25519', inter)
+  generate(ca, dir, :ec, inter)
+  generate(ca, dir, :ed25519, inter)
 
   # Update intermediate CRL now that we've revoked
   save(dir, 'intermediate-crl.pem', inter_crl)
