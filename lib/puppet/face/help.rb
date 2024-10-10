@@ -73,8 +73,12 @@ Puppet::Face.define(:help, '0.0.1') do
         # --ronn`, default the facename to `:help`
         render_face_man(facename || :help)
       else
-        face = Puppet::Face[facename.to_sym, version]
-        render_face_help(face, actionname)
+        begin
+          face = Puppet::Face[facename.to_sym, version]
+          render_face_help(face, actionname)
+        rescue
+          render_external_help(facename)
+        end
       end
     end
   end
@@ -122,6 +126,19 @@ Puppet::Face.define(:help, '0.0.1') do
     message << ''
     message << _('Detail: "%{detail}"') % { detail: detail.message }
     fail ArgumentError, message.join("\n"), detail.backtrace
+  end
+
+  def render_external_help(name)
+    abspath = Puppet::Util.which("puppet-#{name}")
+    if abspath
+      result = Puppet::Util::Execution.execute([abspath, '--help'])
+      if result.exitstatus == 0
+        puts result.to_s
+        return
+      end
+    end
+
+    raise ArgumentError, "Unable to display help for #{name}"
   end
 
   def template_for(face, action)
