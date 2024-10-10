@@ -65,15 +65,16 @@ Puppet::Face.define(:help, '0.0.1') do
         # legacy apps already emit ronn output
         return render_application_help(facename)
       elsif options[:ronn]
+        # Calling `puppet help <app> --ronn` normally calls this action with
+        # <app> as the first argument in the `args` array. However, if <app>
+        # happens to match the name of an action, like `puppet help help
+        # --ronn`, then face_base "eats" the argument and `args` will be
+        # empty. Rather than force users to type `puppet help help help
+        # --ronn`, default the facename to `:help`
         render_face_man(facename || :help)
-      # Calling `puppet help <app> --ronn` normally calls this action with
-      # <app> as the first argument in the `args` array. However, if <app>
-      # happens to match the name of an action, like `puppet help help
-      # --ronn`, then face_base "eats" the argument and `args` will be
-      # empty. Rather than force users to type `puppet help help help
-      # --ronn`, default the facename to `:help`
       else
-        render_face_help(facename, actionname, version)
+        face = Puppet::Face[facename.to_sym, version]
+        render_face_help(face, actionname)
       end
     end
   end
@@ -105,8 +106,14 @@ Puppet::Face.define(:help, '0.0.1') do
     fail ArgumentError, message.join("\n"), detail.backtrace
   end
 
-  def render_face_help(facename, actionname, version)
-    face, action = load_face_help(facename, actionname, version)
+  def render_face_help(face, actionname)
+    if actionname
+      action = face.get_action(actionname.to_sym)
+      unless action
+        fail ArgumentError, _("Unable to load action %{actionname} from %{face}") % { actionname: actionname, face: face }
+      end
+    end
+
     template_for(face, action).result(binding)
   rescue StandardError, LoadError => detail
     message = []
@@ -115,18 +122,6 @@ Puppet::Face.define(:help, '0.0.1') do
     message << ''
     message << _('Detail: "%{detail}"') % { detail: detail.message }
     fail ArgumentError, message.join("\n"), detail.backtrace
-  end
-
-  def load_face_help(facename, actionname, version)
-    face = Puppet::Face[facename.to_sym, version]
-    if actionname
-      action = face.get_action(actionname.to_sym)
-      unless action
-        fail ArgumentError, _("Unable to load action %{actionname} from %{face}") % { actionname: actionname, face: face }
-      end
-    end
-
-    [face, action]
   end
 
   def template_for(face, action)
