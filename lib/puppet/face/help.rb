@@ -146,6 +146,16 @@ Puppet::Face.define(:help, '0.0.1') do
     end.sort
   end
 
+  # Return a list of unique external application names. See Puppet:Util::CommandLine#external_subcommand
+  def external_applications
+    ENV['PATH'].split(File::PATH_SEPARATOR).map do |dir|
+      children = Dir.glob('puppet-*', base: dir)
+      children.filter_map do |child|
+        child.delete_prefix('puppet-') if Puppet::Util.which(child)
+      end
+    end.flatten.uniq
+  end
+
   def generate_summary(appname)
     if is_face_app?(appname)
       begin
@@ -179,7 +189,7 @@ Puppet::Face.define(:help, '0.0.1') do
   #  element in the outer array is a pair whose first element is a String containing the application
   #  name, and whose second element is a String containing the summary for that application.
   def all_application_summaries
-    available_application_names_special_sort().inject([]) do |result, appname|
+    summaries = available_application_names_special_sort().inject([]) do |result, appname|
       next result if exclude_from_docs?(appname)
 
       if appname == COMMON || appname == SPECIALIZED || appname == BLANK
@@ -188,10 +198,23 @@ Puppet::Face.define(:help, '0.0.1') do
         result << generate_summary(appname)
       end
     end
+
+    ext = external_applications
+    unless ext.empty?
+      summaries << BLANK
+      summaries << EXTERNAL
+      ext.sort.each do |e|
+        summary = "Run 'puppet help #{e}'"
+        summaries << [e, summary, '  ']
+      end
+    end
+
+    summaries
   end
 
   COMMON = 'Common:'
   SPECIALIZED = 'Specialized:'
+  EXTERNAL = 'External:'
   BLANK = "\n"
   COMMON_APPS = %w[apply agent config help lookup module resource]
   def available_application_names_special_sort
