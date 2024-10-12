@@ -161,4 +161,36 @@ describe Puppet::Network::HTTP::Handler do
       expect(handler.resolve_node(:ip => "1.2.3.4")).to eq("1.2.3.4")
     end
   end
+
+  describe "when decoding parameters" do
+    it 'interns parameter names' do
+      params = handler.send(:decode_params, {'key' => 'value'})
+      expect(params.keys).to eq([:key])
+    end
+
+    it 'converts boolean truthy values' do
+      params = handler.send(:decode_params, {'recurse' => 'true'})
+      expect(params).to eq(recurse: true)
+    end
+
+    it 'converts boolean false values' do
+      params = handler.send(:decode_params, {'recurse' => 'false'})
+      expect(params).to eq(recurse: false)
+    end
+
+    it 'converts integer values' do
+      params = handler.send(:decode_params, {'recurselimit' => '3'})
+      expect(params).to eq(recurselimit: 3)
+    end
+
+    it 'converts float values' do
+      params = handler.send(:decode_params, {'float' => '1.23'})
+      expect(params).to eq(float: 1.23)
+    end
+
+    it 'special cases environment' do
+      params = handler.send(:decode_params, {'environment' => '123'})
+      expect(params).to eq(environment: '123')
+    end
+  end
 end

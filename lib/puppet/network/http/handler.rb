@@ -169,7 +169,12 @@ module Puppet::Network::HTTP::Handler
   def decode_params(params)
     params.select { |key, _| allowed_parameter?(key) }.each_with_object({}) do |ary, result|
       param, value = ary
-      result[param.to_sym] = parse_parameter_value(param, value)
+      result[param.to_sym] = case param
+                             when 'environment'
+                               value
+                             else
+                               parse_parameter_value(param, value)
+                             end
     end
   end
 
