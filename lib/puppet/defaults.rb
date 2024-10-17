@@ -327,7 +327,7 @@ module Puppet
           specify 'all'. This setting is deprecated, the 'puppet config' command replaces this functionality.",
     },
     :color => {
-      :default => "ansi",
+      :default => "false",
       :type    => :string,
       :desc    => "Whether to use colors when logging to the console.  Valid values are
         `ansi` (equivalent to `true`), `html`, and `false`, which produces no color."
